@@ -1,4 +1,10 @@
-markers = ['emerald', 'sapphire', 'ruby', 'diamond', 'onyx', 'gold']
+markers = [{'stone': 'emerald'},
+           {'stone': 'sapphire'},
+           {'stone': 'ruby'},
+           {'stone': 'diamond'},
+           {'stone': 'onyx'},
+           {'stone': 'gold', 'joker': True}
+           ]
 
 aristocratic_cards = [
     {'requirements': {'emerald': 3, 'sapphire': 3, 'diamond': 3}, 'points': 3, 'img': ''},
