@@ -7,7 +7,6 @@ class StoneMarker:
     stone: str
     joker: bool = False
     quantity: int = 7
-    max: int = 7
 
     def __post_init__(self) -> None:
         self.quantity = self.max = 5 if self.joker else self.quantity
