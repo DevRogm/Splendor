@@ -19,3 +19,5 @@ class Player:
     def __post_init__(self):
         if len(self.name) > 20:
             raise ValueError("Too long name, max. characters is a 20")
+
+    # TO DO: Add some actions to take cards/markes or return cards/marker
