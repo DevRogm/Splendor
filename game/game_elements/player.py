@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from stone_markers import StoneMarker
+from game.game_elements.stone_markers import StoneMarker
 
 
 @dataclass
@@ -11,13 +11,27 @@ class PlayerInventory:
     aristocratic_cards: list = field(default_factory=lambda: [])
 
     def add_marker(self, marker: str) -> None:
+        """
+        The method increases the stone number by 1 based on the received stone
+        :param marker: Name of stone
+        :return: None
+        """
         self.markers[marker] += 1
 
     def remove_marker(self, marker: str) -> None:
-        pass
+        """
+        The method reduces the stone number by 1 based on the received stone
+        :param marker: Name of stone
+        :return: None
+        """
+        self.markers[marker] -= 1
 
-    def check_number_markers(self):
-        pass
+    def check_number_markers(self) -> int:
+        """
+        The method checks number of markers
+        :return: Number of markers
+        """
+        return sum(self.markers.values())
 
 
 @dataclass
@@ -32,7 +46,7 @@ class Player:
 
     def take_markers(self, marker: StoneMarker) -> None:
         """
-        Method takes marker object from the table.
+        The method takes marker object from the table.
         Calls the add_marker method and pass the name of the stone as a string
         :param marker: Marker object
         :return: None
@@ -41,7 +55,7 @@ class Player:
 
     def return_markers(self, marker: StoneMarker) -> None:
         """
-        Method return marker from players inventory.
+        The method return marker from players inventory.
         Calls the return_marker method and pass the name of the stone as a string
         :param marker: Marker object
         :return: None
