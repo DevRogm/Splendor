@@ -1,10 +1,15 @@
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, ClassVar
 from player import Player
 
 
 @dataclass
 class StoneMarkersInventory:
+    markers_quantity_options: ClassVar = {
+        2: 4,  # 2 players: 4 markers
+        3: 5,  # 3 players: 5 markers
+        4: 7,  # 4 players: 7 markers
+    }
     markers: dict[str, int] = field(
         default_factory=lambda: {'emerald': 0, 'sapphire': 0, 'ruby': 0, 'diamond': 0, 'onyx': 0, 'gold': 0})
 
@@ -57,23 +62,29 @@ class StoneCardsInventory:
 
 @dataclass
 class GameBoard:
-    active_player: Player = None
     players: List[Player] = field(default_factory=lambda: [])
-    markers: StoneMarkersInventory = StoneMarkersInventory()
+    stone_markers: StoneMarkersInventory = StoneMarkersInventory()
     aristocratic_cards: AristocraticCardsInventory = AristocraticCardsInventory()
     stone_cards: StoneCardsInventory = StoneCardsInventory()
 
     def game_preparation(self, num_of_player):
         self.add_players(num_of_player)
+        self.prepare_stone_markers()
 
     def add_players(self, num_of_player):
         for num in range(num_of_player):
             # TO DO: Allow to enter the players name
+            # or choose existing players
             player = Player(name=f"Player_{num + 1}")
             self.players.append(player)
 
     def prepare_stone_markers(self):
-        pass
+        num_of_markers = self.stone_markers.markers_quantity_options[len(self.players)]
+        for marker in self.stone_markers.markers:
+            if marker == 'gold':
+                self.stone_markers.markers[marker] = 5
+            else:
+                self.stone_markers.markers[marker] = num_of_markers
 
     def prepare_stone_cards(self):
         pass
