@@ -57,16 +57,20 @@ class StoneCardsInventory:
 
 @dataclass
 class GameBoard:
-    players: List[Player]
+    active_player: Player = None
+    players: List[Player] = field(default_factory=lambda: [])
     markers: StoneMarkersInventory = StoneMarkersInventory()
     aristocratic_cards: AristocraticCardsInventory = AristocraticCardsInventory()
     stone_cards: StoneCardsInventory = StoneCardsInventory()
 
-    def game_preparation(self):
-        pass
+    def game_preparation(self, num_of_player):
+        self.add_players(num_of_player)
 
-    def add_players(self):
-        pass
+    def add_players(self, num_of_player):
+        for num in range(num_of_player):
+            # TO DO: Allow to enter the players name
+            player = Player(name=f"Player_{num + 1}")
+            self.players.append(player)
 
     def prepare_stone_markers(self):
         pass
