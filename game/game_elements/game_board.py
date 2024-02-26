@@ -3,6 +3,8 @@ from dataclasses import dataclass, field
 from typing import List, ClassVar
 from player import Player
 from game_data.markes_and_cards_data import aristocratic_cards
+from stone_markers import StoneMarker
+from game_data.markes_and_cards_data import markers as markers_data
 
 
 @dataclass
@@ -12,8 +14,7 @@ class StoneMarkersInventory:
         3: 5,  # 3 players: 5 markers
         4: 7,  # 4 players: 7 markers
     }
-    markers: dict[str, int] = field(
-        default_factory=lambda: {'emerald': 0, 'sapphire': 0, 'ruby': 0, 'diamond': 0, 'onyx': 0, 'gold': 0})
+    markers: dict = field(default_factory=lambda: {})
 
     def add_marker(self, marker: str) -> None:
         """
@@ -73,6 +74,7 @@ class GameBoard:
         self.add_players(num_of_player)
         self.prepare_stone_markers()
         self.prepare_aristocratic_cards()
+        self.prepare_stone_cards()
 
     def add_players(self, num_of_player):
         for num in range(num_of_player):
@@ -83,11 +85,11 @@ class GameBoard:
 
     def prepare_stone_markers(self):
         num_of_markers = self.stone_markers.markers_quantity_options[len(self.players)]
-        for marker in self.stone_markers.markers:
-            if marker == 'gold':
-                self.stone_markers.markers[marker] = 5
+        for marker in markers_data:
+            if not marker['stone'] == 'gold':
+                self.stone_markers.markers[marker['stone']] = StoneMarker(**marker, quantity=num_of_markers)
             else:
-                self.stone_markers.markers[marker] = num_of_markers
+                self.stone_markers.markers[marker['stone']] = StoneMarker(**marker, quantity=5)
 
     def prepare_stone_cards(self):
         pass

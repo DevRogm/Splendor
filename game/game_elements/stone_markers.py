@@ -7,3 +7,4 @@ class StoneMarker:
     stone: str
     joker: bool = False
     img: str = ''
+    quantity: int = 0

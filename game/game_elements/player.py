@@ -1,14 +1,17 @@
 from dataclasses import dataclass, field
 from game.game_elements.stone_markers import StoneMarker
+from game.game_elements.aristocratic_cards import AristocraticCard
+from game.game_elements.stone_cards import StoneCard
+from game_data.markes_and_cards_data import markers as markers_data
+from typing import List
 
 
 @dataclass
 class PlayerInventory:
-    markers: dict[str, int] = field(
-        default_factory=lambda: {'emerald': 0, 'sapphire': 0, 'ruby': 0, 'diamond': 0, 'onyx': 0, 'gold': 0})
-    stone_cards: dict[str, list] = field(
+    markers: dict = field(default_factory=lambda: {})
+    stone_cards: dict[str, List[StoneCard]] = field(
         default_factory=lambda: {'emerald': [], 'sapphire': [], 'ruby': [], 'diamond': [], 'onyx': [], 'gold': []})
-    aristocratic_cards: list = field(default_factory=lambda: [])
+    aristocratic_cards: List[AristocraticCard] = field(default_factory=lambda: [])
 
     def add_marker(self, marker: str) -> None:
         """
@@ -32,6 +35,16 @@ class PlayerInventory:
         :return: Number of markers
         """
         return sum(self.markers.values())
+
+    def _stone_markers_init(self):
+        for marker in markers_data:
+            if not marker['stone'] == 'gold':
+                self.markers[marker['stone']] = StoneMarker(**marker, quantity=0)
+            else:
+                self.markers[marker['stone']] = StoneMarker(**marker, quantity=0)
+
+    def __post_init__(self):
+        self._stone_markers_init()
 
 
 @dataclass
