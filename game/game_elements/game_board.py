@@ -1,6 +1,8 @@
+import random
 from dataclasses import dataclass, field
 from typing import List, ClassVar
 from player import Player
+from game_data.markes_and_cards_data import aristocratic_cards
 
 
 @dataclass
@@ -35,7 +37,7 @@ class StoneMarkersInventory:
 
 @dataclass
 class AristocraticCardsInventory:
-    aristocratic_cards: list = field(default_factory=lambda: [])
+    cards: list = field(default_factory=lambda: [])
 
     def remove_card(self):
         pass
@@ -46,11 +48,11 @@ class AristocraticCardsInventory:
 
 @dataclass
 class StoneCardsInventory:
-    stone_cards_lvl_1: dict[str, list] = field(
+    cards_lvl_1: dict[str, list] = field(
         default_factory=lambda: {'inverted_stack': [], 'stack_1': [], 'stack_2': [], 'stack_3': [], 'stack_4': []})
-    stone_cards_lvl_2: dict[str, list] = field(
+    cards_lvl_2: dict[str, list] = field(
         default_factory=lambda: {'inverted_stack': [], 'stack_1': [], 'stack_2': [], 'stack_3': [], 'stack_4': []})
-    stone_cards_lvl_3: dict[str, list] = field(
+    cards_lvl_3: dict[str, list] = field(
         default_factory=lambda: {'inverted_stack': [], 'stack_1': [], 'stack_2': [], 'stack_3': [], 'stack_4': []})
 
     def remove_card(self, lvl, stack):
@@ -70,6 +72,7 @@ class GameBoard:
     def game_preparation(self, num_of_player):
         self.add_players(num_of_player)
         self.prepare_stone_markers()
+        self.prepare_aristocratic_cards()
 
     def add_players(self, num_of_player):
         for num in range(num_of_player):
@@ -90,7 +93,9 @@ class GameBoard:
         pass
 
     def prepare_aristocratic_cards(self):
-        pass
+        num_of_cards = len(self.players) + 1
+        cards = random.choices(aristocratic_cards, k=num_of_cards)
+        self.aristocratic_cards.cards = cards
 
     def whose_turn(self):
         pass
