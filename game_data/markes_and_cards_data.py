@@ -179,56 +179,62 @@ cards_1_0_2_v2 = [
 ]
 
 # 0 pt, 3 stones, version 1
-cards_1_0_3_v1 = {'sapphire': {'pts': 0, 'requirements': {'diamond': 1, 'emerald': 2, 'ruby': 2}, 'img': '71cs.png'},
-                  'ruby': {'pts': 0, 'requirements': {'onyx': 2, 'diamond': 2, 'emerald': 1}, 'img': '72cs.png'},
-                  'diamond': {'pts': 0, 'requirements': {'emerald': 2, 'sapphire': 2, 'onyx': 1}, 'img': '73cs.png'},
-                  'onyx': {'pts': 0, 'requirements': {'diamond': 1, 'emerald': 2, 'ruby': 2}, 'img': '74cs.png'},
-                  'emerald': {'pts': 0, 'requirements': {'sapphire': 1, 'ruby': 2, 'onyx': 2}, 'img': '75cs.png'},
-                  }
+cards_1_0_3_v1 = [{'bonus': 'sapphire', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 1, 'emerald': 2, 'ruby': 2},
+                   'img': '71cs.png'},
+                  {'bonus': 'ruby', 'lvl': 1, 'points': 0, 'requirements': {'onyx': 2, 'diamond': 2, 'emerald': 1},
+                   'img': '72cs.png'},
+                  {'bonus': 'diamond', 'lvl': 1, 'points': 0, 'requirements': {'emerald': 2, 'sapphire': 2, 'onyx': 1},
+                   'img': '73cs.png'},
+                  {'bonus': 'onyx', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 1, 'emerald': 2, 'ruby': 2},
+                   'img': '74cs.png'},
+                  {'bonus': 'emerald', 'lvl': 1, 'points': 0, 'requirements': {'sapphire': 1, 'ruby': 2, 'onyx': 2},
+                   'img': '75cs.png'},
+                  ]
 
 # 0 pt, 3 stones, version 2
-cards_1_0_3_v2 = {'sapphire': {'pts': 0, 'requirements': {'sapphire': 1, 'emerald': 3, 'ruby': 1}, 'img': '76cs.png'},
-                  'ruby': {'pts': 0, 'requirements': {'ruby': 1, 'diamond': 1, 'onyx': 3}, 'img': '77cs.png'},
-                  'diamond': {'pts': 0, 'requirements': {'diamond': 3, 'sapphire': 1, 'onyx': 1}, 'img': '78cs.png'},
-                  'onyx': {'pts': 0, 'requirements': {'onyx': 1, 'emerald': 1, 'ruby': 3}, 'img': '79cs.png'},
-                  'emerald': {'pts': 0, 'requirements': {'sapphire': 3, 'diamond': 1, 'emerald': 1}, 'img': '80cs.png'},
-                  }
+cards_1_0_3_v2 = [{'bonus': 'sapphire', 'lvl': 1, 'points': 0, 'requirements': {'sapphire': 1, 'emerald': 3, 'ruby': 1},
+                   'img': '76cs.png'},
+                  {'bonus': 'ruby', 'lvl': 1, 'points': 0, 'requirements': {'ruby': 1, 'diamond': 1, 'onyx': 3},
+                   'img': '77cs.png'},
+                  {'bonus': 'diamond', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 3, 'sapphire': 1, 'onyx': 1},
+                   'img': '78cs.png'},
+                  {'bonus': 'onyx', 'lvl': 1, 'points': 0, 'requirements': {'onyx': 1, 'emerald': 1, 'ruby': 3},
+                   'img': '79cs.png'},
+                  {'bonus': 'emerald', 'lvl': 1, 'points': 0,
+                   'requirements': {'sapphire': 3, 'diamond': 1, 'emerald': 1},
+                   'img': '80cs.png'},
+                  ]
 
 # 0 pt, 4 stones, version 1
-cards_1_0_4_v1 = {'sapphire':
-                      {'pts': 0, 'requirements': {'diamond': 1, 'emerald': 1, 'ruby': 1, 'onyx': 1}, 'img': '81cs.png'},
-                  'ruby':
-                      {'pts': 0, 'requirements': {'diamond': 1, 'sapphire': 1, 'emerald': 1, 'onyx': 1},
-                       'img': '82cs.png'},
-                  'diamond':
-                      {'pts': 0, 'requirements': {'sapphire': 1, 'emerald': 1, 'ruby': 1, 'onyx': 1},
-                       'img': '83cs.png'},
-                  'onyx':
-                      {'pts': 0, 'requirements': {'diamond': 1, 'sapphire': 1, 'emerald': 1, 'ruby': 1},
-                       'img': '84cs.png'},
-                  'emerald':
-                      {'pts': 0, 'requirements': {'diamond': 1, 'sapphire': 1, 'ruby': 1, 'onyx': 1},
-                       'img': '85cs.png'},
-                  }
+cards_1_0_4_v1 = [
+    {'bonus': 'sapphire', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 1, 'emerald': 1, 'ruby': 1, 'onyx': 1},
+     'img': '81cs.png'},
+    {'bonus': 'ruby', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 1, 'sapphire': 1, 'emerald': 1, 'onyx': 1},
+     'img': '82cs.png'},
+    {'bonus': 'diamond', 'lvl': 1, 'points': 0, 'requirements': {'sapphire': 1, 'emerald': 1, 'ruby': 1, 'onyx': 1},
+     'img': '83cs.png'},
+    {'bonus': 'onyx', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 1, 'sapphire': 1, 'emerald': 1, 'ruby': 1},
+     'img': '84cs.png'},
+    {'bonus': 'emerald', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 1, 'sapphire': 1, 'ruby': 1, 'onyx': 1},
+     'img': '85cs.png'},
+]
 
 # 0 pt, 4 stones, version 2
-cards_1_0_4_v2 = {'sapphire':
-                      {'pts': 0, 'requirements': {'diamond': 1, 'emerald': 1, 'ruby': 2, 'onyx': 1}, 'img': '86cs.png'},
-                  'ruby':
-                      {'pts': 0, 'requirements': {'diamond': 2, 'sapphire': 1, 'emerald': 1, 'onyx': 1},
-                       'img': '87cs.png'},
-                  'diamond':
-                      {'pts': 0, 'requirements': {'sapphire': 1, 'emerald': 2, 'ruby': 1, 'onyx': 1},
-                       'img': '88cs.png'},
-                  'onyx':
-                      {'pts': 0, 'requirements': {'diamond': 1, 'sapphire': 2, 'emerald': 1, 'ruby': 1},
-                       'img': '89cs.png'},
-                  'emerald':
-                      {'pts': 0, 'requirements': {'diamond': 1, 'sapphire': 1, 'ruby': 1, 'onyx': 2},
-                       'img': '90cs.png'},
-                  }
+cards_1_0_4_v2 = [
+    {'bonus': 'sapphire', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 1, 'emerald': 1, 'ruby': 2, 'onyx': 1},
+     'img': '86cs.png'},
+    {'bonus': 'ruby', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 2, 'sapphire': 1, 'emerald': 1, 'onyx': 1},
+     'img': '87cs.png'},
+    {'bonus': 'diamond', 'lvl': 1, 'points': 0, 'requirements': {'sapphire': 1, 'emerald': 2, 'ruby': 1, 'onyx': 1},
+     'img': '88cs.png'},
+    {'bonus': 'onyx', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 1, 'sapphire': 2, 'emerald': 1, 'ruby': 1},
+     'img': '89cs.png'},
+    {'bonus': 'emerald', 'lvl': 1, 'points': 0, 'requirements': {'diamond': 1, 'sapphire': 1, 'ruby': 1, 'onyx': 2},
+     'img': '90cs.png'},
+]
 
-cards_lvl_3 = [cards_3_4_1, cards_3_3_4, cards_3_4_3, cards_3_5_2]
-cards_lvl_2 = [cards_2_1_3_v1, cards_2_1_3_v2, cards_2_2_3, cards_2_3_1_v1, cards_2_2_1, cards_2_2_2]
-cards_lvl_1 = [cards_1_0_1, cards_1_0_4_v2, cards_1_0_4_v1, cards_1_1_1, cards_1_0_3_v2, cards_1_0_2_v2, cards_1_0_3_v1,
-               cards_1_0_2_v1]
+cards_lvl_3 = list(chain(cards_3_4_1, cards_3_3_4, cards_3_4_3, cards_3_5_2))
+cards_lvl_2 = list(chain(cards_2_1_3_v1, cards_2_1_3_v2, cards_2_2_3, cards_2_3_1_v1, cards_2_2_1, cards_2_2_2))
+cards_lvl_1 = list(
+    chain(cards_1_0_1, cards_1_0_4_v2, cards_1_0_4_v1, cards_1_1_1, cards_1_0_3_v2, cards_1_0_2_v2, cards_1_0_3_v1,
+          cards_1_0_2_v1))

@@ -5,7 +5,7 @@ from player import Player
 from game_data.markes_and_cards_data import aristocratic_cards
 from stone_markers import StoneMarker
 from stone_cards import StoneCard
-from game_data.markes_and_cards_data import markers as markers_data, cards_3_3_4
+from game_data.markes_and_cards_data import markers as markers_data, cards_lvl_1, cards_lvl_2, cards_lvl_3
 
 
 @dataclass
@@ -60,8 +60,12 @@ class StoneCardsInventory:
     def remove_card(self, lvl, stack):
         pass
 
-    def lay_out_card(self):
-        pass
+    def lay_out_cards(self):
+        for attribute in vars(self):
+            cards_lvl = self.__getattribute__(attribute)
+            for card in cards_lvl.keys():
+                if card.startswith('card') and not cards_lvl[card] and cards_lvl['inverted_stack']:
+                    cards_lvl[card] = cards_lvl['inverted_stack'].pop(0)
 
 
 @dataclass
@@ -93,7 +97,15 @@ class GameBoard:
                 self.stone_markers.markers[marker['stone']] = StoneMarker(**marker, quantity=5)
 
     def prepare_stone_cards(self):
-        pass
+        random.shuffle(cards_lvl_1)
+        random.shuffle(cards_lvl_2)
+        random.shuffle(cards_lvl_3)
+
+        self.stone_cards.cards_lvl_1['inverted_stack'] = [StoneCard(**card_lvl_1) for card_lvl_1 in cards_lvl_1]
+        self.stone_cards.cards_lvl_2['inverted_stack'] = [StoneCard(**card_lvl_2) for card_lvl_2 in cards_lvl_2]
+        self.stone_cards.cards_lvl_3['inverted_stack'] = [StoneCard(**card_lvl_3) for card_lvl_3 in cards_lvl_3]
+
+        self.stone_cards.lay_out_cards()
 
     def prepare_aristocratic_cards(self):
         num_of_cards = len(self.players) + 1
