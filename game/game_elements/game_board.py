@@ -1,10 +1,11 @@
 import random
 from dataclasses import dataclass, field
-from typing import List, ClassVar
+from typing import List, ClassVar, Union
 from player import Player
 from game_data.markes_and_cards_data import aristocratic_cards
 from stone_markers import StoneMarker
-from game_data.markes_and_cards_data import markers as markers_data
+from stone_cards import StoneCard
+from game_data.markes_and_cards_data import markers as markers_data, cards_3_3_4
 
 
 @dataclass
@@ -49,17 +50,17 @@ class AristocraticCardsInventory:
 
 @dataclass
 class StoneCardsInventory:
-    cards_lvl_1: dict[str, list] = field(
-        default_factory=lambda: {'inverted_stack': [], 'stack_1': [], 'stack_2': [], 'stack_3': [], 'stack_4': []})
-    cards_lvl_2: dict[str, list] = field(
-        default_factory=lambda: {'inverted_stack': [], 'stack_1': [], 'stack_2': [], 'stack_3': [], 'stack_4': []})
-    cards_lvl_3: dict[str, list] = field(
-        default_factory=lambda: {'inverted_stack': [], 'stack_1': [], 'stack_2': [], 'stack_3': [], 'stack_4': []})
+    cards_lvl_1: dict[str, Union[List[StoneCard], StoneCard, None]] = field(
+        default_factory=lambda: {'inverted_stack': [], 'card_1': None, 'card_2': None, 'card_3': None, 'card_4': None})
+    cards_lvl_2: dict[str, Union[List[StoneCard], StoneCard, None]] = field(
+        default_factory=lambda: {'inverted_stack': [], 'card_1': None, 'card_2': None, 'card_3': None, 'card_4': None})
+    cards_lvl_3: dict[str, Union[List[StoneCard], StoneCard, None]] = field(
+        default_factory=lambda: {'inverted_stack': [], 'card_1': None, 'card_2': None, 'card_3': None, 'card_4': None})
 
     def remove_card(self, lvl, stack):
         pass
 
-    def add_card_from_inverted_stack(self):
+    def lay_out_card(self):
         pass
 
 
