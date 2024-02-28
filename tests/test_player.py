@@ -24,8 +24,8 @@ class TestPlayer:
             Player(name="Test tooooo long name")
 
     def test_markers_init(self, player):
-        for marker_quantity in player.inventory.markers.values():
-            assert marker_quantity == 0
+        for marker in player.inventory.markers.values():
+            assert marker.quantity == 0
 
     def test_stone_cards_init(self, player):
         for stone_cards_list in player.inventory.stone_cards.values():
@@ -37,12 +37,13 @@ class TestPlayer:
     def test_add_stone_markers_to_inventory(self, player, stone_markers):
         for stone_marker in stone_markers:
             player.take_markers(stone_marker)
-        assert list(player.inventory.markers.values()) == [1 for _ in range(6)]
+        quantities = [stone.quantity for stone in player.inventory.markers.values()]
+        assert quantities == [1 for _ in range(6)]
 
     def test_number_of_all_markers(self, player, stone_markers):
         assert player.inventory.check_number_markers() == 6
 
-    def test_return_one_marker(self, player, stone_markers):
-        emerald = stone_markers[0]
-        player.return_markers(emerald)
-        assert player.inventory.markers['emerald'] == 0
+    def test_return_one_marker(self, player):
+        assert player.inventory.markers['emerald'].quantity == 1
+        player.return_markers('emerald')
+        assert player.inventory.markers['emerald'].quantity == 0

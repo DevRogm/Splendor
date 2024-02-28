@@ -19,7 +19,7 @@ class PlayerInventory:
         :param marker: Name of stone
         :return: None
         """
-        self.markers[marker] += 1
+        self.markers[marker].quantity += 1
 
     def remove_marker(self, marker: str) -> None:
         """
@@ -27,14 +27,14 @@ class PlayerInventory:
         :param marker: Name of stone
         :return: None
         """
-        self.markers[marker] -= 1
+        self.markers[marker].quantity -= 1
 
     def check_number_markers(self) -> int:
         """
         The method checks number of markers
         :return: Number of markers
         """
-        return sum(self.markers.values())
+        return sum(stone.quantity for stone in self.markers.values())
 
     def _stone_markers_init(self):
         for marker in markers_data:
@@ -66,14 +66,14 @@ class Player:
         """
         self.inventory.add_marker(marker.stone)
 
-    def return_markers(self, marker: StoneMarker) -> None:
+    def return_markers(self, marker: str) -> None:
         """
         The method return marker from players inventory.
         Calls the return_marker method and pass the name of the stone as a string
         :param marker: Marker object
         :return: None
         """
-        self.inventory.remove_marker(marker.stone)
+        self.inventory.remove_marker(marker)
 
     def reserve_card(self):
         pass
