@@ -36,12 +36,13 @@ class PlayerInventory:
         """
         return sum(stone.quantity for stone in self.markers.values())
 
-    def _stone_markers_init(self):
+    def _stone_markers_init(self) -> None:
+        """
+        The method sets the initial stone markers with a quantity of 0
+        :return: None
+        """
         for marker in markers_data:
-            if not marker['stone'] == 'gold':
-                self.markers[marker['stone']] = StoneMarker(**marker, quantity=0)
-            else:
-                self.markers[marker['stone']] = StoneMarker(**marker, quantity=0)
+            self.markers[marker['stone']] = StoneMarker(**marker, quantity=0)
 
     def __post_init__(self):
         self._stone_markers_init()
@@ -59,8 +60,8 @@ class Player:
 
     def take_markers(self, marker: StoneMarker) -> None:
         """
-        The method takes marker object from the table.
-        Calls the add_marker method and pass the name of the stone as a string
+        The method takes marker from the table.
+        Calls the add_marker method from players inventory and pass the name of the stone as a string
         :param marker: Marker object
         :return: None
         """
@@ -68,8 +69,8 @@ class Player:
 
     def return_markers(self, marker: str) -> None:
         """
-        The method return marker from players inventory.
-        Calls the return_marker method and pass the name of the stone as a string
+        The method removes marker from players inventory.
+        Calls the remove_marker method from players inventory and pass the name of the stone as a string
         :param marker: Marker object
         :return: None
         """
