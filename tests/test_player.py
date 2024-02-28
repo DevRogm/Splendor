@@ -41,3 +41,8 @@ class TestPlayer:
 
     def test_number_of_all_markers(self, player, stone_markers):
         assert player.inventory.check_number_markers() == 6
+
+    def test_return_one_marker(self, player, stone_markers):
+        emerald = stone_markers[0]
+        player.return_markers(emerald)
+        assert player.inventory.markers['emerald'] == 0
