@@ -1,11 +1,11 @@
 import random
 from dataclasses import dataclass, field
-from typing import List, ClassVar, Union
-from player import Player
-from game_data.markes_and_cards_data import aristocratic_cards
-from stone_markers import StoneMarker
-from stone_cards import StoneCard
-from game_data.markes_and_cards_data import markers as markers_data, cards_lvl_1, cards_lvl_2, cards_lvl_3
+from typing import List, ClassVar, Union, Literal
+from game.game_elements.player import Player
+from game.game_elements.stone_markers import StoneMarker
+from game.game_elements.stone_cards import StoneCard
+from game_data.markes_and_cards_data import markers as markers_data, aristocratic_cards, cards_lvl_1, cards_lvl_2, \
+    cards_lvl_3
 
 
 @dataclass
@@ -77,16 +77,20 @@ class GameBoard:
 
     def game_preparation(self, num_of_player):
         self.add_players(num_of_player)
-        self.prepare_stone_markers()
-        self.prepare_aristocratic_cards()
-        self.prepare_stone_cards()
+        if num_of_player in [2, 3, 4]:
+            self.prepare_stone_markers()
+            self.prepare_aristocratic_cards()
+            self.prepare_stone_cards()
 
-    def add_players(self, num_of_player):
-        for num in range(num_of_player):
-            # TO DO: Allow to enter the players name
-            # or choose existing players
-            player = Player(name=f"Player_{num + 1}")
-            self.players.append(player)
+    def add_players(self, num_of_player: Literal[2, 3, 4]) -> None:
+        if 2 <= num_of_player <= 4:
+            for num in range(num_of_player):
+                # TO DO: Allow to enter the players name
+                # or choose existing players
+                player = Player(name=f"Player_{num + 1}")
+                self.players.append(player)
+        else:
+            raise ValueError("Wrong number of players")
 
     def prepare_stone_markers(self):
         num_of_markers = self.stone_markers.markers_quantity_options[len(self.players)]
