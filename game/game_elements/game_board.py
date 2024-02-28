@@ -1,11 +1,11 @@
 import random
 from dataclasses import dataclass, field
-from typing import List, ClassVar, Union
-from player import Player
-from game_data.markes_and_cards_data import aristocratic_cards
-from stone_markers import StoneMarker
-from stone_cards import StoneCard
-from game_data.markes_and_cards_data import markers as markers_data, cards_lvl_1, cards_lvl_2, cards_lvl_3
+from typing import List, ClassVar, Union, Literal
+from game.game_elements.player import Player
+from game.game_elements.stone_markers import StoneMarker
+from game.game_elements.stone_cards import StoneCard
+from game_data.markes_and_cards_data import markers as markers_data, aristocratic_cards, cards_lvl_1, cards_lvl_2, \
+    cards_lvl_3
 
 
 @dataclass
@@ -60,7 +60,11 @@ class StoneCardsInventory:
     def remove_card(self, lvl, stack):
         pass
 
-    def lay_out_cards(self):
+    def lay_out_cards(self) -> None:
+        """
+        The method places cards on the table from the stack
+        :return: None
+        """
         for attribute in vars(self):
             cards_lvl = self.__getattribute__(attribute)
             for card in cards_lvl.keys():
@@ -75,20 +79,39 @@ class GameBoard:
     aristocratic_cards: AristocraticCardsInventory = AristocraticCardsInventory()
     stone_cards: StoneCardsInventory = StoneCardsInventory()
 
-    def game_preparation(self, num_of_player):
+    def game_preparation(self, num_of_player: Literal[2, 3, 4]) -> None:
+        """
+        The method prepares the game based on the given number of players.
+        Calls the methods responsible for adding players, setup stone markers, aristocratic and stones cards
+        :param num_of_player:
+        :return: None
+        """
         self.add_players(num_of_player)
-        self.prepare_stone_markers()
-        self.prepare_aristocratic_cards()
-        self.prepare_stone_cards()
+        if num_of_player in [2, 3, 4]:
+            self.prepare_stone_markers()
+            self.prepare_aristocratic_cards()
+            self.prepare_stone_cards()
 
-    def add_players(self, num_of_player):
-        for num in range(num_of_player):
-            # TO DO: Allow to enter the players name
-            # or choose existing players
-            player = Player(name=f"Player_{num + 1}")
-            self.players.append(player)
+    def add_players(self, num_of_player: Literal[2, 3, 4]) -> None:
+        """
+        The method that adds players to the game based on the number of players.
+        :param num_of_player:
+        :return:
+        """
+        if 2 <= num_of_player <= 4:
+            for num in range(num_of_player):
+                # TO DO: Allow to enter the players name
+                # or choose existing players
+                player = Player(name=f"Player_{num + 1}")
+                self.players.append(player)
+        else:
+            raise ValueError("Wrong number of players")
 
-    def prepare_stone_markers(self):
+    def prepare_stone_markers(self) -> None:
+        """
+        The method prepares stone markers based on number of players
+        :return:
+        """
         num_of_markers = self.stone_markers.markers_quantity_options[len(self.players)]
         for marker in markers_data:
             if not marker['stone'] == 'gold':
@@ -96,7 +119,12 @@ class GameBoard:
             else:
                 self.stone_markers.markers[marker['stone']] = StoneMarker(**marker, quantity=5)
 
-    def prepare_stone_cards(self):
+    def prepare_stone_cards(self) -> None:
+        """
+        The method prepares the stone cards, shuffles the cards at all levels, creates stacks of cards and arranges
+        the cards on the table
+        :return:
+        """
         random.shuffle(cards_lvl_1)
         random.shuffle(cards_lvl_2)
         random.shuffle(cards_lvl_3)
@@ -107,7 +135,11 @@ class GameBoard:
 
         self.stone_cards.lay_out_cards()
 
-    def prepare_aristocratic_cards(self):
+    def prepare_aristocratic_cards(self) -> None:
+        """
+        The method prepares aristocratic cards based on number of players
+        :return: None
+        """
         num_of_cards = len(self.players) + 1
         cards = random.choices(aristocratic_cards, k=num_of_cards)
         self.aristocratic_cards.cards = cards

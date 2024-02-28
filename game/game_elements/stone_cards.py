@@ -8,5 +8,3 @@ class StoneCard:
     points: int
     requirements: dict
     img: str
-
-
