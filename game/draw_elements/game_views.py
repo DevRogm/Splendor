@@ -15,8 +15,9 @@ class GameViews:
     results_view: ResultsView = ResultsView()
     current_view: str = 'start_view'
 
-    def display_view(self):
-        return self.__getattribute__(self.current_view)
+    def draw_view(self, screen, images_path):
+        view = self.__getattribute__(self.current_view)
+        view.draw(screen, images_path)
 
     def change_view(self, new_view):
         self.current_view = new_view
