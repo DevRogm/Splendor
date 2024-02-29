@@ -18,6 +18,8 @@ game_views = GameViews()
 
 
 while running:
+    # Display game view
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False

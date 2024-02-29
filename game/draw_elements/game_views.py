@@ -13,3 +13,10 @@ class GameViews:
     statistics_view: StatisticsView = StatisticsView()
     game_board_view: GameBoardView = GameBoardView()
     results_view: ResultsView = ResultsView()
+    current_view: str = 'start_view'
+
+    def display_view(self):
+        return self.__getattribute__(self.current_view)
+
+    def change_view(self, new_view):
+        self.current_view = new_view
