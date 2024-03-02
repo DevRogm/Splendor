@@ -21,3 +21,7 @@ class GameViews:
 
     def change_view(self, new_view):
         self.current_view = new_view
+
+    def do_action(self):
+        view = self.__getattribute__(self.current_view)
+        view.action(self)

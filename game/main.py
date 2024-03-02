@@ -2,7 +2,7 @@ import pygame
 import os
 from game.game_elements.game_board import GameBoard
 from game.draw_elements.game_views import GameViews
-
+from utils import element_detection
 pygame.init()
 
 screen = pygame.display.set_mode((1280, 720))
@@ -23,6 +23,8 @@ while running:
     game_views.draw_view(screen, images_path)
     pygame.display.update()
     for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONUP:
+            game_views.do_action()
         if event.type == pygame.QUIT:
             running = False
     screen.fill("black")
