@@ -14,6 +14,22 @@ def draw_el_and_save_their_edges(view, screen, images_path, image_name, pos_x=0,
         view.view_elements.setdefault(element_name, el_edges)
 
 
+def draw_statistic(data, screen):
+    dummy_data = {
+        1: {'nickname': "Lenny", "score": 24, "date": "21-03-2021"},
+        2: {'nickname': "Lenny", "score": 22, "date": "23-02-2021"},
+        3: {'nickname': "Lenny", "score": 21, "date": "13-01-2021"},
+        4: {'nickname': "Lenny", "score": 14, "date": "23-03-2021"},
+        5: {'nickname': "Lenny", "score": 12, "date": "12-05-2021"}
+    }
+    myfont = pygame.font.SysFont('ARIAL', 26)
+    player_score = myfont.render("Lp.       Nickname        Score             Date", True, (227, 206, 0))
+    screen.blit(player_score, (400, 200))
+    for data_key, data_values in dummy_data.items():
+        player_score = myfont.render(f"{data_key}.{12*' '}{data_values['nickname']}{14*' '}{data_values['score']}{12*' '}{data_values['date']}", True, (227, 206, 0))
+        screen.blit(player_score, (400, 200+data_key*50))
+
+
 def element_detection(element_edges):
     el_pos_x = element_edges[0][0]
     el_pos_y = element_edges[0][1]
@@ -26,4 +42,3 @@ def element_detection(element_edges):
         return True
     else:
         return False
-

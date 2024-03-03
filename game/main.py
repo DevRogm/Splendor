@@ -24,7 +24,9 @@ while running:
     pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
-            game_views.do_action()
+            action = game_views.do_action()
+            if action == "quit":
+                running = False
         if event.type == pygame.QUIT:
             running = False
     screen.fill("black")

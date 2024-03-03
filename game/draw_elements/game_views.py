@@ -24,4 +24,4 @@ class GameViews:
 
     def do_action(self):
         view = self.__getattribute__(self.current_view)
-        view.action(self)
+        return view.action(self)

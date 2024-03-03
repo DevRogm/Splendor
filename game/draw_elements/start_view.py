@@ -1,3 +1,4 @@
+import pygame
 from dataclasses import dataclass, field
 from game.utils import draw_el_and_save_their_edges, element_detection
 
@@ -22,13 +23,14 @@ class StartView:
     def action(self, game_view):
         for element_key, element_values in self.view_elements.items():
             if element_detection(element_values):
-                self.__getattribute__(element_key)(game_view)
+                return self.__getattribute__(element_key)(game_view)
 
     def go_to_game_menu(self, game_view):
         game_view.change_view('game_menu_view')
 
     def go_to_statistics(self, game_view):
-        print("Go to statistics", self)
+        game_view.change_view('statistics_view')
 
     def game_quit(self, game_view):
-        print("Game quit", self)
+        return "quit"
+
