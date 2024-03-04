@@ -22,8 +22,10 @@ class StartView:
 
     def action(self, game_view):
         for element_key, element_values in self.view_elements.items():
-            if element_detection(element_values):
+            if element_detection(element_values) and 'go_to' in element_key:
                 return self.__getattribute__(element_key)(game_view)
+            elif element_detection(element_values):
+                return self.__getattribute__(element_key)()
 
     def go_to_game_menu(self, game_view):
         game_view.change_view('game_menu_view')
@@ -31,6 +33,6 @@ class StartView:
     def go_to_statistics(self, game_view):
         game_view.change_view('statistics_view')
 
-    def game_quit(self, game_view):
+    def game_quit(self):
         return "quit"
 
