@@ -38,7 +38,6 @@ class GameMenuView:
             if self.num_of_players == 4:
                 draw_el_and_save_their_edges(self, screen, images_path, "selected.png", pos_y=100, pos_x=-220)
 
-
             # Enter player names - display
             draw_el_and_save_their_edges(self, screen, images_path, "enter_player_names.png", pos_y=0)
 
@@ -56,8 +55,7 @@ class GameMenuView:
             for player_k, player_v in self.player_names.items():
                 if player_v:
                     text = f"Player {player_k}: {player_v}"
-                    draw_simple_text(screen, text, pos_y=250-player_k*70)
-
+                    draw_simple_text(screen, text, pos_y=250 - player_k * 70)
 
     def action(self, game_view):
         print(self.num_of_players)
@@ -96,4 +94,7 @@ class GameMenuView:
         game_view.change_view('game_view')
 
     def go_to_start_view(self, game_view):
+        self.player_names = dict.fromkeys([1, 2, 3, 4], '')
+        self.can_start_game = False
+        self.active_player = 1
         game_view.change_view('start_view')
