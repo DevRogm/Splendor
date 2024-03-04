@@ -6,4 +6,4 @@ class GameBoardView:
     pass
 
     def draw(self):
-        print(self)
+        pass
