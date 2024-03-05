@@ -2,7 +2,7 @@ import pygame
 import os
 
 
-def draw_el_and_save_their_edges(view, screen, images_path, image_name, pos_x=0, pos_y=0, element_name=None) -> None:
+def draw_elements(view, screen, images_path, image_name, pos_x=0, pos_y=0, element_name=None) -> None:
     """
     A methods that draws element and save them edges if an element name passed
     :param view: current view
@@ -68,3 +68,12 @@ def element_detection(element_edges: tuple) -> bool:
         return True
     else:
         return False
+
+
+def draw_simple_text(screen, text, pos_x=0, pos_y=0):
+    my_font = pygame.font.SysFont('ARIAL', 36)
+    player_name = my_font.render(text.upper(), True, (227, 206, 0))
+    player_name_position = (
+        screen.get_width() / 2 - player_name.get_width() / 2,
+        screen.get_height() / 2 - pos_y)
+    screen.blit(player_name, player_name_position)
