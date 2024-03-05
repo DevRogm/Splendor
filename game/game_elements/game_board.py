@@ -99,10 +99,8 @@ class GameBoard:
         :return: None
         """
         if 2 <= len(players) <= 4:
-            for num in range(len(players)):
-                # TO DO: Allow to enter the players name
-                # or choose existing players
-                player = Player(name=f"Player_{num + 1}")
+            for player_name in players.values():
+                player = Player(name=player_name)
                 self.players.append(player)
         else:
             raise ValueError("Wrong number of players")
