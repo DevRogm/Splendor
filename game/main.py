@@ -26,6 +26,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
             action = game_views.do_action()
+            if action == "start_game":
+                players = game_views.game_menu_view.players
+                game_board.game_preparation(players)
             if action == "quit":
                 running = False
         if game_views.current_view == "game_menu_view" and game_views.game_menu_view.num_of_players:

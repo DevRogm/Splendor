@@ -79,27 +79,27 @@ class GameBoard:
     aristocratic_cards: AristocraticCardsInventory = AristocraticCardsInventory()
     stone_cards: StoneCardsInventory = StoneCardsInventory()
 
-    def game_preparation(self, num_of_player: Literal[2, 3, 4]) -> None:
+    def game_preparation(self, ply: dict) -> None:
         """
         The method prepares the game based on the given number of players.
         Calls the methods responsible for adding players, setup stone markers, aristocratic and stones cards
-        :param num_of_player:
+        :param ply:
         :return: None
         """
-        self.add_players(num_of_player)
-        if num_of_player in [2, 3, 4]:
+        self.add_players(ply)
+        if len(ply) in [2, 3, 4]:
             self.prepare_stone_markers()
             self.prepare_aristocratic_cards()
             self.prepare_stone_cards()
 
-    def add_players(self, num_of_player: Literal[2, 3, 4]) -> None:
+    def add_players(self, players: dict) -> None:
         """
         The method that adds players to the game based on the number of players.
-        :param num_of_player:
-        :return:
+        :param players:
+        :return: None
         """
-        if 2 <= num_of_player <= 4:
-            for num in range(num_of_player):
+        if 2 <= len(players) <= 4:
+            for num in range(len(players)):
                 # TO DO: Allow to enter the players name
                 # or choose existing players
                 player = Player(name=f"Player_{num + 1}")

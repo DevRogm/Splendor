@@ -9,7 +9,7 @@ class GameMenuView:
     num_of_players: int = 2
     temp_name: str = ''
     active_player: int = 1
-    player_names: dict = field(default_factory=lambda: {1: '', 2: '', 3: '', 4: ''})
+    players: dict = field(default_factory=lambda: {})
     can_start_game: bool = False
 
     def draw(self, screen, images_path):
@@ -52,13 +52,12 @@ class GameMenuView:
             draw_elements(self, screen, images_path, "start_game.png", pos_x=-400, pos_y=-150,
                                          element_name='go_to_game_view')
 
-            for player_k, player_v in self.player_names.items():
+            for player_k, player_v in self.players.items():
                 if player_v:
                     text = f"Player {player_k}: {player_v}"
                     draw_simple_text(screen, text, pos_y=250 - player_k * 70)
 
     def action(self, game_view):
-        print(self.num_of_players)
         for element_key, element_values in self.view_elements.items():
             if element_detection(element_values) and 'go_to' in element_key:
                 return self.__getattribute__(element_key)(game_view)
@@ -79,7 +78,7 @@ class GameMenuView:
 
     def add_player_name(self, char_id):
         if char_id == 13 and len(self.temp_name) >= 1:
-            self.player_names[self.active_player] = self.temp_name
+            self.players[self.active_player] = self.temp_name
             if self.active_player == self.num_of_players:
                 self.can_start_game = True
             else:
@@ -91,10 +90,11 @@ class GameMenuView:
             self.temp_name += chr(char_id)
 
     def go_to_game_view(self, game_view):
-        game_view.change_view('game_view')
+        game_view.change_view('game_board_view')
+        return "start_game"
 
     def go_to_start_view(self, game_view):
-        self.player_names = dict.fromkeys([1, 2, 3, 4], '')
+        self.players = dict.fromkeys([1, 2, 3, 4], '')
         self.can_start_game = False
         self.active_player = 1
         game_view.change_view('start_view')
