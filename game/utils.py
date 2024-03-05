@@ -2,7 +2,7 @@ import pygame
 import os
 
 
-def draw_el_and_save_their_edges(view, screen, images_path, image_name, pos_x=0, pos_y=0, element_name=None) -> None:
+def draw_elements(view, screen, images_path, image_name, pos_x=0, pos_y=0, element_name=None) -> None:
     """
     A methods that draws element and save them edges if an element name passed
     :param view: current view

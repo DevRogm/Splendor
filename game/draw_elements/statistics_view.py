@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from game.utils import draw_el_and_save_their_edges, element_detection, draw_statistic
+from game.utils import draw_elements, element_detection, draw_statistic
 from typing import Type
 
 
@@ -15,13 +15,13 @@ class StatisticsView:
         :return: None
         """
         # Prepare Statistics title and display
-        draw_el_and_save_their_edges(self, screen, images_path, "statistics_option.png", pos_y=300)
+        draw_elements(self, screen, images_path, "statistics_option.png", pos_y=300)
 
         # Prepare list of player with scores, - to do: add pagination and read data from db
         draw_statistic(screen)
 
         # Back to previous view button
-        draw_el_and_save_their_edges(self, screen, images_path, "back.png", pos_x=-550, pos_y=-300,
+        draw_elements(self, screen, images_path, "back.png", pos_x=-550, pos_y=-300,
                                      element_name='back_to_start_view')
 
     def action(self, game_view) -> None:

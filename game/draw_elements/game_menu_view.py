@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from game.utils import draw_el_and_save_their_edges, element_detection, draw_simple_text
+from game.utils import draw_elements, element_detection, draw_simple_text
 from typing import List
 
 
@@ -15,41 +15,41 @@ class GameMenuView:
     def draw(self, screen, images_path):
         if not self.can_start_game:
             # Prepare Game Menu title and display
-            draw_el_and_save_their_edges(self, screen, images_path, "add_players.png", pos_y=300)
+            draw_elements(self, screen, images_path, "add_players.png", pos_y=300)
 
             # Select number of players - display
-            draw_el_and_save_their_edges(self, screen, images_path, "select_num_of_players.png", pos_y=200)
+            draw_elements(self, screen, images_path, "select_num_of_players.png", pos_y=200)
 
             # Select 2 players
-            draw_el_and_save_their_edges(self, screen, images_path, "2_players.png", pos_y=100, pos_x=200,
+            draw_elements(self, screen, images_path, "2_players.png", pos_y=100, pos_x=200,
                                          element_name="select_2_players")
             if self.num_of_players == 2:
-                draw_el_and_save_their_edges(self, screen, images_path, "selected.png", pos_y=100, pos_x=180)
+                draw_elements(self, screen, images_path, "selected.png", pos_y=100, pos_x=180)
 
             # Select 3 players
-            draw_el_and_save_their_edges(self, screen, images_path, "3_players.png", pos_y=100,
+            draw_elements(self, screen, images_path, "3_players.png", pos_y=100,
                                          element_name="select_3_players")
             if self.num_of_players == 3:
-                draw_el_and_save_their_edges(self, screen, images_path, "selected.png", pos_y=100, pos_x=-20)
+                draw_elements(self, screen, images_path, "selected.png", pos_y=100, pos_x=-20)
 
             # Select 4 players
-            draw_el_and_save_their_edges(self, screen, images_path, "4_players.png", pos_y=100, pos_x=-200,
+            draw_elements(self, screen, images_path, "4_players.png", pos_y=100, pos_x=-200,
                                          element_name="select_4_players")
             if self.num_of_players == 4:
-                draw_el_and_save_their_edges(self, screen, images_path, "selected.png", pos_y=100, pos_x=-220)
+                draw_elements(self, screen, images_path, "selected.png", pos_y=100, pos_x=-220)
 
             # Enter player names - display
-            draw_el_and_save_their_edges(self, screen, images_path, "enter_player_names.png", pos_y=0)
+            draw_elements(self, screen, images_path, "enter_player_names.png", pos_y=0)
 
             text = f"Player {self.active_player}: {self.temp_name}"
             draw_simple_text(screen, text, pos_y=-50)
 
         # Back to previous view
-        draw_el_and_save_their_edges(self, screen, images_path, "back.png", pos_x=-550, pos_y=-300,
+        draw_elements(self, screen, images_path, "back.png", pos_x=-550, pos_y=-300,
                                      element_name='go_to_start_view')
 
         if self.can_start_game:
-            draw_el_and_save_their_edges(self, screen, images_path, "start_game.png", pos_x=-400, pos_y=-150,
+            draw_elements(self, screen, images_path, "start_game.png", pos_x=-400, pos_y=-150,
                                          element_name='go_to_game_view')
 
             for player_k, player_v in self.player_names.items():
