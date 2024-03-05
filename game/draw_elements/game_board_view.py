@@ -13,10 +13,10 @@ class GameBoardView:
         :param images_path: Path of images
         :return: None
         """
-        # Prepare Statistics title and display
+        # Game Area
         draw_elements(self, screen, images_path, "statistics_option.png", pos_y=300)
 
-        # Back to previous view button
+        # Players Area
         draw_elements(self, screen, images_path, "back.png", pos_x=-550, pos_y=-300,
                       element_name='back_to_start_view')
 

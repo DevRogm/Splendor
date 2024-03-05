@@ -77,3 +77,26 @@ def draw_simple_text(screen, text, pos_x=0, pos_y=0):
         screen.get_width() / 2 - player_name.get_width() / 2,
         screen.get_height() / 2 - pos_y)
     screen.blit(player_name, player_name_position)
+
+
+def draw_game_area(screen):
+    game_area_surface = pygame.Surface((screen.get_width() / 2, screen.get_height()))
+    pygame.draw.rect(game_area_surface, (250, 0, 0), (0, 0, screen.get_width() / 2,
+                                                      screen.get_height()), 1)
+    screen.blit(game_area_surface, (screen.get_width() / 2, 0))
+
+    def draw_player_area(screen):
+        pygame.draw.rect(screen, (250, 0, 0), (screen.get_width() / 2, 0, screen.get_width() / 2,
+                                               screen.get_height()), 2)
+
+    def draw_stone_card(screen):
+        pass
+
+    def draw_reverse_card(screen):
+        pass
+
+    def draw_markers(screen):
+        pass
+
+    def draw_aristocratic_card(screen):
+        pass
