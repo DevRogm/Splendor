@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection, draw_game_area, draw_player_area, draw_markers_area
+from game.utils import draw_elements, element_detection, draw_game_area, draw_player_area, draw_simple_text, draw_marker_quantities
 from game_data.markes_and_cards_data import markers
 from game.game_elements.game_board import GameBoard
 
@@ -35,6 +35,15 @@ class GameBoardView:
             draw_elements(self, screen, images_path, img_name, pos_x=pos_x, pos_y=pos_y,
                           element_name=element_name)
 
+        # Draw Marker Quantities
+        for element_key, element_values in self.view_elements.items():
+            if "marker" in element_key:
+                marker_name = element_key.split("_")[1]
+                quantity = str(self.game_board.stone_markers.markers[marker_name].quantity)
+                pos_x = (element_values[0][0] + element_values[1][0]) / 2.01
+                pos_y = (element_values[0][1] + element_values[1][1]) / 2.25
+                draw_marker_quantities(screen, quantity, pos_x=pos_x, pos_y=pos_y)
+
     def action(self, game_view) -> None:
         """
         A method that calls another method with an action on the found element
@@ -43,7 +52,7 @@ class GameBoardView:
         """
         for element_key, element_values in self.view_elements.items():
             if element_detection(element_values):
-                if "take_" in element_key:
+                if "marker" in element_key:
                     self.take_marker(element_key)
                 else:
                     self.__getattribute__(element_key)(game_view)

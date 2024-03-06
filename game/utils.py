@@ -70,12 +70,19 @@ def element_detection(element_edges: tuple) -> bool:
         return False
 
 
-def draw_simple_text(screen, text, pos_x=0, pos_y=0):
-    my_font = pygame.font.SysFont('ARIAL', 36)
+def draw_simple_text(screen, text, pos_x=0, pos_y=0, font_size=36):
+    my_font = pygame.font.SysFont('ARIAL', font_size)
     player_name = my_font.render(text.upper(), True, (227, 206, 0))
     player_name_position = (
-        screen.get_width() / 2 - player_name.get_width() / 2,
+        screen.get_width() / 2 - player_name.get_width() / 2 - pos_x,
         screen.get_height() / 2 - pos_y)
+    screen.blit(player_name, player_name_position)
+
+
+def draw_marker_quantities(screen, text, pos_x=0, pos_y=0):
+    my_font = pygame.font.SysFont('ARIAL', 20)
+    player_name = my_font.render(text.upper(), True, (227, 206, 0))
+    player_name_position = (pos_x, pos_y)
     screen.blit(player_name, player_name_position)
 
 
