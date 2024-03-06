@@ -28,7 +28,7 @@ class GameBoardView:
 
         # Draw Markers
         for marker in enumerate(markers):
-            pos_y = -screen.get_height() / 3
+            pos_y = -screen.get_height() / 2.8
             pos_x = - screen.get_width() * 0.05 - (100 * marker[0])
             img_name = f"{marker[1]['stone']}.png"
             element_name = f"take_{marker[1]['stone']}_marker"
@@ -41,8 +41,14 @@ class GameBoardView:
                 marker_name = element_key.split("_")[1]
                 quantity = str(self.game_board.stone_markers.markers[marker_name].quantity)
                 pos_x = (element_values[0][0] + element_values[1][0]) / 2.01
-                pos_y = (element_values[0][1] + element_values[1][1]) / 2.25
+                pos_y = (element_values[0][1] + element_values[1][1]) / 2.2
                 draw_marker_quantities(screen, quantity, pos_x=pos_x, pos_y=pos_y)
+
+        # Draw Reverse Cards
+        for lvl_card in range(1, 4):
+            img_name = f"{lvl_card}_lvl_cards.png"
+            cards_pos = - screen.get_width() * 0.055, 300 - (lvl_card * 140)
+            draw_elements(self, screen, images_path, img_name, pos_x=cards_pos[0], pos_y=cards_pos[1])
 
     def action(self, game_view) -> None:
         """
