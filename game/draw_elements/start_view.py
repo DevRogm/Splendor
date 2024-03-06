@@ -1,6 +1,6 @@
 import pygame
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection, draw_game_area
+from game.utils import draw_elements, element_detection, draw_game_area, draw_player_area
 
 
 @dataclass
@@ -20,8 +20,6 @@ class StartView:
         draw_elements(self, screen, images_path, "quit_option.png", pos_y=-160,
                       element_name='game_quit')
 
-        # Game Area
-        draw_game_area(screen)
     def action(self, game_view):
         for element_key, element_values in self.view_elements.items():
             if element_detection(element_values) and 'go_to' in element_key:

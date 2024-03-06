@@ -81,22 +81,31 @@ def draw_simple_text(screen, text, pos_x=0, pos_y=0):
 
 def draw_game_area(screen):
     game_area_surface = pygame.Surface((screen.get_width() / 2, screen.get_height()))
-    pygame.draw.rect(game_area_surface, (250, 0, 0), (0, 0, screen.get_width() / 2,
-                                                      screen.get_height()), 1)
+    pygame.draw.rect(game_area_surface, (250, 0, 0), (0, 0, game_area_surface.get_width(),
+                                                      game_area_surface.get_height()), 1)
     screen.blit(game_area_surface, (screen.get_width() / 2, 0))
 
-    def draw_player_area(screen):
-        pygame.draw.rect(screen, (250, 0, 0), (screen.get_width() / 2, 0, screen.get_width() / 2,
-                                               screen.get_height()), 2)
 
-    def draw_stone_card(screen):
-        pass
+def draw_player_area(screen, player_num):
+    player_area_surface = pygame.Surface((screen.get_width() / 4, screen.get_height() / 2))
+    pygame.draw.rect(player_area_surface, (250, 0, 0), (0, 0, player_area_surface.get_width(),
+                                                        player_area_surface.get_height()), 1)
+    player_positions = {1: (0, 0), 2: (player_area_surface.get_width(), 0), 3: (0, player_area_surface.get_height()),
+                        4: (player_area_surface.get_width(), player_area_surface.get_height())}
+    screen.blit(player_area_surface, player_positions[player_num])
 
-    def draw_reverse_card(screen):
-        pass
 
-    def draw_markers(screen):
-        pass
+def draw_stone_card(screen):
+    pass
 
-    def draw_aristocratic_card(screen):
-        pass
+
+def draw_reverse_card(screen):
+    pass
+
+
+def draw_markers(screen):
+    pass
+
+
+def draw_aristocratic_card(screen):
+    pass

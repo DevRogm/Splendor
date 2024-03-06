@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection
+from game.utils import draw_elements, element_detection, draw_game_area, draw_player_area
 
 
 @dataclass
@@ -13,12 +13,13 @@ class GameBoardView:
         :param images_path: Path of images
         :return: None
         """
+        #
         # Game Area
-        draw_elements(self, screen, images_path, "statistics_option.png", pos_y=300)
+        draw_game_area(screen)
 
-        # Players Area
-        draw_elements(self, screen, images_path, "back.png", pos_x=-550, pos_y=-300,
-                      element_name='back_to_start_view')
+        # Player Area
+        for player in range(1, 5):
+            draw_player_area(screen, player)
 
     def action(self, game_view) -> None:
         """
