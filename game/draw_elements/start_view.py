@@ -1,6 +1,6 @@
 import pygame
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection, draw_game_area, draw_player_area
+from game.utils import draw_elements, element_detection
 
 
 @dataclass

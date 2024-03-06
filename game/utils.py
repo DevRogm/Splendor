@@ -79,20 +79,32 @@ def draw_simple_text(screen, text, pos_x=0, pos_y=0):
     screen.blit(player_name, player_name_position)
 
 
-def draw_game_area(screen):
-    game_area_surface = pygame.Surface((screen.get_width() / 2, screen.get_height()))
-    pygame.draw.rect(game_area_surface, (250, 0, 0), (0, 0, game_area_surface.get_width(),
-                                                      game_area_surface.get_height()), 1)
-    screen.blit(game_area_surface, (screen.get_width() / 2, 0))
+def draw_game_area(screen, game_area):
+    if not game_area:
+        game_area = pygame.Surface((screen.get_width() / 2, screen.get_height()))
+    pygame.draw.rect(game_area, (250, 0, 0), (0, 0, game_area.get_width(),
+                                              game_area.get_height()), 1)
+    screen.blit(game_area, (screen.get_width() / 2, 0))
+    return game_area
 
 
-def draw_player_area(screen, player_num):
-    player_area_surface = pygame.Surface((screen.get_width() / 4, screen.get_height() / 2))
+def draw_player_area(screen, player, player_num, player_areas):
+    if len(player_areas) != player_num:
+        player_area_surface = pygame.Surface((screen.get_width() / 4, screen.get_height() / 2))
+    else:
+        player_area_surface = player_areas[player]
     pygame.draw.rect(player_area_surface, (250, 0, 0), (0, 0, player_area_surface.get_width(),
                                                         player_area_surface.get_height()), 1)
     player_positions = {1: (0, 0), 2: (player_area_surface.get_width(), 0), 3: (0, player_area_surface.get_height()),
                         4: (player_area_surface.get_width(), player_area_surface.get_height())}
-    screen.blit(player_area_surface, player_positions[player_num])
+    screen.blit(player_area_surface, player_positions[player])
+    return player_area_surface
+
+
+def draw_markers_area(screen, game_area_surface):
+    pygame.draw.rect(game_area_surface, (250, 0, 0), (0, 0, game_area_surface.get_width(),
+                                                      game_area_surface.get_height()), 1)
+    screen.blit(game_area_surface, (220, 0))
 
 
 def draw_stone_card(screen):

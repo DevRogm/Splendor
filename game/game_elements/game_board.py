@@ -15,6 +15,7 @@ class StoneMarkersInventory:
         3: 5,  # 3 players: 5 markers
         4: 7,  # 4 players: 7 markers
     }
+    players: list
     markers: dict = field(default_factory=lambda: {})
 
     def add_marker(self, marker: str) -> None:
@@ -23,7 +24,11 @@ class StoneMarkersInventory:
         :param marker: Name of stone
         :return: None
         """
-        self.markers[marker] += 1
+        if self.markers[marker].stone == 'gold' and self.markers[marker].quantity < 5:
+            self.markers[marker] += 1
+        else:
+            if self.markers[marker].quantity < len(self.players):
+                self.markers[marker] += 1
 
     def remove_marker(self, marker: str) -> None:
         """
@@ -31,7 +36,8 @@ class StoneMarkersInventory:
         :param marker: Name of stone
         :return: None
         """
-        self.markers[marker] -= 1
+        if self.markers[marker].quantity > 0:
+            self.markers[marker].quantity -= 1
 
     def check_number_markers(self):
         pass
@@ -75,7 +81,7 @@ class StoneCardsInventory:
 @dataclass
 class GameBoard:
     players: List[Player] = field(default_factory=lambda: [])
-    stone_markers: StoneMarkersInventory = StoneMarkersInventory()
+    stone_markers: StoneMarkersInventory = StoneMarkersInventory(players)
     aristocratic_cards: AristocraticCardsInventory = AristocraticCardsInventory()
     stone_cards: StoneCardsInventory = StoneCardsInventory()
 

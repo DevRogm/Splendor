@@ -19,7 +19,7 @@ images_path = os.path.abspath('../images')
 # Init game_board and game_views
 game_board = GameBoard()
 game_views = GameViews()
-
+game_views.game_board_view.game_board = game_board
 while running:
     # Display game view
     game_views.draw_view(screen, images_path)
@@ -29,7 +29,7 @@ while running:
             action = game_views.do_action()
             # code only for test game board view , remove after work on game board
             if test_game_board:
-                game_views.current_view = "game_board_view"
+                game_views.current_view = "game_board_view"  # remove after work on game board
                 # if action == "start_game": # uncomment after work on game board
                 # players = game_views.game_menu_view.players # uncomment after work on game board
                 players = {1: "Mariusz", 2: "Magda", 3: "Milosz", 4: "Mikolaj"}  # remove after work on game board
