@@ -12,13 +12,13 @@ class StartView:
         draw_elements(self, screen, images_path, "splendor.png", pos_y=200)
         # Prepare Game option
         draw_elements(self, screen, images_path, "game_option.png",
-                                     element_name='go_to_game_menu')
+                      element_name='go_to_game_menu')
         # Prepare Statistics option
         draw_elements(self, screen, images_path, "statistics_option.png", pos_y=-80,
-                                     element_name='go_to_statistics')
+                      element_name='go_to_statistics')
         # Prepare Quit option
         draw_elements(self, screen, images_path, "quit_option.png", pos_y=-160,
-                                     element_name='game_quit')
+                      element_name='game_quit')
 
     def action(self, game_view):
         for element_key, element_values in self.view_elements.items():
@@ -35,4 +35,3 @@ class StartView:
 
     def game_quit(self):
         return "quit"
-

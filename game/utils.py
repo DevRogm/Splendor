@@ -70,10 +70,75 @@ def element_detection(element_edges: tuple) -> bool:
         return False
 
 
-def draw_simple_text(screen, text, pos_x=0, pos_y=0):
-    my_font = pygame.font.SysFont('ARIAL', 36)
+def draw_simple_text(screen, text, pos_x=0, pos_y=0, font_size=36):
+    my_font = pygame.font.SysFont('ARIAL', font_size)
     player_name = my_font.render(text.upper(), True, (227, 206, 0))
     player_name_position = (
-        screen.get_width() / 2 - player_name.get_width() / 2,
+        screen.get_width() / 2 - player_name.get_width() / 2 - pos_x,
         screen.get_height() / 2 - pos_y)
     screen.blit(player_name, player_name_position)
+
+
+def draw_marker_quantities(screen, text, pos_x=0, pos_y=0):
+    my_font = pygame.font.SysFont('ARIAL', 20)
+    player_name = my_font.render(text.upper(), True, (227, 206, 0))
+    player_name_position = (pos_x, pos_y)
+    screen.blit(player_name, player_name_position)
+
+
+def draw_game_area(screen, game_area):
+    if not game_area:
+        game_area = pygame.Surface((screen.get_width() / 2, screen.get_height()))
+    pygame.draw.rect(game_area, (250, 0, 0), (0, 0, game_area.get_width(),
+                                              game_area.get_height()), 1)
+    screen.blit(game_area, (screen.get_width() / 2, 0))
+    return game_area
+
+
+def draw_player_area(screen, player, player_num, player_areas):
+    if len(player_areas) != player_num:
+        player_area_surface = pygame.Surface((screen.get_width() / 4, screen.get_height() / 2))
+    else:
+        player_area_surface = player_areas[player]
+    pygame.draw.rect(player_area_surface, (250, 0, 0), (0, 0, player_area_surface.get_width(),
+                                                        player_area_surface.get_height()), 1)
+    player_positions = {1: (0, 0), 2: (player_area_surface.get_width(), 0), 3: (0, player_area_surface.get_height()),
+                        4: (player_area_surface.get_width(), player_area_surface.get_height())}
+    screen.blit(player_area_surface, player_positions[player])
+    return player_area_surface
+
+
+def draw_markers_area(screen, game_area_surface):
+    pygame.draw.rect(game_area_surface, (250, 0, 0), (0, 0, game_area_surface.get_width(),
+                                                      game_area_surface.get_height()), 1)
+    screen.blit(game_area_surface, (220, 0))
+
+
+def draw_stone_requirements(view, screen, stone_name, quantity, pos_x=0, pos_y=0) -> None:
+    colors = {'emerald': (32, 102, 0, 100),
+              'sapphire': (83, 142, 199),
+              'onyx': (82, 68, 68, 100),
+              'diamond': (226, 219, 219, 100),
+              'ruby': (159, 0, 0, 100),
+              }
+    pygame.draw.circle(screen, colors[stone_name], (screen.get_width() / 2 - pos_x, screen.get_height() / 2 - pos_y),
+                       10, 0)
+
+    my_font = pygame.font.SysFont('ARIAL', 18, True)
+    stone_quantity = my_font.render(str(quantity), True, (0, 0, 0))
+    stone_quantity_position = (
+        screen.get_width() / 2 - pos_x - 5,
+        screen.get_height() / 2 - pos_y - 8)
+    screen.blit(stone_quantity, stone_quantity_position)
+
+
+def draw_reverse_card(screen):
+    pass
+
+
+def draw_markers(screen):
+    pass
+
+
+def draw_aristocratic_card(screen):
+    pass
