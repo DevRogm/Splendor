@@ -114,8 +114,22 @@ def draw_markers_area(screen, game_area_surface):
     screen.blit(game_area_surface, (220, 0))
 
 
-def draw_stone_card(screen):
-    pass
+def draw_stone_requirements(view, screen, stone_name, quantity, pos_x=0, pos_y=0) -> None:
+    colors = {'emerald': (32, 102, 0, 100),
+              'sapphire': (83, 142, 199),
+              'onyx': (82, 68, 68, 100),
+              'diamond': (226, 219, 219, 100),
+              'ruby': (159, 0, 0, 100),
+              }
+    pygame.draw.circle(screen, colors[stone_name], (screen.get_width() / 2 - pos_x, screen.get_height() / 2 - pos_y),
+                       10, 0)
+
+    my_font = pygame.font.SysFont('ARIAL', 18, True)
+    stone_quantity = my_font.render(str(quantity), True, (0, 0, 0))
+    stone_quantity_position = (
+        screen.get_width() / 2 - pos_x - 5,
+        screen.get_height() / 2 - pos_y - 8)
+    screen.blit(stone_quantity, stone_quantity_position)
 
 
 def draw_reverse_card(screen):

@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection, draw_game_area, draw_player_area, draw_simple_text, draw_marker_quantities
+from game.utils import draw_elements, element_detection, draw_game_area, draw_player_area, draw_simple_text, \
+    draw_marker_quantities, draw_stone_requirements
 from game_data.markes_and_cards_data import markers
 from game.game_elements.game_board import GameBoard
+
 
 @dataclass
 class GameBoardView:
@@ -45,10 +47,31 @@ class GameBoardView:
                 draw_marker_quantities(screen, quantity, pos_x=pos_x, pos_y=pos_y)
 
         # Draw Reverse Cards
-        for lvl_card in range(1, 4):
+        for lvl_card in range(3, 0, -1):
             img_name = f"{lvl_card}_lvl_cards.png"
-            cards_pos = - screen.get_width() * 0.055, 300 - (lvl_card * 140)
+            cards_pos = - screen.get_width() * 0.055, -260 + lvl_card * 140
             draw_elements(self, screen, images_path, img_name, pos_x=cards_pos[0], pos_y=cards_pos[1])
+
+        # Draw Stone Cards
+        for cards_lvl in ['cards_lvl_1', 'cards_lvl_2', 'cards_lvl_3']:
+            cards = self.game_board.stone_cards.__getattribute__(cards_lvl)
+            for card_key, card_val in cards.items():
+                if card_key != 'inverted_stack':
+                    cards_pos = 20 - screen.get_width() * 0.1 - (int(card_key.split("_")[1]) * 0.8 * 140), -260 - (
+                            -int(cards_lvl.split("_")[2]) * 140)
+                    # Draw main card
+                    draw_elements(self, screen, images_path, card_val.img, pos_x=cards_pos[0], pos_y=cards_pos[1])
+                    # Draw gem
+                    draw_elements(self, screen, images_path, card_val.bonus + "_gem.png", pos_x=cards_pos[0] - 30,
+                                  pos_y=cards_pos[1] + 45)
+                    # Draw requirements
+                    # print("----------------")
+                    n = 0
+                    for stone_name, quantity in card_val.requirements.items():
+                        # print(stone_name, quantity)
+                        draw_stone_requirements(self, screen, stone_name, quantity, pos_x=cards_pos[0] + 30,
+                                                pos_y=cards_pos[1] - 45 + 23 * n)
+                        n += 1
 
     def action(self, game_view) -> None:
         """
@@ -66,4 +89,3 @@ class GameBoardView:
     def take_marker(self, marker_name):
         marker = marker_name.split("_")[1]
         self.game_board.stone_markers.remove_marker(marker)
-
