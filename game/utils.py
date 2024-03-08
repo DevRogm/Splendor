@@ -45,15 +45,6 @@ def element_detection(element_edges: tuple) -> bool:
         return False
 
 
-def draw_simple_text(screen, text, pos_x=0, pos_y=0, font_size=36):
-    my_font = pygame.font.SysFont('ARIAL', font_size)
-    player_name = my_font.render(text.upper(), True, (227, 206, 0))
-    player_name_position = (
-        screen.get_width() / 2 - player_name.get_width() / 2 - pos_x,
-        screen.get_height() / 2 - pos_y)
-    screen.blit(player_name, player_name_position)
-
-
 def draw_marker_quantities(screen, text, pos_x=0, pos_y=0):
     my_font = pygame.font.SysFont('ARIAL', 20)
     player_name = my_font.render(text.upper(), True, (227, 206, 0))
@@ -126,13 +117,6 @@ def draw_card_requirements(view, screen, stone_name, quantity, pos_x=0, pos_y=0)
 
 
 def draw_statistic(screen, font_size=26, data=None) -> None:
-    """
-    A method that displays player scores
-    :param screen:  Surface for displaying elements
-    :param data: Data from db
-    :return: None
-    """
-
     # Dummy data, data from database will be added
     dummy_data = {
         1: {'nickname': "Lenny", "score": 24, "date": "21-03-2021"},
@@ -155,7 +139,7 @@ def draw_image(view, screen, img_path, factor_pos_x=0.0, factor_pos_y=0.0, actio
     k_x = screen.get_width() / 1280
     k_y = screen.get_height() / 720
     img = pygame.image.load(img_path)
-    img = pygame.transform.scale(img, (img.get_width()*k_x, img.get_height()*k_y))
+    img = pygame.transform.scale(img, (img.get_width() * k_x, img.get_height() * k_y))
     pos_x = screen.get_width() * factor_pos_x - img.get_width() / 2
     pos_y = screen.get_height() * factor_pos_y - img.get_height() / 2
     screen.blit(img, (pos_x, pos_y))
@@ -168,3 +152,12 @@ def get_img(img_name):
     images_path = os.path.abspath('../images')
     img_full_path = os.path.join(images_path, img_name)
     return img_full_path
+
+
+def draw_simple_text(screen, text, factor_pos_x=0.0, factor_pos_y=0.0, font_size=36):
+    k_x = screen.get_width() / 1280
+    my_font = pygame.font.SysFont('ARIAL', font_size)
+    player_name = my_font.render(text.upper(), True, (227, 206, 0))
+    pos_x = screen.get_width() * factor_pos_x - player_name.get_width() / 2
+    pos_y = screen.get_height() * factor_pos_y - player_name.get_height() / 2
+    screen.blit(player_name, (pos_x, pos_y))

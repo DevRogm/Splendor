@@ -34,10 +34,10 @@ class StartView:
                 return self.__getattribute__(element_key)()
 
     def go_to_game_menu(self, game_view):
-        print("GO TO GAME MENU")
-        # game_view.change_view('game_menu_view')
+        game_view.change_view('game_menu_view')
 
-    def go_to_statistics(self, game_view):
+    @staticmethod
+    def go_to_statistics(game_view):
         game_view.change_view('statistics_view')
 
     @staticmethod
