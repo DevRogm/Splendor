@@ -1,6 +1,6 @@
 import pygame
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection, get_img
+from game.utils import draw_elements, element_detection, get_img, draw_image
 import os
 
 
@@ -11,29 +11,20 @@ class StartView:
     def draw(self, screen):
         # Prepare game title and display
         splendor_img = get_img("splendor.png")
-        self.draw_image(screen, splendor_img, factor_pos_x=0.5, factor_pos_y=0.2)
+        draw_image(self, screen, splendor_img, factor_pos_x=0.5, factor_pos_y=0.2)
 
         # Prepare Game option
         game_option_img = get_img("game_option.png")
-        self.draw_image(screen, game_option_img, factor_pos_x=0.5, factor_pos_y=0.5, action_name='go_to_game_menu')
+        draw_image(self, screen, game_option_img, factor_pos_x=0.5, factor_pos_y=0.5, action_name='go_to_game_menu')
 
         # Prepare Statistics option
         statistics_option_img = get_img("statistics_option.png")
-        self.draw_image(screen, statistics_option_img, factor_pos_x=0.5, factor_pos_y=0.6,
-                        action_name='go_to_statistics')
+        draw_image(self, screen, statistics_option_img, factor_pos_x=0.5, factor_pos_y=0.6,
+                   action_name='go_to_statistics')
 
         # Prepare Quit option
         game_quit_img = get_img("quit_option.png")
-        self.draw_image(screen, game_quit_img, factor_pos_x=0.5, factor_pos_y=0.7, action_name='game_quit')
-
-    def draw_image(self, screen, img_path, factor_pos_x=0.0, factor_pos_y=0.0, action_name=None) -> None:
-        img = pygame.image.load(img_path)
-        pos_x = screen.get_width() * factor_pos_x - img.get_width() / 2
-        pos_y = screen.get_height() * factor_pos_y - img.get_height() / 2
-        screen.blit(img, (pos_x, pos_y))
-        element_edges = ((pos_x, pos_y), (pos_x + img.get_width(), pos_y + img.get_height()))
-        if action_name:
-            self.active_view_elements.setdefault(action_name, element_edges)
+        draw_image(self, screen, game_quit_img, factor_pos_x=0.5, factor_pos_y=0.7, action_name='game_quit')
 
     def action(self, game_view):
         for element_key, element_values in self.active_view_elements.items():
@@ -47,8 +38,8 @@ class StartView:
         # game_view.change_view('game_menu_view')
 
     def go_to_statistics(self, game_view):
-        print("GO TO STATISTICS")
-        # game_view.change_view('statistics_view')
+        game_view.change_view('statistics_view')
 
-    def game_quit(self):
+    @staticmethod
+    def game_quit():
         return "quit"
