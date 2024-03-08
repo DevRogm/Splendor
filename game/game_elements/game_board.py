@@ -145,8 +145,8 @@ class GameBoard:
         :return: None
         """
         num_of_cards = len(self.players) + 1
-        cards = random.choices(aristocratic_cards, k=num_of_cards)
-        self.aristocratic_cards.cards = cards
+        random.shuffle(aristocratic_cards)
+        self.aristocratic_cards.cards = aristocratic_cards[:num_of_cards]
 
     def whose_turn(self):
         pass

@@ -1,3 +1,5 @@
+import random
+
 import pygame
 import os
 
@@ -132,6 +134,24 @@ def draw_stone_requirements(view, screen, stone_name, quantity, pos_x=0, pos_y=0
     screen.blit(stone_quantity, stone_quantity_position)
 
 
+def draw_card_requirements(view, screen, stone_name, quantity, pos_x=0, pos_y=0) -> None:
+    colors = {'emerald': (32, 102, 0, 100),
+              'sapphire': (83, 142, 199),
+              'onyx': (82, 68, 68, 100),
+              'diamond': (226, 219, 219, 100),
+              'ruby': (159, 0, 0, 100),
+              }
+    pygame.draw.rect(screen, colors[stone_name], (screen.get_width() / 2 - pos_x, screen.get_height() / 2 - pos_y,
+                                                  15, 20))
+
+    my_font = pygame.font.SysFont('ARIAL', 18, True)
+    card_quantity = my_font.render(str(quantity), True, (0, 0, 0))
+    card_quantity_position = (
+        screen.get_width() / 2 - pos_x + 3,
+        screen.get_height() / 2 - pos_y + 2)
+    screen.blit(card_quantity, card_quantity_position)
+
+
 def draw_reverse_card(screen):
     pass
 
@@ -142,3 +162,8 @@ def draw_markers(screen):
 
 def draw_aristocratic_card(screen):
     pass
+
+
+lista = [1, 2, 3, 4, 5]
+
+print(random.choices(lista, k=3))

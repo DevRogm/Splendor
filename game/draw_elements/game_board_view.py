@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from game.utils import draw_elements, element_detection, draw_game_area, draw_player_area, draw_simple_text, \
-    draw_marker_quantities, draw_stone_requirements
+    draw_marker_quantities, draw_stone_requirements, draw_card_requirements
 from game_data.markes_and_cards_data import markers
 from game.game_elements.game_board import GameBoard
 
@@ -72,6 +72,23 @@ class GameBoardView:
                         draw_stone_requirements(self, screen, stone_name, quantity, pos_x=cards_pos[0] + 30,
                                                 pos_y=cards_pos[1] - 45 + 23 * n)
                         n += 1
+
+        # Draw Aristo Cards
+        n = 0
+        for aristo_card in self.game_board.aristocratic_cards.cards:
+            cards_pos = - screen.get_width() / 10.5, screen.get_height() / 2.5
+            draw_elements(self, screen, images_path, aristo_card['img'], pos_x=cards_pos[0] + n * -100,
+                          pos_y=cards_pos[1])
+            m = 0
+            for card_name, quantity in aristo_card['requirements'].items():
+                # print(stone_name, quantity)
+                draw_card_requirements(self, screen, card_name, quantity, pos_x=cards_pos[0] + 40 - n * 100,
+                                       pos_y=cards_pos[1] - 19 + m * 20)
+                m += 1
+            n += 1
+
+        # Draw Players Area
+
 
     def action(self, game_view) -> None:
         """
