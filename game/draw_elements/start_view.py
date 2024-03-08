@@ -1,6 +1,6 @@
 import pygame
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection, get_img, draw_image
+from game.utils import element_detection, get_img, draw_image
 import os
 
 

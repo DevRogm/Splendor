@@ -19,6 +19,28 @@ images_path = os.path.abspath('../images')
 # Init game_board and game_views
 game_views = GameViews()
 
+# while running:
+#     # Display game view
+#     game_views.draw_view(screen)
+#     pygame.display.update()
+#     for event in pygame.event.get():
+#         if event.type == pygame.MOUSEBUTTONUP:
+#             action = game_views.do_action()
+#             if action == "start_game":
+#                 players = game_views.game_menu_view.players
+#                 game_views.game_board_view.game_preparation(players)
+#             if action == "quit":
+#                 running = False
+#         if game_views.current_view == "game_menu_view" and game_views.game_menu_view.num_of_players:
+#             if event.type == pygame.KEYDOWN:
+#                 game_views.game_menu_view.add_player_name(event.key)
+#         if event.type == pygame.QUIT:
+#             running = False
+#     screen.fill("black")
+#     dt = clock.tick(60) / 1000
+# pygame.quit()
+
+test_game = True
 while running:
     # Display game view
     game_views.draw_view(screen)
@@ -26,11 +48,13 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
             action = game_views.do_action()
-            if action == "start_game":
-                players = game_views.game_menu_view.players
-                game_views.game_board_view.game_board.game_preparation(players)
             if action == "quit":
                 running = False
+        if test_game:
+            game_views.change_view("game_board_view")
+            test_game = False
+            players = {1: "Mario", 2: "Luigi"}
+            game_views.game_board_view.game_preparation(players)
         if game_views.current_view == "game_menu_view" and game_views.game_menu_view.num_of_players:
             if event.type == pygame.KEYDOWN:
                 game_views.game_menu_view.add_player_name(event.key)

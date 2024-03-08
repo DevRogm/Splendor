@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection, draw_simple_text, draw_image, get_img
+from game.utils import element_detection, draw_simple_text, draw_image, get_img
 from typing import List
 
 
@@ -87,7 +87,7 @@ class GameMenuView:
     def add_player_name(self, char_id):
         if char_id == 13 and len(self.temp_name) >= 1:
             self.players[self.active_player] = self.temp_name
-            if self.active_player == self.num_of_players:
+            if self.players.__len__() >= self.num_of_players:
                 self.can_start_game = True
             else:
                 self.active_player += 1

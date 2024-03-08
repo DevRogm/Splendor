@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection, draw_statistic, draw_image, get_img
+from game.utils import element_detection, draw_statistic, draw_image, get_img
 from typing import Type
 
 

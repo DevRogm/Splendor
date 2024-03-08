@@ -3,29 +3,6 @@ import pygame
 import os
 
 
-def draw_elements(view, screen, images_path, image_name, pos_x=0, pos_y=0, element_name=None) -> None:
-    """
-    A methods that draws element and save them edges if an element name passed
-    :param view: current view
-    :param screen: Surface for displaying elements
-    :param images_path: Paths of all images
-    :param image_name: Name of the image
-    :param pos_x: Position x for the element
-    :param pos_y: Position y for the element
-    :param element_name: Name of the element
-    :return: None
-    """
-    img_path = os.path.join(images_path, image_name)
-    img = pygame.image.load(img_path)
-    img_position = (
-        screen.get_width() / 2 - img.get_width() / 2 - pos_x, screen.get_height() / 2 - img.get_height() / 2 - pos_y)
-    screen.blit(img, img_position)
-    el_edges = (img_position, (img_position[0] + img.get_width(), img_position[1] + img.get_height()))
-
-    if element_name:
-        view.view_elements.setdefault(element_name, el_edges)
-
-
 def element_detection(element_edges: tuple) -> bool:
     """
     A method that detects view elements on mouse click
@@ -155,7 +132,6 @@ def get_img(img_name):
 
 
 def draw_simple_text(screen, text, factor_pos_x=0.0, factor_pos_y=0.0, font_size=36):
-    k_x = screen.get_width() / 1280
     my_font = pygame.font.SysFont('ARIAL', font_size)
     player_name = my_font.render(text.upper(), True, (227, 206, 0))
     pos_x = screen.get_width() * factor_pos_x - player_name.get_width() / 2
