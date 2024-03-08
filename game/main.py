@@ -53,7 +53,7 @@ while running:
         if test_game:
             game_views.change_view("game_board_view")
             test_game = False
-            players = {1: "Mario", 2: "Luigi"}
+            players = {1: "Mario", 2: "Luigi", 3: "Poppy", 4: "Luna"}
             game_views.game_board_view.game_preparation(players)
         if game_views.current_view == "game_menu_view" and game_views.game_menu_view.num_of_players:
             if event.type == pygame.KEYDOWN:

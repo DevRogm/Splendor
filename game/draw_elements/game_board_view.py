@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
-from game.utils import element_detection, draw_game_area, draw_player_area, draw_simple_text, \
-    draw_marker_quantities, draw_requirements, draw_card_requirements, draw_image, get_img
+from game.utils import element_detection, draw_player_area, draw_simple_text, draw_requirements, draw_image, get_img
 from game_data.markes_and_cards_data import markers
 from game.game_elements.game_board import GameBoard
 
@@ -57,7 +56,8 @@ class GameBoardView(GameBoard):
                     for req_count, (stone_name, quantity) in enumerate(card_val.requirements.items()):
                         # print(req_count, stone_name, quantity)
                         draw_requirements(screen, stone_name, quantity, factor_pos_x=0.545 + (row * 0.087),
-                                          factor_pos_y=0.718 - (column * 0.2) - (req_count * 0.03))
+                                          factor_pos_y=0.718 - (column * 0.2) - (req_count * 0.03),
+                                          stone_requirements=True)
 
                     # Draw card bonus
                     if card_val.points:
@@ -65,18 +65,15 @@ class GameBoardView(GameBoard):
                                          factor_pos_y=0.59 - (column * 0.2), font_size=30)
 
         # # Draw Aristo Cards
-        # n = 0
-        # for aristo_card in self.game_board.aristocratic_cards.cards:
-        #     cards_pos = - screen.get_width() / 10.5, screen.get_height() / 2.5
-        #     draw_elements(self, screen, images_path, aristo_card['img'], pos_x=cards_pos[0] + n * -100,
-        #                   pos_y=cards_pos[1])
-        #     m = 0
-        #     for card_name, quantity in aristo_card['requirements'].items():
-        #         # print(stone_name, quantity)
-        #         draw_card_requirements(self, screen, card_name, quantity, pos_x=cards_pos[0] + 40 - n * 100,
-        #                                pos_y=cards_pos[1] - 19 + m * 20)
-        #         m += 1
-        #     n += 1
+        for column, aristo_card in enumerate(self.aristocratic_cards.cards):
+            aristo_img = get_img(aristo_card['img'])
+            draw_image(self, screen, aristo_img, factor_pos_x=0.57 + (column * 0.087),
+                       factor_pos_y=0.08)
+            print(aristo_card)
+            for row, (card_name, quantity) in enumerate(aristo_card['requirements'].items()):
+                draw_requirements(screen, card_name, quantity, factor_pos_x=0.545 + (column * 0.087),
+                                  factor_pos_y=0.12 - (row * 0.03),
+                                  cards_requirements=True)
         #
         # # Draw Players Area
 
