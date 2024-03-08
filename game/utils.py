@@ -1,5 +1,4 @@
 import random
-
 import pygame
 import os
 
@@ -164,6 +163,10 @@ def draw_aristocratic_card(screen):
     pass
 
 
-lista = [1, 2, 3, 4, 5]
+def get_img(img_name):
+    images_path = os.path.abspath('../images')
+    img_full_path = os.path.join(images_path, img_name)
+    return img_full_path
 
-print(random.choices(lista, k=3))
+
+

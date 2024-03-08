@@ -4,10 +4,11 @@ from game.draw_elements.statistics_view import StatisticsView
 from game.draw_elements.game_menu_view import GameMenuView
 from game.draw_elements.game_board_view import GameBoardView
 from game.draw_elements.results_view import ResultsView
+from game.game_elements.game_board import GameBoard
 
 
 @dataclass
-class GameViews:
+class GameViews(GameBoard):
     start_view: StartView = StartView()
     game_menu_view: GameMenuView = GameMenuView()
     statistics_view: StatisticsView = StatisticsView()
@@ -15,15 +16,14 @@ class GameViews:
     results_view: ResultsView = ResultsView()
     current_view: str = 'start_view'
 
-    def draw_view(self, screen, images_path) -> None:
+    def draw_view(self, screen) -> None:
         """
         A method that calls draw method for current view
         :param screen: Surface to display elements
-        :param images_path: Path of images
         :return: None
         """
         view = self.__getattribute__(self.current_view)
-        view.draw(screen, images_path)
+        view.draw(screen)
 
     def change_view(self, new_view: str) -> None:
         """
