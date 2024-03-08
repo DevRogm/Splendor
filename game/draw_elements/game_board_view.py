@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from game.utils import element_detection, draw_game_area, draw_player_area, draw_simple_text, \
-    draw_marker_quantities, draw_stone_requirements, draw_card_requirements, draw_image, get_img
+    draw_marker_quantities, draw_requirements, draw_card_requirements, draw_image, get_img
 from game_data.markes_and_cards_data import markers
 from game.game_elements.game_board import GameBoard
 
@@ -29,7 +29,8 @@ class GameBoardView(GameBoard):
             if "marker" in element_key:
                 marker_name = element_key.split("_")[1]
                 quantity = str(self.stone_markers.markers[marker_name].quantity)
-                draw_simple_text(screen, quantity, factor_pos_x=0.57 + (0.07 * count), factor_pos_y=0.78, font_size=20)
+                draw_simple_text(screen, quantity, factor_pos_x=0.57 + (0.07 * count), factor_pos_y=0.78, font_size=20,
+                                 color=(227, 206, 0))
 
         # Draw Reverse Cards
         for lvl_card in range(3, 0, -1):
@@ -52,14 +53,16 @@ class GameBoardView(GameBoard):
                     draw_image(self, screen, gem_img, factor_pos_x=0.59 + (row * 0.087),
                                factor_pos_y=0.59 - (column * 0.2))
 
-            #         # Draw requirements
-            #         # print("----------------")
-            #         n = 0
-            #         for stone_name, quantity in card_val.requirements.items():
-            #             # print(stone_name, quantity)
-            #             draw_stone_requirements(self, screen, stone_name, quantity, pos_x=cards_pos[0] + 30,
-            #                                     pos_y=cards_pos[1] - 45 + 23 * n)
-            #             n += 1
+                    # Draw requirements
+                    for req_count, (stone_name, quantity) in enumerate(card_val.requirements.items()):
+                        # print(req_count, stone_name, quantity)
+                        draw_requirements(screen, stone_name, quantity, factor_pos_x=0.545 + (row * 0.087),
+                                          factor_pos_y=0.718 - (column * 0.2) - (req_count * 0.03))
+
+                    # Draw card bonus
+                    if card_val.points:
+                        draw_simple_text(screen, str(card_val.points), factor_pos_x=0.545 + (row * 0.087),
+                                         factor_pos_y=0.59 - (column * 0.2), font_size=30)
 
         # # Draw Aristo Cards
         # n = 0

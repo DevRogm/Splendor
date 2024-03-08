@@ -57,24 +57,6 @@ def draw_markers_area(screen, game_area_surface):
     screen.blit(game_area_surface, (220, 0))
 
 
-def draw_stone_requirements(view, screen, stone_name, quantity, pos_x=0, pos_y=0) -> None:
-    colors = {'emerald': (32, 102, 0, 100),
-              'sapphire': (83, 142, 199),
-              'onyx': (82, 68, 68, 100),
-              'diamond': (226, 219, 219, 100),
-              'ruby': (159, 0, 0, 100),
-              }
-    pygame.draw.circle(screen, colors[stone_name], (screen.get_width() / 2 - pos_x, screen.get_height() / 2 - pos_y),
-                       10, 0)
-
-    my_font = pygame.font.SysFont('ARIAL', 18, True)
-    stone_quantity = my_font.render(str(quantity), True, (0, 0, 0))
-    stone_quantity_position = (
-        screen.get_width() / 2 - pos_x - 5,
-        screen.get_height() / 2 - pos_y - 8)
-    screen.blit(stone_quantity, stone_quantity_position)
-
-
 def draw_card_requirements(view, screen, stone_name, quantity, pos_x=0, pos_y=0) -> None:
     colors = {'emerald': (32, 102, 0, 100),
               'sapphire': (83, 142, 199),
@@ -131,9 +113,28 @@ def get_img(img_name):
     return img_full_path
 
 
-def draw_simple_text(screen, text, factor_pos_x=0.0, factor_pos_y=0.0, font_size=36):
+def draw_simple_text(screen, text, factor_pos_x=0.0, factor_pos_y=0.0, font_size=36, color=(0, 0, 0)):
     my_font = pygame.font.SysFont('ARIAL', font_size)
-    player_name = my_font.render(text.upper(), True, (227, 206, 0))
-    pos_x = screen.get_width() * factor_pos_x - player_name.get_width() / 2
-    pos_y = screen.get_height() * factor_pos_y - player_name.get_height() / 2
-    screen.blit(player_name, (pos_x, pos_y))
+    text = my_font.render(text.upper(), True, color)
+    pos_x = screen.get_width() * factor_pos_x - text.get_width() / 2
+    pos_y = screen.get_height() * factor_pos_y - text.get_height() / 2
+    screen.blit(text, (pos_x, pos_y))
+
+
+def draw_requirements(screen, stone_name, quantity, factor_pos_x=0.0, factor_pos_y=0.0, font_size=18,
+                      stone_requirements=False,
+                      cards_requirements=False):
+    colors = {'emerald': (32, 102, 0, 100),
+              'sapphire': (83, 142, 199),
+              'onyx': (82, 68, 68, 100),
+              'diamond': (226, 219, 219, 100),
+              'ruby': (159, 0, 0, 100),
+              }
+    pos_x = screen.get_width() * factor_pos_x
+    pos_y = screen.get_height() * factor_pos_y
+    circle = pygame.draw.circle(screen, colors[stone_name], (pos_x, pos_y),
+                                10, 0)
+    my_font = pygame.font.SysFont('ARIAL', font_size, True)
+    stone_quantity = my_font.render(str(quantity), True, (0, 0, 0))
+    stone_quantity_position = (screen.get_width() * factor_pos_x - 5, screen.get_height() * factor_pos_y - 7)
+    screen.blit(stone_quantity, stone_quantity_position)
