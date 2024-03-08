@@ -20,8 +20,8 @@ class GameBoardView(GameBoard):
         for marker in enumerate(markers):
             img_name = f"{marker[1]['stone']}.png"
             action_name = f"take_{marker[1]['stone']}_marker"
-            splendor_img = get_img(img_name)
-            draw_image(self, screen, splendor_img, factor_pos_x=0.57 + (0.07 * marker[0]), factor_pos_y=0.85,
+            img = get_img(img_name)
+            draw_image(self, screen, img, factor_pos_x=0.57 + (0.07 * marker[0]), factor_pos_y=0.85,
                        action_name=action_name)
 
         # Draw Marker Quantities
@@ -30,34 +30,37 @@ class GameBoardView(GameBoard):
                 marker_name = element_key.split("_")[1]
                 quantity = str(self.stone_markers.markers[marker_name].quantity)
                 draw_simple_text(screen, quantity, factor_pos_x=0.57 + (0.07 * count), factor_pos_y=0.78, font_size=20)
-        #
-        # # Draw Reverse Cards
-        # for lvl_card in range(3, 0, -1):
-        #     img_name = f"{lvl_card}_lvl_cards.png"
-        #     cards_pos = - screen.get_width() * 0.055, -260 + lvl_card * 140
-        #     draw_elements(self, screen, images_path, img_name, pos_x=cards_pos[0], pos_y=cards_pos[1])
-        #
-        # # Draw Stone Cards
-        # for cards_lvl in ['cards_lvl_1', 'cards_lvl_2', 'cards_lvl_3']:
-        #     cards = self.game_board.stone_cards.__getattribute__(cards_lvl)
-        #     for card_key, card_val in cards.items():
-        #         if card_key != 'inverted_stack':
-        #             cards_pos = 20 - screen.get_width() * 0.1 - (int(card_key.split("_")[1]) * 0.8 * 140), -260 - (
-        #                     -int(cards_lvl.split("_")[2]) * 140)
-        #             # Draw main card
-        #             draw_elements(self, screen, images_path, card_val.img, pos_x=cards_pos[0], pos_y=cards_pos[1])
-        #             # Draw gem
-        #             draw_elements(self, screen, images_path, card_val.bonus + "_gem.png", pos_x=cards_pos[0] - 30,
-        #                           pos_y=cards_pos[1] + 45)
-        #             # Draw requirements
-        #             # print("----------------")
-        #             n = 0
-        #             for stone_name, quantity in card_val.requirements.items():
-        #                 # print(stone_name, quantity)
-        #                 draw_stone_requirements(self, screen, stone_name, quantity, pos_x=cards_pos[0] + 30,
-        #                                         pos_y=cards_pos[1] - 45 + 23 * n)
-        #                 n += 1
-        #
+
+        # Draw Reverse Cards
+        for lvl_card in range(3, 0, -1):
+            img_name = f"{lvl_card}_lvl_cards.png"
+            img = get_img(img_name)
+            draw_image(self, screen, img, factor_pos_x=0.57, factor_pos_y=0.85 - (lvl_card * 0.2))
+
+        # Draw Stone Cards
+        for column, cards_lvl in enumerate(['cards_lvl_1', 'cards_lvl_2', 'cards_lvl_3']):
+            cards = self.stone_cards.__getattribute__(cards_lvl)
+            for row, (card_key, card_val) in enumerate(cards.items()):
+                if card_key != 'inverted_stack':
+                    # Draw main card
+                    card_img = get_img(card_val.img)
+                    draw_image(self, screen, card_img, factor_pos_x=0.57 + (row * 0.087),
+                               factor_pos_y=0.65 - (column * 0.2))
+                    # Draw gem
+                    gem_name = card_val.bonus + "_gem.png"
+                    gem_img = get_img(gem_name)
+                    draw_image(self, screen, gem_img, factor_pos_x=0.59 + (row * 0.087),
+                               factor_pos_y=0.59 - (column * 0.2))
+
+            #         # Draw requirements
+            #         # print("----------------")
+            #         n = 0
+            #         for stone_name, quantity in card_val.requirements.items():
+            #             # print(stone_name, quantity)
+            #             draw_stone_requirements(self, screen, stone_name, quantity, pos_x=cards_pos[0] + 30,
+            #                                     pos_y=cards_pos[1] - 45 + 23 * n)
+            #             n += 1
+
         # # Draw Aristo Cards
         # n = 0
         # for aristo_card in self.game_board.aristocratic_cards.cards:
