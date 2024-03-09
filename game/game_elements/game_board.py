@@ -153,6 +153,7 @@ class GameBoard:
         self.aristocratic_cards.cards = aristocratic_cards[:num_of_cards]
 
     def change_active_player(self):
+        print("ZMIENIAM GRACZA")
         player_idx = self.players.index(self.active_player)
         if player_idx + 1 >= len(self.players):
             player_idx = 0

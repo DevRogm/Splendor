@@ -52,10 +52,10 @@ class PlayerInventory:
 @dataclass
 class Player:
     name: str
-    inventory: PlayerInventory = PlayerInventory()
     points: int = 0
 
     def __post_init__(self):
+        self.__setattr__('inventory', PlayerInventory())
         if len(self.name) > 20:
             raise ValueError("Too long name, max. characters is a 20")
 

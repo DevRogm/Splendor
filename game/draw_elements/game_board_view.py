@@ -50,7 +50,6 @@ class GameBoardView(GameBoard):
 
                     # Draw requirements
                     for req_count, (stone_name, quantity) in enumerate(card_val.requirements.items()):
-                        # print(req_count, stone_name, quantity)
                         draw_requirements(screen, stone_name, quantity, factor_pos_x=0.575 + (row * 0.087),
                                           factor_pos_y=0.718 - (column * 0.2) - (req_count * 0.03),
                                           stone_requirements=True)
@@ -104,26 +103,26 @@ class GameBoardView(GameBoard):
                              factor_pos_y=0.03 + offset_y, font_size=24, color=color)
 
             # Draw Cards and Markers
-            for column, card in enumerate(markers):
-                if card['stone'] != "gold" and player.inventory.markers[card['stone']].quantity > 0:
-                    card_img = get_img(f"player_{card['stone']}_card.png")
+            for column, card_markers in enumerate(markers):
+                if card_markers['stone'] != "gold" and len(player.inventory.stone_cards[card_markers['stone']]) > 0:
+                    card_img = get_img(f"player_{card_markers['stone']}_card.png")
                     draw_image(self, screen, card_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
                                factor_pos_y=0.14 + offset_y)
-                    draw_simple_text(screen, "x" + str(len(player.inventory.stone_cards[card['stone']])),
+                    draw_simple_text(screen, "x" + str(len(player.inventory.stone_cards[card_markers['stone']])),
                                      factor_pos_x=0.035 + offset_x + (column * 0.045),
                                      factor_pos_y=0.2 + offset_y, font_size=16, color=(255, 255, 255))
-
-                    marker_img = get_img(f"{card['stone']}_player.png")
+                elif card_markers['stone'] != "gold" and player.inventory.markers[card_markers['stone']].quantity > 0:
+                    marker_img = get_img(f"{card_markers['stone']}_player.png")
                     draw_image(self, screen, marker_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
                                factor_pos_y=0.25 + offset_y)
-                    draw_simple_text(screen, "x" + str(player.inventory.markers[card['stone']].quantity),
+                    draw_simple_text(screen, "x" + str(player.inventory.markers[card_markers['stone']].quantity),
                                      factor_pos_x=0.035 + offset_x + (column * 0.045),
                                      factor_pos_y=0.29 + offset_y, font_size=16, color=(255, 255, 255))
-                elif card['stone'] == "gold" and player.inventory.markers[card['stone']].quantity > 0:
-                    marker_img = get_img(f"{card['stone']}_player.png")
+                elif card_markers['stone'] == "gold" and player.inventory.markers[card_markers['stone']].quantity > 0:
+                    marker_img = get_img(f"{card_markers['stone']}_player.png")
                     draw_image(self, screen, marker_img, factor_pos_x=0.215 + offset_x,
                                factor_pos_y=0.045 + offset_y)
-                    draw_simple_text(screen, "x" + str(player.inventory.markers[card['stone']].quantity),
+                    draw_simple_text(screen, "x" + str(player.inventory.markers[card_markers['stone']].quantity),
                                      factor_pos_x=0.19 + offset_x,
                                      factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
 
@@ -202,7 +201,6 @@ class GameBoardView(GameBoard):
 
     def can_finish_turn(self):
         for marker in self.temp_markers:
-            print(self.active_player)
             self.active_player.inventory.add_marker(marker)
         self.temp_markers = []
         self.active_action = None
