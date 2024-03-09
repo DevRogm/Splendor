@@ -11,7 +11,7 @@ class PlayerInventory:
     markers: dict = field(default_factory=lambda: {})
     stone_cards: dict[str, List[StoneCard]] = field(
         default_factory=lambda: {'emerald': [], 'sapphire': [], 'ruby': [], 'diamond': [], 'onyx': [], 'gold': []})
-    aristocratic_cards: List[AristocraticCard] = field(default_factory=lambda: [])
+    aristocratic_cards: dict[int, AristocraticCard] = field(default_factory=lambda: {1: None, 2: None, 3: None})
 
     def add_marker(self, marker: str) -> None:
         """

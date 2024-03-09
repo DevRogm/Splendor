@@ -2,7 +2,7 @@ import pygame
 import os
 from game.game_elements.game_board import GameBoard
 from game.draw_elements.game_views import GameViews
-from utils import element_detection
+from utils import get_img
 
 pygame.init()
 
@@ -13,8 +13,10 @@ running = True
 dt = 0
 test_game_board = True  # remove after work on game board
 
-# Game Global Variables
-images_path = os.path.abspath('../images')
+
+table = get_img('table.png')
+table_img = pygame.image.load(table)
+screen.blit(pygame.transform.scale(table_img, (1280, 720)), (0, 0))
 
 # Init game_board and game_views
 game_views = GameViews()
@@ -42,6 +44,9 @@ game_views = GameViews()
 
 test_game = True
 while running:
+    table = get_img('table.png')
+    table_img = pygame.image.load(table)
+    screen.blit(pygame.transform.scale(table_img, (1280, 720)), (0, 0))
     # Display game view
     game_views.draw_view(screen)
     pygame.display.update()

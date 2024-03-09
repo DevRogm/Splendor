@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from game.utils import element_detection, draw_player_area, draw_simple_text, draw_requirements, draw_image, get_img
+from game.utils import element_detection, draw_simple_text, draw_requirements, draw_image, get_img
 from game_data.markes_and_cards_data import markers
 from game.game_elements.game_board import GameBoard
 
@@ -10,11 +10,6 @@ class GameBoardView(GameBoard):
     player_areas: dict = field(default_factory=lambda: {})
 
     def draw(self, screen) -> None:
-        # Player Area
-        for player in range(1, self.players.__len__() + 1):
-            self.player_areas.setdefault(player,
-                                         draw_player_area(screen, player, self.players.__len__(), self.player_areas))
-
         # Draw Markers
         for marker in enumerate(markers):
             img_name = f"{marker[1]['stone']}.png"
@@ -62,20 +57,54 @@ class GameBoardView(GameBoard):
                     # Draw card bonus
                     if card_val.points:
                         draw_simple_text(screen, str(card_val.points), factor_pos_x=0.545 + (row * 0.087),
-                                         factor_pos_y=0.59 - (column * 0.2), font_size=30)
+                                         factor_pos_y=0.58 - (column * 0.2), font_size=36, font_name="Gargi")
 
         # # Draw Aristo Cards
         for column, aristo_card in enumerate(self.aristocratic_cards.cards):
             aristo_img = get_img(aristo_card['img'])
             draw_image(self, screen, aristo_img, factor_pos_x=0.57 + (column * 0.087),
                        factor_pos_y=0.08)
-            print(aristo_card)
             for row, (card_name, quantity) in enumerate(aristo_card['requirements'].items()):
                 draw_requirements(screen, card_name, quantity, factor_pos_x=0.545 + (column * 0.087),
                                   factor_pos_y=0.12 - (row * 0.03),
                                   cards_requirements=True)
         #
-        # # Draw Players Area
+        # Draw Players Area
+        for count, player in enumerate(self.players):
+            # Draw Name
+            if count <= 1:
+                offset_x = (0.25 * count)
+                offset_y = 0
+            else:
+                offset_x = (0.25 * count - 0.5)
+                offset_y = 0.5
+            draw_simple_text(screen, player.name, factor_pos_x=0.04 + offset_x,
+                             factor_pos_y=0.03 + offset_y, font_size=24, color=(255, 255, 255))
+            # Draw Points
+
+            # Draw Cards and Markers
+            for column, card in enumerate(markers):
+                if card['stone'] != "gold":
+                    card_img = get_img(f"player_{card['stone']}_card.png")
+                    draw_image(self, screen, card_img,factor_pos_x=0.035 + offset_x + (column * 0.045),
+                               factor_pos_y=0.14 + offset_y)
+
+                    marker_img = get_img(f"{card['stone']}_player.png")
+                    draw_image(self, screen, marker_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
+                               factor_pos_y=0.25 + offset_y)
+                else:
+                    marker_img = get_img(f"{card['stone']}_player.png")
+                    draw_image(self, screen, marker_img, factor_pos_x=0.215 + offset_x,
+                             factor_pos_y=0.045 + offset_y)
+
+            # Draw Reserved Cards
+            for aristo_count, (aristo_card_num, aristo_card) in enumerate(player.inventory.aristocratic_cards.items()):
+                if aristo_card is None:
+                    shadow_img = get_img("shadow_card.png")
+                    draw_image(self, screen, shadow_img, factor_pos_x=0.05 + (aristo_count * 0.0765) + offset_x,
+                               factor_pos_y=0.4 + offset_y)
+            # Draw Aristocratic Cards
+            pass
 
     def action(self, game_view) -> None:
         """

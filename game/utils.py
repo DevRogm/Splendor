@@ -72,8 +72,8 @@ def get_img(img_name):
     return img_full_path
 
 
-def draw_simple_text(screen, text, factor_pos_x=0.0, factor_pos_y=0.0, font_size=36, color=(0, 0, 0)):
-    my_font = pygame.font.SysFont('ARIAL', font_size)
+def draw_simple_text(screen, text, factor_pos_x=0.0, factor_pos_y=0.0, font_size=36, font_name="ARIAL", color=(0, 0, 0)):
+    my_font = pygame.font.SysFont(font_name, font_size)
     text = my_font.render(text.upper(), True, color)
     pos_x = screen.get_width() * factor_pos_x - text.get_width() / 2
     pos_y = screen.get_height() * factor_pos_y - text.get_height() / 2
