@@ -83,19 +83,29 @@ class GameBoardView(GameBoard):
             # Draw Points
 
             # Draw Cards and Markers
+            # TO DO: If quantity is 0 dont display element !!!
             for column, card in enumerate(markers):
                 if card['stone'] != "gold":
                     card_img = get_img(f"player_{card['stone']}_card.png")
-                    draw_image(self, screen, card_img,factor_pos_x=0.035 + offset_x + (column * 0.045),
+                    draw_image(self, screen, card_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
                                factor_pos_y=0.14 + offset_y)
+                    draw_simple_text(screen, "x"+str(len(player.inventory.stone_cards[card['stone']])),
+                                     factor_pos_x=0.035 + offset_x + (column * 0.045),
+                                     factor_pos_y=0.2 + offset_y, font_size=16, color=(255,255,255))
 
                     marker_img = get_img(f"{card['stone']}_player.png")
                     draw_image(self, screen, marker_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
                                factor_pos_y=0.25 + offset_y)
+                    draw_simple_text(screen, "x" + str(player.inventory.markers[card['stone']].quantity),
+                                     factor_pos_x=0.035 + offset_x + (column * 0.045),
+                                     factor_pos_y=0.29 + offset_y, font_size=16, color=(255, 255, 255))
                 else:
                     marker_img = get_img(f"{card['stone']}_player.png")
                     draw_image(self, screen, marker_img, factor_pos_x=0.215 + offset_x,
-                             factor_pos_y=0.045 + offset_y)
+                               factor_pos_y=0.045 + offset_y)
+                    draw_simple_text(screen, "x" + str(player.inventory.markers[card['stone']].quantity),
+                                     factor_pos_x=0.19 + offset_x,
+                                     factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
 
             # Draw Reserved Cards
             for aristo_count, (aristo_card_num, aristo_card) in enumerate(player.inventory.aristocratic_cards.items()):
@@ -103,8 +113,8 @@ class GameBoardView(GameBoard):
                     shadow_img = get_img("shadow_card.png")
                     draw_image(self, screen, shadow_img, factor_pos_x=0.05 + (aristo_count * 0.0765) + offset_x,
                                factor_pos_y=0.4 + offset_y)
+
             # Draw Aristocratic Cards
-            pass
 
     def action(self, game_view) -> None:
         """
