@@ -2,7 +2,7 @@ import pygame
 import os
 from game.game_elements.game_board import GameBoard
 from game.draw_elements.game_views import GameViews
-from utils import element_detection
+from utils import get_img
 
 pygame.init()
 
@@ -13,30 +13,53 @@ running = True
 dt = 0
 test_game_board = True  # remove after work on game board
 
-# Game Global Variables
-images_path = os.path.abspath('../images')
+
+table = get_img('table.png')
+table_img = pygame.image.load(table)
+screen.blit(pygame.transform.scale(table_img, (1280, 720)), (0, 0))
 
 # Init game_board and game_views
-game_board = GameBoard()
 game_views = GameViews()
-game_views.game_board_view.game_board = game_board
+
+# while running:
+#     # Display game view
+#     game_views.draw_view(screen)
+#     pygame.display.update()
+#     for event in pygame.event.get():
+#         if event.type == pygame.MOUSEBUTTONUP:
+#             action = game_views.do_action()
+#             if action == "start_game":
+#                 players = game_views.game_menu_view.players
+#                 game_views.game_board_view.game_preparation(players)
+#             if action == "quit":
+#                 running = False
+#         if game_views.current_view == "game_menu_view" and game_views.game_menu_view.num_of_players:
+#             if event.type == pygame.KEYDOWN:
+#                 game_views.game_menu_view.add_player_name(event.key)
+#         if event.type == pygame.QUIT:
+#             running = False
+#     screen.fill("black")
+#     dt = clock.tick(60) / 1000
+# pygame.quit()
+
+test_game = True
 while running:
+    table = get_img('table.png')
+    table_img = pygame.image.load(table)
+    screen.blit(pygame.transform.scale(table_img, (1280, 720)), (0, 0))
     # Display game view
-    game_views.draw_view(screen, images_path)
+    game_views.draw_view(screen)
     pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
             action = game_views.do_action()
-            # code only for test game board view , remove after work on game board
-            if test_game_board:
-                game_views.current_view = "game_board_view"  # remove after work on game board
-                # if action == "start_game": # uncomment after work on game board
-                # players = game_views.game_menu_view.players # uncomment after work on game board
-                players = {1: "Mariusz", 2: "Magda", 3: "Milosz", 4: "Mikolaj"}  # remove after work on game board
-                game_board.game_preparation(players)
-                test_game_board = False
             if action == "quit":
                 running = False
+        if test_game:
+            game_views.change_view("game_board_view")
+            test_game = False
+            players = {1: "Mario", 2: "Luigi", 3: "Poppy", 4: "Luna"}
+            game_views.game_board_view.game_preparation(players)
         if game_views.current_view == "game_menu_view" and game_views.game_menu_view.num_of_players:
             if event.type == pygame.KEYDOWN:
                 game_views.game_menu_view.add_player_name(event.key)

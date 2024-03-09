@@ -1,27 +1,33 @@
 import pygame
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection
+from game.utils import element_detection, get_img, draw_image
+import os
 
 
 @dataclass
 class StartView:
-    view_elements: dict = field(default_factory=lambda: {})
+    active_view_elements: dict = field(default_factory=lambda: {})
 
-    def draw(self, screen, images_path):
+    def draw(self, screen):
         # Prepare game title and display
-        draw_elements(self, screen, images_path, "splendor.png", pos_y=200)
+        splendor_img = get_img("splendor.png")
+        draw_image(self, screen, splendor_img, factor_pos_x=0.5, factor_pos_y=0.2)
+
         # Prepare Game option
-        draw_elements(self, screen, images_path, "game_option.png",
-                      element_name='go_to_game_menu')
+        game_option_img = get_img("game_option.png")
+        draw_image(self, screen, game_option_img, factor_pos_x=0.5, factor_pos_y=0.5, action_name='go_to_game_menu')
+
         # Prepare Statistics option
-        draw_elements(self, screen, images_path, "statistics_option.png", pos_y=-80,
-                      element_name='go_to_statistics')
+        statistics_option_img = get_img("statistics_option.png")
+        draw_image(self, screen, statistics_option_img, factor_pos_x=0.5, factor_pos_y=0.6,
+                   action_name='go_to_statistics')
+
         # Prepare Quit option
-        draw_elements(self, screen, images_path, "quit_option.png", pos_y=-160,
-                      element_name='game_quit')
+        game_quit_img = get_img("quit_option.png")
+        draw_image(self, screen, game_quit_img, factor_pos_x=0.5, factor_pos_y=0.7, action_name='game_quit')
 
     def action(self, game_view):
-        for element_key, element_values in self.view_elements.items():
+        for element_key, element_values in self.active_view_elements.items():
             if element_detection(element_values) and 'go_to' in element_key:
                 return self.__getattribute__(element_key)(game_view)
             elif element_detection(element_values):
@@ -30,8 +36,10 @@ class StartView:
     def go_to_game_menu(self, game_view):
         game_view.change_view('game_menu_view')
 
-    def go_to_statistics(self, game_view):
+    @staticmethod
+    def go_to_statistics(game_view):
         game_view.change_view('statistics_view')
 
-    def game_quit(self):
+    @staticmethod
+    def game_quit():
         return "quit"

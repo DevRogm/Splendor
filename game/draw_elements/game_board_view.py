@@ -1,102 +1,147 @@
 from dataclasses import dataclass, field
-from game.utils import draw_elements, element_detection, draw_game_area, draw_player_area, draw_simple_text, \
-    draw_marker_quantities, draw_stone_requirements, draw_card_requirements
+from game.utils import element_detection, draw_simple_text, draw_requirements, draw_image, get_img
 from game_data.markes_and_cards_data import markers
 from game.game_elements.game_board import GameBoard
 
 
 @dataclass
-class GameBoardView:
-    game_board: GameBoard = None
-    view_elements: dict = field(default_factory=lambda: {})
-    players_num: int = 4
-    game_area = None
+class GameBoardView(GameBoard):
+    active_view_elements: dict = field(default_factory=lambda: {})
     player_areas: dict = field(default_factory=lambda: {})
 
-    def draw(self, screen, images_path) -> None:
-        """
-        A method that calls other methods which draw some elements and return the edges of those elements
-        :param screen: Surface to display elements
-        :param images_path: Path of images
-        :return: None
-        """
-
-        # Game Area
-        self.game_area = draw_game_area(screen, self.game_area)
-
-        # Player Area
-        for player in range(1, self.players_num + 1):
-            self.player_areas.setdefault(player, draw_player_area(screen, player, self.players_num, self.player_areas))
-
+    def draw(self, screen) -> None:
         # Draw Markers
         for marker in enumerate(markers):
-            pos_y = -screen.get_height() / 2.8
-            pos_x = - screen.get_width() * 0.05 - (100 * marker[0])
             img_name = f"{marker[1]['stone']}.png"
-            element_name = f"take_{marker[1]['stone']}_marker"
-            draw_elements(self, screen, images_path, img_name, pos_x=pos_x, pos_y=pos_y,
-                          element_name=element_name)
+            action_name = f"take_{marker[1]['stone']}_marker"
+            img = get_img(img_name)
+            draw_image(self, screen, img, factor_pos_x=0.57 + (0.07 * marker[0]), factor_pos_y=0.85,
+                       action_name=action_name)
 
         # Draw Marker Quantities
-        for element_key, element_values in self.view_elements.items():
+        for count, (element_key, element_values) in enumerate(self.active_view_elements.items()):
             if "marker" in element_key:
                 marker_name = element_key.split("_")[1]
-                quantity = str(self.game_board.stone_markers.markers[marker_name].quantity)
-                pos_x = (element_values[0][0] + element_values[1][0]) / 2.01
-                pos_y = (element_values[0][1] + element_values[1][1]) / 2.2
-                draw_marker_quantities(screen, quantity, pos_x=pos_x, pos_y=pos_y)
+                quantity = str(self.stone_markers.markers[marker_name].quantity)
+                draw_simple_text(screen, quantity, factor_pos_x=0.57 + (0.07 * count), factor_pos_y=0.78, font_size=20,
+                                 color=(227, 206, 0))
 
         # Draw Reverse Cards
         for lvl_card in range(3, 0, -1):
             img_name = f"{lvl_card}_lvl_cards.png"
-            cards_pos = - screen.get_width() * 0.055, -260 + lvl_card * 140
-            draw_elements(self, screen, images_path, img_name, pos_x=cards_pos[0], pos_y=cards_pos[1])
+            img = get_img(img_name)
+            draw_image(self, screen, img, factor_pos_x=0.57, factor_pos_y=0.85 - (lvl_card * 0.2))
 
         # Draw Stone Cards
-        for cards_lvl in ['cards_lvl_1', 'cards_lvl_2', 'cards_lvl_3']:
-            cards = self.game_board.stone_cards.__getattribute__(cards_lvl)
-            for card_key, card_val in cards.items():
+        for column, cards_lvl in enumerate(['cards_lvl_1', 'cards_lvl_2', 'cards_lvl_3']):
+            cards = self.stone_cards.__getattribute__(cards_lvl)
+            for row, (card_key, card_val) in enumerate(cards.items()):
                 if card_key != 'inverted_stack':
-                    cards_pos = 20 - screen.get_width() * 0.1 - (int(card_key.split("_")[1]) * 0.8 * 140), -260 - (
-                            -int(cards_lvl.split("_")[2]) * 140)
                     # Draw main card
-                    draw_elements(self, screen, images_path, card_val.img, pos_x=cards_pos[0], pos_y=cards_pos[1])
+                    card_img = get_img(card_val.img)
+                    draw_image(self, screen, card_img, factor_pos_x=0.57 + (row * 0.087),
+                               factor_pos_y=0.65 - (column * 0.2))
                     # Draw gem
-                    draw_elements(self, screen, images_path, card_val.bonus + "_gem.png", pos_x=cards_pos[0] - 30,
-                                  pos_y=cards_pos[1] + 45)
-                    # Draw requirements
-                    # print("----------------")
-                    n = 0
-                    for stone_name, quantity in card_val.requirements.items():
-                        # print(stone_name, quantity)
-                        draw_stone_requirements(self, screen, stone_name, quantity, pos_x=cards_pos[0] + 30,
-                                                pos_y=cards_pos[1] - 45 + 23 * n)
-                        n += 1
+                    gem_name = card_val.bonus + "_gem.png"
+                    gem_img = get_img(gem_name)
+                    draw_image(self, screen, gem_img, factor_pos_x=0.59 + (row * 0.087),
+                               factor_pos_y=0.59 - (column * 0.2))
 
-        # Draw Aristo Cards
-        n = 0
-        for aristo_card in self.game_board.aristocratic_cards.cards:
-            cards_pos = - screen.get_width() / 10.5, screen.get_height() / 2.5
-            draw_elements(self, screen, images_path, aristo_card['img'], pos_x=cards_pos[0] + n * -100,
-                          pos_y=cards_pos[1])
-            m = 0
-            for card_name, quantity in aristo_card['requirements'].items():
-                # print(stone_name, quantity)
-                draw_card_requirements(self, screen, card_name, quantity, pos_x=cards_pos[0] + 40 - n * 100,
-                                       pos_y=cards_pos[1] - 19 + m * 20)
-                m += 1
-            n += 1
+                    # Draw requirements
+                    for req_count, (stone_name, quantity) in enumerate(card_val.requirements.items()):
+                        # print(req_count, stone_name, quantity)
+                        draw_requirements(screen, stone_name, quantity, factor_pos_x=0.545 + (row * 0.087),
+                                          factor_pos_y=0.718 - (column * 0.2) - (req_count * 0.03),
+                                          stone_requirements=True)
+
+                    # Draw card bonus
+                    if card_val.points:
+                        draw_simple_text(screen, str(card_val.points), factor_pos_x=0.545 + (row * 0.087),
+                                         factor_pos_y=0.58 - (column * 0.2), font_size=36, font_name="Gargi")
+
+        # # Draw Aristo Cards
+        for column, aristo_card in enumerate(self.aristocratic_cards.cards):
+            aristo_img = get_img(aristo_card['img'])
+            draw_image(self, screen, aristo_img, factor_pos_x=0.57 + (column * 0.087),
+                       factor_pos_y=0.08)
+            for row, (card_name, quantity) in enumerate(aristo_card['requirements'].items()):
+                draw_requirements(screen, card_name, quantity, factor_pos_x=0.545 + (column * 0.087),
+                                  factor_pos_y=0.12 - (row * 0.03),
+                                  cards_requirements=True)
+        # Draw Action
+        take_3_img = get_img("take_3_markers.png")
+        draw_image(self, screen, take_3_img, factor_pos_x=0.6, factor_pos_y=0.95)
+
+        take_2_img = get_img("take_2_markers.png")
+        draw_image(self, screen, take_2_img, factor_pos_x=0.7, factor_pos_y=0.95)
+
+        buy_card_img = get_img("buy_card.png")
+        draw_image(self, screen, buy_card_img, factor_pos_x=0.8, factor_pos_y=0.95)
+
+        reserve_card_img = get_img("reserve_card.png")
+        draw_image(self, screen, reserve_card_img, factor_pos_x=0.9, factor_pos_y=0.95)
 
         # Draw Players Area
+        for count, player in enumerate(self.players):
+            # Draw Name
+            if count <= 1:
+                offset_x = (0.25 * count)
+                offset_y = 0
+            else:
+                offset_x = (0.25 * count - 0.5)
+                offset_y = 0.5
+            draw_simple_text(screen, player.name, factor_pos_x=0.04 + offset_x,
+                             factor_pos_y=0.03 + offset_y, font_size=24, color=(255, 255, 255))
 
+            # Draw Cards and Markers
+            for column, card in enumerate(markers):
+                if card['stone'] != "gold" and player.inventory.markers[card['stone']].quantity > 0:
+                    card_img = get_img(f"player_{card['stone']}_card.png")
+                    draw_image(self, screen, card_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
+                               factor_pos_y=0.14 + offset_y)
+                    draw_simple_text(screen, "x" + str(len(player.inventory.stone_cards[card['stone']])),
+                                     factor_pos_x=0.035 + offset_x + (column * 0.045),
+                                     factor_pos_y=0.2 + offset_y, font_size=16, color=(255, 255, 255))
 
+                    marker_img = get_img(f"{card['stone']}_player.png")
+                    draw_image(self, screen, marker_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
+                               factor_pos_y=0.25 + offset_y)
+                    draw_simple_text(screen, "x" + str(player.inventory.markers[card['stone']].quantity),
+                                     factor_pos_x=0.035 + offset_x + (column * 0.045),
+                                     factor_pos_y=0.29 + offset_y, font_size=16, color=(255, 255, 255))
+                elif card['stone'] == "gold" and player.inventory.markers[card['stone']].quantity > 0:
+                    marker_img = get_img(f"{card['stone']}_player.png")
+                    draw_image(self, screen, marker_img, factor_pos_x=0.215 + offset_x,
+                               factor_pos_y=0.045 + offset_y)
+                    draw_simple_text(screen, "x" + str(player.inventory.markers[card['stone']].quantity),
+                                     factor_pos_x=0.19 + offset_x,
+                                     factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
+
+            # Draw Reserved Cards
+            for reserved_count, (reserved_card_num, reserved_card) in enumerate(player.inventory.reserved_cards.items()):
+                if reserved_card is None:
+                    shadow_img = get_img("shadow_card.png")
+                    draw_image(self, screen, shadow_img, factor_pos_x=0.05 + (reserved_count * 0.0765) + offset_x,
+                               factor_pos_y=0.4 + offset_y)
+            # Display Points
+            draw_simple_text(screen, "Score: " + str(player.points), factor_pos_x=0.04 + offset_x,
+                             factor_pos_y=0.055 + offset_y, font_size=14, color=(255, 255, 255))
+
+            # Draw Aristocratic Cards
+            if player.inventory.aristocratic_cards:
+                crown_img = get_img("crown.png")
+                draw_image(self, screen, crown_img, factor_pos_x=0.16 + offset_x,
+                           factor_pos_y=0.043 + offset_y)
+                draw_simple_text(screen, "x" + str(player.inventory.aristocratic_cards),
+                                 factor_pos_x=0.13 + offset_x,
+                                 factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
     def action(self, game_view) -> None:
         """
         A method that calls another method with an action on the found element
         :param game_view: Instance of GameView
         :return: None
         """
-        for element_key, element_values in self.view_elements.items():
+        for element_key, element_values in self.active_view_elements.items():
             if element_detection(element_values):
                 if "marker" in element_key:
                     self.take_marker(element_key)
@@ -105,4 +150,4 @@ class GameBoardView:
 
     def take_marker(self, marker_name):
         marker = marker_name.split("_")[1]
-        self.game_board.stone_markers.remove_marker(marker)
+        self.stone_markers.remove_marker(marker)
