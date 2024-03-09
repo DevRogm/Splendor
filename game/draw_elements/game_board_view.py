@@ -89,9 +89,9 @@ class GameBoardView(GameBoard):
                     card_img = get_img(f"player_{card['stone']}_card.png")
                     draw_image(self, screen, card_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
                                factor_pos_y=0.14 + offset_y)
-                    draw_simple_text(screen, "x"+str(len(player.inventory.stone_cards[card['stone']])),
+                    draw_simple_text(screen, "x" + str(len(player.inventory.stone_cards[card['stone']])),
                                      factor_pos_x=0.035 + offset_x + (column * 0.045),
-                                     factor_pos_y=0.2 + offset_y, font_size=16, color=(255,255,255))
+                                     factor_pos_y=0.2 + offset_y, font_size=16, color=(255, 255, 255))
 
                     marker_img = get_img(f"{card['stone']}_player.png")
                     draw_image(self, screen, marker_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
@@ -108,14 +108,23 @@ class GameBoardView(GameBoard):
                                      factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
 
             # Draw Reserved Cards
-            for aristo_count, (aristo_card_num, aristo_card) in enumerate(player.inventory.aristocratic_cards.items()):
-                if aristo_card is None:
+            for reserved_count, (reserved_card_num, reserved_card) in enumerate(player.inventory.reserved_cards.items()):
+                if reserved_card is None:
                     shadow_img = get_img("shadow_card.png")
-                    draw_image(self, screen, shadow_img, factor_pos_x=0.05 + (aristo_count * 0.0765) + offset_x,
+                    draw_image(self, screen, shadow_img, factor_pos_x=0.05 + (reserved_count * 0.0765) + offset_x,
                                factor_pos_y=0.4 + offset_y)
+            # Display Points
+            draw_simple_text(screen, "Score: " + str(player.points), factor_pos_x=0.04 + offset_x,
+                             factor_pos_y=0.055 + offset_y, font_size=14, color=(255, 255, 255))
 
             # Draw Aristocratic Cards
 
+            crown_img = get_img("crown.png")
+            draw_image(self, screen, crown_img, factor_pos_x=0.16 + offset_x,
+                       factor_pos_y=0.043 + offset_y)
+            draw_simple_text(screen, "x" + str(player.inventory.aristocratic_cards),
+                             factor_pos_x=0.13 + offset_x,
+                             factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
     def action(self, game_view) -> None:
         """
         A method that calls another method with an action on the found element
