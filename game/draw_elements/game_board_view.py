@@ -13,24 +13,25 @@ class GameBoardView(GameBoard):
         # Draw Markers
         for marker in enumerate(markers):
             img_name = f"{marker[1]['stone']}.png"
-            action_name = f"take_{marker[1]['stone']}_marker"
+            if marker[1]['stone'] == 'gold':
+                action_name = None
+            else:
+                action_name = f"take_{marker[1]['stone']}_marker"
             img = get_img(img_name)
-            draw_image(self, screen, img, factor_pos_x=0.57 + (0.07 * marker[0]), factor_pos_y=0.85,
+            draw_image(self, screen, img, factor_pos_x=0.6 + (0.07 * marker[0]), factor_pos_y=0.85,
                        action_name=action_name)
 
         # Draw Marker Quantities
-        for count, (element_key, element_values) in enumerate(self.active_view_elements.items()):
-            if "marker" in element_key:
-                marker_name = element_key.split("_")[1]
-                quantity = str(self.stone_markers.markers[marker_name].quantity)
-                draw_simple_text(screen, quantity, factor_pos_x=0.57 + (0.07 * count), factor_pos_y=0.78, font_size=20,
-                                 color=(227, 206, 0))
+        for count, (element_key, element_values) in enumerate(self.stone_markers.markers.items()):
+            quantity = str(self.stone_markers.markers[element_key].quantity)
+            draw_simple_text(screen, quantity, factor_pos_x=0.6 + (0.07 * count), factor_pos_y=0.78, font_size=20,
+                             color=(227, 206, 0))
 
         # Draw Reverse Cards
         for lvl_card in range(3, 0, -1):
             img_name = f"{lvl_card}_lvl_cards.png"
             img = get_img(img_name)
-            draw_image(self, screen, img, factor_pos_x=0.57, factor_pos_y=0.85 - (lvl_card * 0.2))
+            draw_image(self, screen, img, factor_pos_x=0.6, factor_pos_y=0.85 - (lvl_card * 0.2))
 
         # Draw Stone Cards
         for column, cards_lvl in enumerate(['cards_lvl_1', 'cards_lvl_2', 'cards_lvl_3']):
@@ -39,47 +40,51 @@ class GameBoardView(GameBoard):
                 if card_key != 'inverted_stack':
                     # Draw main card
                     card_img = get_img(card_val.img)
-                    draw_image(self, screen, card_img, factor_pos_x=0.57 + (row * 0.087),
+                    draw_image(self, screen, card_img, factor_pos_x=0.6 + (row * 0.087),
                                factor_pos_y=0.65 - (column * 0.2))
                     # Draw gem
                     gem_name = card_val.bonus + "_gem.png"
                     gem_img = get_img(gem_name)
-                    draw_image(self, screen, gem_img, factor_pos_x=0.59 + (row * 0.087),
+                    draw_image(self, screen, gem_img, factor_pos_x=0.62 + (row * 0.087),
                                factor_pos_y=0.59 - (column * 0.2))
 
                     # Draw requirements
                     for req_count, (stone_name, quantity) in enumerate(card_val.requirements.items()):
                         # print(req_count, stone_name, quantity)
-                        draw_requirements(screen, stone_name, quantity, factor_pos_x=0.545 + (row * 0.087),
+                        draw_requirements(screen, stone_name, quantity, factor_pos_x=0.575 + (row * 0.087),
                                           factor_pos_y=0.718 - (column * 0.2) - (req_count * 0.03),
                                           stone_requirements=True)
 
                     # Draw card bonus
                     if card_val.points:
-                        draw_simple_text(screen, str(card_val.points), factor_pos_x=0.545 + (row * 0.087),
+                        draw_simple_text(screen, str(card_val.points), factor_pos_x=0.575 + (row * 0.087),
                                          factor_pos_y=0.58 - (column * 0.2), font_size=36, font_name="Gargi")
 
         # # Draw Aristo Cards
         for column, aristo_card in enumerate(self.aristocratic_cards.cards):
             aristo_img = get_img(aristo_card['img'])
-            draw_image(self, screen, aristo_img, factor_pos_x=0.57 + (column * 0.087),
+            draw_image(self, screen, aristo_img, factor_pos_x=0.6 + (column * 0.087),
                        factor_pos_y=0.08)
             for row, (card_name, quantity) in enumerate(aristo_card['requirements'].items()):
-                draw_requirements(screen, card_name, quantity, factor_pos_x=0.545 + (column * 0.087),
+                draw_requirements(screen, card_name, quantity, factor_pos_x=0.575 + (column * 0.087),
                                   factor_pos_y=0.12 - (row * 0.03),
                                   cards_requirements=True)
         # Draw Action
-        take_3_img = get_img("take_3_markers.png")
-        draw_image(self, screen, take_3_img, factor_pos_x=0.6, factor_pos_y=0.95)
+        take_3_img = get_img("take_3_markers_active.png") if self.active_action == "take_3" else get_img(
+            "take_3_markers.png")
+        draw_image(self, screen, take_3_img, factor_pos_x=0.63, factor_pos_y=0.95, action_name="take_3")
 
-        take_2_img = get_img("take_2_markers.png")
-        draw_image(self, screen, take_2_img, factor_pos_x=0.7, factor_pos_y=0.95)
+        take_2_img = get_img("take_2_markers_active.png") if self.active_action == "take_2" else get_img(
+            "take_2_markers.png")
+        draw_image(self, screen, take_2_img, factor_pos_x=0.73, factor_pos_y=0.95, action_name="take_2")
 
-        buy_card_img = get_img("buy_card.png")
-        draw_image(self, screen, buy_card_img, factor_pos_x=0.8, factor_pos_y=0.95)
+        buy_card_img = get_img("buy_card_active.png") if self.active_action == "buy_card" else get_img(
+            "buy_card.png")
+        draw_image(self, screen, buy_card_img, factor_pos_x=0.83, factor_pos_y=0.95, action_name="buy_card")
 
-        reserve_card_img = get_img("reserve_card.png")
-        draw_image(self, screen, reserve_card_img, factor_pos_x=0.9, factor_pos_y=0.95)
+        reserve_card_img = get_img("reserve_card_active.png") if self.active_action == "reserve_card" else get_img(
+            "reserve_card.png")
+        draw_image(self, screen, reserve_card_img, factor_pos_x=0.93, factor_pos_y=0.95, action_name="reserve_card")
 
         # Draw Players Area
         for count, player in enumerate(self.players):
@@ -90,8 +95,13 @@ class GameBoardView(GameBoard):
             else:
                 offset_x = (0.25 * count - 0.5)
                 offset_y = 0.5
+
+            if player.name == self.active_player.name:
+                color = (227, 206, 0)
+            else:
+                color = (255, 255, 255)
             draw_simple_text(screen, player.name, factor_pos_x=0.04 + offset_x,
-                             factor_pos_y=0.03 + offset_y, font_size=24, color=(255, 255, 255))
+                             factor_pos_y=0.03 + offset_y, font_size=24, color=color)
 
             # Draw Cards and Markers
             for column, card in enumerate(markers):
@@ -118,7 +128,8 @@ class GameBoardView(GameBoard):
                                      factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
 
             # Draw Reserved Cards
-            for reserved_count, (reserved_card_num, reserved_card) in enumerate(player.inventory.reserved_cards.items()):
+            for reserved_count, (reserved_card_num, reserved_card) in enumerate(
+                    player.inventory.reserved_cards.items()):
                 if reserved_card is None:
                     shadow_img = get_img("shadow_card.png")
                     draw_image(self, screen, shadow_img, factor_pos_x=0.05 + (reserved_count * 0.0765) + offset_x,
@@ -135,6 +146,7 @@ class GameBoardView(GameBoard):
                 draw_simple_text(screen, "x" + str(player.inventory.aristocratic_cards),
                                  factor_pos_x=0.13 + offset_x,
                                  factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
+
     def action(self, game_view) -> None:
         """
         A method that calls another method with an action on the found element
@@ -146,8 +158,59 @@ class GameBoardView(GameBoard):
                 if "marker" in element_key:
                     self.take_marker(element_key)
                 else:
-                    self.__getattribute__(element_key)(game_view)
+                    self.__getattribute__(element_key)()
 
     def take_marker(self, marker_name):
         marker = marker_name.split("_")[1]
-        self.stone_markers.remove_marker(marker)
+        if self.active_action == 'take_3' and marker not in self.temp_markers and len(self.temp_markers) < 3 and \
+                self.stone_markers.markers[marker].quantity > 0:
+            self.temp_markers.append(marker)
+            self.stone_markers.remove_marker(marker)
+            if len(self.temp_markers) == 3:
+                self.can_finish_turn()
+        elif self.active_action == 'take_2' and len(self.temp_markers) < 2 and (
+                not self.temp_markers or marker in self.temp_markers):
+            if self.stone_markers.markers[marker].quantity >= 4 or (
+                    self.stone_markers.markers[marker].quantity >= 3 and self.temp_markers):
+                self.temp_markers.append(marker)
+                self.stone_markers.remove_marker(marker)
+                if len(self.temp_markers) == 2:
+                    self.can_finish_turn()
+
+    # CHOOSE ACTION
+    def take_3(self):
+        print("TAKE 3 MARKERS")
+        if self.temp_markers:
+            [self.stone_markers.add_marker(marker, len(self.players)) for marker in self.temp_markers]
+        self.temp_markers = []
+        self.active_action = 'take_3'
+
+    def take_2(self):
+        print("TAKE 2 MARKERS")
+        if self.temp_markers:
+            [self.stone_markers.add_marker(marker, len(self.players)) for marker in self.temp_markers]
+        self.temp_markers = []
+        self.active_action = 'take_2'
+
+    def buy_card(self):
+        print("BUY CARD")
+        self.active_action = 'buy_card'
+
+    def reserve_card(self):
+        print("RESERVE CARD")
+        self.active_action = 'reserve_card'
+
+    def can_finish_turn(self):
+        for marker in self.temp_markers:
+            print(self.active_player)
+            self.active_player.inventory.add_marker(marker)
+        self.temp_markers = []
+        self.active_action = None
+        self.change_active_player()
+        # reset all temps
+        # reset active action
+        # check all player markers
+        # wait for return markers if more than 10
+        # check all player markers
+        # check can take aristo card
+        # change player
