@@ -68,7 +68,19 @@ class GameBoardView(GameBoard):
                 draw_requirements(screen, card_name, quantity, factor_pos_x=0.545 + (column * 0.087),
                                   factor_pos_y=0.12 - (row * 0.03),
                                   cards_requirements=True)
-        #
+        # Draw Action
+        take_3_img = get_img("take_3_markers.png")
+        draw_image(self, screen, take_3_img, factor_pos_x=0.6, factor_pos_y=0.95)
+
+        take_2_img = get_img("take_2_markers.png")
+        draw_image(self, screen, take_2_img, factor_pos_x=0.7, factor_pos_y=0.95)
+
+        buy_card_img = get_img("buy_card.png")
+        draw_image(self, screen, buy_card_img, factor_pos_x=0.8, factor_pos_y=0.95)
+
+        reserve_card_img = get_img("reserve_card.png")
+        draw_image(self, screen, reserve_card_img, factor_pos_x=0.9, factor_pos_y=0.95)
+
         # Draw Players Area
         for count, player in enumerate(self.players):
             # Draw Name
@@ -80,12 +92,10 @@ class GameBoardView(GameBoard):
                 offset_y = 0.5
             draw_simple_text(screen, player.name, factor_pos_x=0.04 + offset_x,
                              factor_pos_y=0.03 + offset_y, font_size=24, color=(255, 255, 255))
-            # Draw Points
 
             # Draw Cards and Markers
-            # TO DO: If quantity is 0 dont display element !!!
             for column, card in enumerate(markers):
-                if card['stone'] != "gold":
+                if card['stone'] != "gold" and player.inventory.markers[card['stone']].quantity > 0:
                     card_img = get_img(f"player_{card['stone']}_card.png")
                     draw_image(self, screen, card_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
                                factor_pos_y=0.14 + offset_y)
@@ -99,7 +109,7 @@ class GameBoardView(GameBoard):
                     draw_simple_text(screen, "x" + str(player.inventory.markers[card['stone']].quantity),
                                      factor_pos_x=0.035 + offset_x + (column * 0.045),
                                      factor_pos_y=0.29 + offset_y, font_size=16, color=(255, 255, 255))
-                else:
+                elif card['stone'] == "gold" and player.inventory.markers[card['stone']].quantity > 0:
                     marker_img = get_img(f"{card['stone']}_player.png")
                     draw_image(self, screen, marker_img, factor_pos_x=0.215 + offset_x,
                                factor_pos_y=0.045 + offset_y)
@@ -118,13 +128,13 @@ class GameBoardView(GameBoard):
                              factor_pos_y=0.055 + offset_y, font_size=14, color=(255, 255, 255))
 
             # Draw Aristocratic Cards
-
-            crown_img = get_img("crown.png")
-            draw_image(self, screen, crown_img, factor_pos_x=0.16 + offset_x,
-                       factor_pos_y=0.043 + offset_y)
-            draw_simple_text(screen, "x" + str(player.inventory.aristocratic_cards),
-                             factor_pos_x=0.13 + offset_x,
-                             factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
+            if player.inventory.aristocratic_cards:
+                crown_img = get_img("crown.png")
+                draw_image(self, screen, crown_img, factor_pos_x=0.16 + offset_x,
+                           factor_pos_y=0.043 + offset_y)
+                draw_simple_text(screen, "x" + str(player.inventory.aristocratic_cards),
+                                 factor_pos_x=0.13 + offset_x,
+                                 factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
     def action(self, game_view) -> None:
         """
         A method that calls another method with an action on the found element
