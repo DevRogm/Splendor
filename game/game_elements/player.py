@@ -54,47 +54,43 @@ class Player:
         """
         self.inventory.markers[marker].quantity += 1
 
-    def return_markers(self, marker: str) -> None:
+    def return_markers(self, marker_name: str, quantity: int) -> None:
         """
         The method removes marker from players inventory.
         Calls the remove_marker method from players inventory and pass the name of the stone as a string
-        :param marker: Marker object
+        :param marker_name: Marker object
+        :param quantity: Number of marker to return
         :return: None
         """
-        self.inventory.markers[marker].quantity -= 1
+        self.inventory.markers[marker_name].quantity -= quantity
 
     def reserve_card(self):
         pass
 
-    def can_buy(self, card) -> bool:
+    def can_buy(self, card):
         temp_markers_to_return = {}
-        print("Wymagania karty", card.requirements)
-        print("Moje Zasoby w kartach", self.inventory.stone_cards)
-        print("Moje Zasoby w znacznikach", self.inventory.markers)
         for stone_name, stone_quantity in card.requirements.items():
-            all_stones_by_type = len(self.inventory.stone_cards[stone_name]) + self.inventory.markers[
-                stone_name].quantity
-            if all_stones_by_type >= stone_quantity:
+            if all_stones_by_type := (len(self.inventory.stone_cards[stone_name]) +
+                                      self.inventory.markers[stone_name].quantity >= stone_quantity):
                 print("Poszło bez golda")
                 print("SUPER")
+                if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name])) > 0:
+                    temp_markers_to_return[stone_name] = markers_to_return
 
             elif all_stones_by_type + self.inventory.markers["gold"].quantity >= stone_quantity:
                 print("Poszło z goldem")
                 print("SUPER")
 
             else:
-                print("Nie ma tylu zasobów")
+                print("Brak zasobów")
+                return False
+        print("temp_markers_to_return", temp_markers_to_return)
+        return temp_markers_to_return
 
-        # for card_resources, marker_resources, requirements in zip(self.inventory.stone_cards.items(),
-        #                                                           self.inventory.markers.items(),
-        #                                                           card.requirements.items()):
-        #     print(card_resources[0], len(card_resources[1]),  marker_resources[1].quantity, requirements[1])
-        # if len(card_resources) + marker_resources.quantity < requirements:
-        #     return False
-        # print("MOGE KUPIĆ")
-        return False
+    def buy_card(self, card, markers_to_return):
+        for marker_name, quantity in markers_to_return.items():
 
-    def buy_card(self, card):
-        print(self.name, "Kupuje kartę")
-        print(card)
+            print("DO oddaniam", marker_name, quantity)
+            self.return_markers(marker_name, quantity)
+            print("Zasoby po oddaniu", self.inventory.markers[marker_name])
         self.inventory.stone_cards[card.bonus].append(card)
