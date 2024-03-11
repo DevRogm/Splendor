@@ -214,9 +214,12 @@ class GameBoardView(GameBoard):
 
     def buy_card(self, card):
         lvl, num = card.split("__")
-        self.active_player.buy_card(self.stone_cards.remove_card(lvl, num))
-        self.stone_cards.lay_out_cards()
-        self.can_finish_turn()
+        card_obj = self.stone_cards.return_card_obj(lvl, num)
+        if self.active_player.can_buy(card_obj):
+            print("YYYYYYEAH JUZ KUPUJE")
+            self.active_player.buy_card(self.stone_cards.remove_card(lvl, num))
+            self.stone_cards.lay_out_cards()
+            self.can_finish_turn()
 
     def can_finish_turn(self):
         for marker in self.temp_markers:

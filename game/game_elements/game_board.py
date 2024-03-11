@@ -79,6 +79,9 @@ class StoneCardsInventory:
                 if card.startswith('card') and not cards_lvl[card] and cards_lvl['inverted_stack']:
                     cards_lvl[card] = cards_lvl['inverted_stack'].pop(0)
 
+    def return_card_obj(self, lvl, card):
+        return self.__getattribute__(lvl)[card]
+
 
 @dataclass
 class GameBoard:
