@@ -14,22 +14,6 @@ class PlayerInventory:
     aristocratic_cards: int = 0
     reserved_cards: dict[int, StoneCard] = field(default_factory=lambda: {1: None, 2: None, 3: None})
 
-    def add_marker(self, marker: str) -> None:
-        """
-        The method increases the stone number by 1 based on the received stone
-        :param marker: Name of stone
-        :return: None
-        """
-        self.markers[marker].quantity += 1
-
-    def remove_marker(self, marker: str) -> None:
-        """
-        The method reduces the stone number by 1 based on the received stone
-        :param marker: Name of stone
-        :return: None
-        """
-        self.markers[marker].quantity -= 1
-
     def check_number_markers(self) -> int:
         """
         The method checks number of markers
@@ -53,20 +37,21 @@ class PlayerInventory:
 class Player:
     name: str
     points: int = 0
+    inventory = None
 
     def __post_init__(self):
         self.__setattr__('inventory', PlayerInventory())
         if len(self.name) > 20:
             raise ValueError("Too long name, max. characters is a 20")
 
-    def take_markers(self, marker: StoneMarker) -> None:
+    def take_markers(self, marker: str) -> None:
         """
         The method takes marker from the table.
         Calls the add_marker method from players inventory and pass the name of the stone as a string
         :param marker: Marker object
         :return: None
         """
-        self.inventory.add_marker(marker.stone)
+        self.inventory.markers[marker].quantity += 1
 
     def return_markers(self, marker: str) -> None:
         """
@@ -75,10 +60,12 @@ class Player:
         :param marker: Marker object
         :return: None
         """
-        self.inventory.remove_marker(marker)
+        self.inventory.markers[marker].quantity -= 1
 
     def reserve_card(self):
         pass
 
-    def buy_card(self):
-        pass
+    def buy_card(self, card):
+        print(self.name, "Kupuje kartę")
+        print(card)
+        self.inventory.stone_cards[card.bonus].append(card)

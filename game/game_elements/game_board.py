@@ -63,8 +63,10 @@ class StoneCardsInventory:
     cards_lvl_3: dict[str, Union[List[StoneCard], StoneCard, None]] = field(
         default_factory=lambda: {'inverted_stack': [], 'card_1': None, 'card_2': None, 'card_3': None, 'card_4': None})
 
-    def remove_card(self, lvl, stack):
-        pass
+    def remove_card(self, lvl, card):
+        card_to_return = self.__getattribute__(lvl).copy()
+        self.__getattribute__(lvl)[card] = None
+        return card_to_return[card]
 
     def lay_out_cards(self) -> None:
         """
