@@ -160,6 +160,8 @@ class GameBoard:
     def change_active_player(self):
         print("ZMIENIAM GRACZA")
         player_idx = self.players.index(self.active_player)
+        print("LOL", self.active_player.name)
+        self.active_player.check_points()
         if player_idx + 1 >= len(self.players):
             player_idx = 0
         else:

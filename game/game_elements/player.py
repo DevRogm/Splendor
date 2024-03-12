@@ -20,6 +20,8 @@ class PlayerInventory:
         The method checks number of markers
         :return: Number of markers
         """
+        print("SRPAWDZAM LICZBA ZNACNZIKOW!!!")
+        print(sum(stone.quantity for stone in self.markers.values()))
         return sum(stone.quantity for stone in self.markers.values())
 
     def _stone_markers_init(self) -> None:
@@ -70,27 +72,33 @@ class Player:
     def can_buy(self, card):
         temp_markers_to_return = {}
         for stone_name, stone_quantity in card.requirements.items():
-            if all_stones_by_type := (len(self.inventory.stone_cards[stone_name]) +
-                                      self.inventory.markers[stone_name].quantity >= stone_quantity):
-                print("Poszło bez golda")
-                print("SUPER")
+            print("STONE NAME: ", stone_name, "Znaczniki: ", self.inventory.markers[stone_name].quantity, "Karty: ",
+                  len(self.inventory.stone_cards[stone_name]))
+            print("SUMA KAMIENI: ", (
+                len(self.inventory.stone_cards[stone_name]) + self.inventory.markers[stone_name].quantity, "WYMAGANE: ",
+                stone_quantity))
+            if (all_stones_by_type := len(self.inventory.stone_cards[stone_name]) +
+                                      self.inventory.markers[stone_name].quantity) >= stone_quantity:
+                print("MAM TYLE KAMIENI ILE POTRZEBA")
                 if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name])) > 0:
                     temp_markers_to_return[stone_name] = markers_to_return
 
             elif all_stones_by_type + self.inventory.markers["gold"].quantity >= stone_quantity:
-                print("Poszło z goldem")
-                print("SUPER")
-
+                print("CIUL")
+                pass
             else:
-                print("Brak zasobów")
-                return False
-        print("temp_markers_to_return", temp_markers_to_return)
-        return temp_markers_to_return
+                print("JEDNAK FALSE")
+                return False, {}
+        return True, temp_markers_to_return
 
     def buy_card(self, card, markers_to_return):
-        for marker_name, quantity in markers_to_return.items():
-
-            print("DO oddaniam", marker_name, quantity)
-            self.return_markers(marker_name, quantity)
-            print("Zasoby po oddaniu", self.inventory.markers[marker_name])
+        if markers_to_return:
+            for marker_name, quantity in markers_to_return.items():
+                self.return_markers(marker_name, quantity)
         self.inventory.stone_cards[card.bonus].append(card)
+
+    def check_points(self):
+        # sum([sum([num for num in lista]) for lista in nested_list])
+        self.points = sum([sum([stone_card.points for stone_card in stone_cards]) for stone_cards in
+                           self.inventory.stone_cards.values()]) + self.inventory.aristocratic_cards * 3
+        print(self.name, self.points)

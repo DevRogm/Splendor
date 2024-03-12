@@ -191,21 +191,18 @@ class GameBoardView(GameBoard):
 
     # CHOOSE ACTION
     def take_3(self):
-        print("TAKE 3 MARKERS")
         if self.temp_markers:
             [self.stone_markers.add_marker(marker, len(self.players)) for marker in self.temp_markers]
         self.temp_markers = []
         self.active_action = 'take_3'
 
     def take_2(self):
-        print("TAKE 2 MARKERS")
         if self.temp_markers:
             [self.stone_markers.add_marker(marker, len(self.players)) for marker in self.temp_markers]
         self.temp_markers = []
         self.active_action = 'take_2'
 
     def buy_card_action(self):
-        print("BUY CARD")
         self.active_action = 'buy_card'
 
     def reserve_card_action(self):
@@ -215,13 +212,19 @@ class GameBoardView(GameBoard):
     def buy_card(self, card):
         lvl, num = card.split("__")
         card_obj = self.stone_cards.return_card_obj(lvl, num)
-        if markers_to_return := self.active_player.can_buy(card_obj):
+        can_buy, marker_to_return = self.active_player.can_buy(card_obj)
+        if can_buy:
+            print("MOGE KUPIĆ")
             removed_card_from_table = self.stone_cards.remove_card(lvl, num)
-            self.active_player.buy_card(removed_card_from_table, markers_to_return)
-            for marker_name, quantity in markers_to_return.items():
-                [self.stone_markers.add_marker(marker_name, len(self.players)) for _ in range(quantity)]
+            self.active_player.buy_card(removed_card_from_table, marker_to_return)
+            if marker_to_return:
+                for marker_name, quantity in marker_to_return.items():
+                    [self.stone_markers.add_marker(marker_name, len(self.players)) for _ in range(quantity)]
             self.stone_cards.lay_out_cards()
             self.can_finish_turn()
+
+    def reserve_card(self):
+        print("SIEMA RESERVE CARD")
 
     def can_finish_turn(self):
         for marker in self.temp_markers:
