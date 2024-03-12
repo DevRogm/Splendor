@@ -141,6 +141,15 @@ class GameBoardView(GameBoard):
                     shadow_img = get_img("shadow_card.png")
                     draw_image(self, screen, shadow_img, factor_pos_x=0.05 + (reserved_count * 0.0765) + offset_x,
                                factor_pos_y=0.4 + offset_y)
+                else:
+                    card_img = get_img(reserved_card.img)
+                    draw_image(self, screen, card_img, factor_pos_x=0.05 + (reserved_count * 0.0765) + offset_x,
+                               factor_pos_y=0.4 + offset_y)
+                    gem_name = reserved_card.bonus + "_gem.png"
+                    gem_img = get_img(gem_name)
+                    draw_image(self, screen, gem_img, factor_pos_x=0.07 + (reserved_count * 0.0765) + offset_x,
+                               factor_pos_y=0.34 + offset_y)
+
             # Display Points
             draw_simple_text(screen, "Score: " + str(player.points), factor_pos_x=0.04 + offset_x,
                              factor_pos_y=0.055 + offset_y, font_size=14, color=(255, 255, 255))
@@ -166,6 +175,8 @@ class GameBoardView(GameBoard):
                     self.take_marker(element_key)
                 elif "cards_lvl" in element_key and self.active_action == "buy_card":
                     self.buy_card(element_key)
+                elif "cards_lvl" in element_key and self.active_action == "reserve_card":
+                    self.reserve_card(element_key)
                 else:
                     try:
                         self.__getattribute__(element_key)()
@@ -214,7 +225,6 @@ class GameBoardView(GameBoard):
         card_obj = self.stone_cards.return_card_obj(lvl, num)
         can_buy, marker_to_return = self.active_player.can_buy(card_obj)
         if can_buy:
-            print("MOGE KUPIĆ")
             removed_card_from_table = self.stone_cards.remove_card(lvl, num)
             self.active_player.buy_card(removed_card_from_table, marker_to_return)
             if marker_to_return:
@@ -223,9 +233,17 @@ class GameBoardView(GameBoard):
             self.stone_cards.lay_out_cards()
             self.can_finish_turn()
 
-    def reserve_card(self):
-        print("SIEMA RESERVE CARD")
-
+    def reserve_card(self, card):
+        lvl, num = card.split("__")
+        card_obj = self.stone_cards.return_card_obj(lvl, num)
+        if None in list(self.active_player.inventory.reserved_cards.values()):
+            print("Działam")
+            self.active_player.reserve_card(card_obj)
+            self.stone_cards.lay_out_cards()
+            self.can_finish_turn()
+                # Usunac karte ze stołu
+                # dodać ją do rezerwowanych  przez gracza
+                # dodac znacznik golda graczowi o ile taki znacznik jeszcze jest na stol
     def can_finish_turn(self):
         for marker in self.temp_markers:
             self.active_player.take_markers(marker)

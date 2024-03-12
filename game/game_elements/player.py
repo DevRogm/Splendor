@@ -66,8 +66,12 @@ class Player:
         """
         self.inventory.markers[marker_name].quantity -= quantity
 
-    def reserve_card(self):
-        pass
+    def reserve_card(self, card):
+        for card_number, reserved_card in self.inventory.reserved_cards.items():
+            if reserved_card is None:
+                self.inventory.reserved_cards[card_number] = card
+                break
+        print(self.inventory.reserved_cards)
 
     def can_buy(self, card):
         temp_markers_to_return = {}
