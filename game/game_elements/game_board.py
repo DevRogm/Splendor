@@ -168,6 +168,3 @@ class GameBoard:
 
     def check_the_winner(self):
         pass
-
-    def show_available_actions(self):
-        pass

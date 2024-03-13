@@ -54,7 +54,7 @@ class Player:
         """
         self.inventory.markers[marker].quantity += 1
 
-    def return_markers(self, marker_name: str, quantity: int) -> None:
+    def return_markers(self, marker_name: str, quantity: int = 1) -> None:
         """
         The method removes marker from players inventory.
         Calls the remove_marker method from players inventory and pass the name of the stone as a string

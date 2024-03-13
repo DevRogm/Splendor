@@ -122,14 +122,15 @@ class GameBoardView(GameBoard):
                 if card_markers['stone'] != "gold" and player.inventory.markers[card_markers['stone']].quantity > 0:
                     marker_img = get_img(f"{card_markers['stone']}_player.png")
                     draw_image(self, screen, marker_img, factor_pos_x=0.035 + offset_x + (column * 0.045),
-                               factor_pos_y=0.25 + offset_y)
+                               factor_pos_y=0.25 + offset_y,
+                               action_name=f"{player.name}_return_{card_markers['stone']}_marker")
                     draw_simple_text(screen, "x" + str(player.inventory.markers[card_markers['stone']].quantity),
                                      factor_pos_x=0.035 + offset_x + (column * 0.045),
                                      factor_pos_y=0.29 + offset_y, font_size=16, color=(255, 255, 255))
                 elif card_markers['stone'] == "gold" and player.inventory.markers[card_markers['stone']].quantity > 0:
                     marker_img = get_img(f"{card_markers['stone']}_player.png")
                     draw_image(self, screen, marker_img, factor_pos_x=0.215 + offset_x,
-                               factor_pos_y=0.045 + offset_y)
+                               factor_pos_y=0.045 + offset_y, action_name=f"{player.name}_return_gold_marker")
                     draw_simple_text(screen, "x" + str(player.inventory.markers[card_markers['stone']].quantity),
                                      factor_pos_x=0.19 + offset_x,
                                      factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
@@ -186,7 +187,7 @@ class GameBoardView(GameBoard):
         :return: None
         """
         for element_key, element_values in self.active_view_elements.items():
-            if element_detection(element_values):
+            if element_detection(element_values) and not self.active_action == "return_markers":
                 if "marker" in element_key:
                     self.take_marker(element_key)
                 elif "cards_lvl" in element_key and self.active_action == "buy_card":
@@ -200,6 +201,10 @@ class GameBoardView(GameBoard):
                         self.__getattribute__(element_key)()
                     except AttributeError:
                         pass
+            elif element_detection(element_values) and self.active_action == "return_markers":
+                if f"{self.active_player.name}_return_" in element_key:
+                    marker_name = element_key.split("_")[2]
+                    self.return_marker(marker_name)
 
     def take_marker(self, marker_name):
         marker = marker_name.split("_")[1]
@@ -217,6 +222,11 @@ class GameBoardView(GameBoard):
                 self.stone_markers.remove_marker(marker)
                 if len(self.temp_markers) == 2:
                     self.can_finish_turn()
+
+    def return_marker(self, marker_name):
+        self.active_player.return_markers(marker_name)
+        self.stone_markers.add_marker(marker_name, ply_num=len(self.players))
+        self.can_finish_turn()
 
     # CHOOSE ACTION
     def take_3(self):
@@ -280,7 +290,11 @@ class GameBoardView(GameBoard):
             self.active_player.take_markers(marker)
         self.temp_markers = []
         self.active_action = None
-        self.change_active_player()
+        if self.active_player.inventory.check_number_markers() > 10:
+            self.active_action = "return_markers"
+        else:
+            self.active_action = None
+            self.change_active_player()
         # autocomplete card
         # reset all temps
         # reset active action
