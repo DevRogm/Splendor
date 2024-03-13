@@ -145,10 +145,25 @@ class GameBoardView(GameBoard):
                     card_img = get_img(reserved_card.img)
                     draw_image(self, screen, card_img, factor_pos_x=0.05 + (reserved_count * 0.0765) + offset_x,
                                factor_pos_y=0.4 + offset_y)
+
+                    # Gems
                     gem_name = reserved_card.bonus + "_gem.png"
                     gem_img = get_img(gem_name)
                     draw_image(self, screen, gem_img, factor_pos_x=0.07 + (reserved_count * 0.0765) + offset_x,
                                factor_pos_y=0.34 + offset_y)
+
+                    # Draw requirements
+                    for req_count, (stone_name, quantity) in enumerate(reserved_card.requirements.items()):
+                        draw_requirements(screen, stone_name, quantity,
+                                          factor_pos_x=0.025 + (reserved_count * 0.0765) + offset_x,
+                                          factor_pos_y=0.468 - (req_count * 0.03) + offset_y,
+                                          stone_requirements=True)
+
+                    # Draw card bonus
+                    if reserved_card.points:
+                        draw_simple_text(screen, str(reserved_card.points),
+                                         factor_pos_x=0.025 + (reserved_count * 0.0765) + offset_x,
+                                         factor_pos_y=0.33 + offset_y, font_size=36, font_name="Gargi")
 
             # Display Points
             draw_simple_text(screen, "Score: " + str(player.points), factor_pos_x=0.04 + offset_x,
@@ -228,6 +243,7 @@ class GameBoardView(GameBoard):
             removed_card_from_table = self.stone_cards.remove_card(lvl, num)
             self.active_player.buy_card(removed_card_from_table, marker_to_return)
             if marker_to_return:
+                print("MARKERY DO ODDANIA: ", marker_to_return)
                 for marker_name, quantity in marker_to_return.items():
                     [self.stone_markers.add_marker(marker_name, len(self.players)) for _ in range(quantity)]
             self.stone_cards.lay_out_cards()
@@ -239,11 +255,14 @@ class GameBoardView(GameBoard):
         if None in list(self.active_player.inventory.reserved_cards.values()):
             print("Działam")
             self.active_player.reserve_card(card_obj)
+            self.stone_cards.remove_card(lvl, num)
+            if self.stone_markers.markers['gold'].quantity > 0:
+                self.stone_markers.remove_marker('gold')
+                self.active_player.take_markers('gold')
             self.stone_cards.lay_out_cards()
             self.can_finish_turn()
-                # Usunac karte ze stołu
-                # dodać ją do rezerwowanych  przez gracza
-                # dodac znacznik golda graczowi o ile taki znacznik jeszcze jest na stol
+            # dodac znacznik golda graczowi o ile taki znacznik jeszcze jest na stol
+
     def can_finish_turn(self):
         for marker in self.temp_markers:
             self.active_player.take_markers(marker)

@@ -81,18 +81,42 @@ class Player:
             print("SUMA KAMIENI: ", (
                 len(self.inventory.stone_cards[stone_name]) + self.inventory.markers[stone_name].quantity, "WYMAGANE: ",
                 stone_quantity))
-            if (all_stones_by_type := len(self.inventory.stone_cards[stone_name]) +
-                                      self.inventory.markers[stone_name].quantity) >= stone_quantity:
-                print("MAM TYLE KAMIENI ILE POTRZEBA")
+            if (all_stones_by_type := len(self.inventory.stone_cards[stone_name]) + self.inventory.markers[
+                stone_name].quantity - stone_quantity) >= 0:
+                print("MOGE KUPIĆ ZA ZNACZNIKI I KARTY")
                 if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name])) > 0:
                     temp_markers_to_return[stone_name] = markers_to_return
+            elif self.inventory.markers['gold'].quantity - temp_markers_to_return.get('gold', 0) >= abs(
+                    all_stones_by_type):
+                if temp_markers_to_return.get('gold'):
+                    temp_markers_to_return['gold'] += abs(all_stones_by_type)
+                else:
+                    temp_markers_to_return['gold'] = abs(all_stones_by_type)
+                if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name])) > 0:
+                    temp_markers_to_return[stone_name] = markers_to_return - abs(all_stones_by_type)
 
-            elif all_stones_by_type + self.inventory.markers["gold"].quantity >= stone_quantity:
-                print("CIUL")
-                pass
+            # if (all_stones_by_type := len(self.inventory.stone_cards[stone_name]) +
+            #                           self.inventory.markers[stone_name].quantity) >= stone_quantity:
+            #     print("MAM TYLE KAMIENI ILE POTRZEBA")
+            #     if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name])) > 0:
+            #         temp_markers_to_return[stone_name] = markers_to_return
+            #
+            # elif (all_stones_by_type := len(self.inventory.stone_cards[stone_name]) +
+            #                           self.inventory.markers[stone_name].quantity) + self.inventory.markers["gold"].quantity >= stone_quantity:
+            #     print("ZA GOLDA")
+            #     print("stone_name", stone_name)
+            #     print(len(self.inventory.stone_cards[stone_name]) + self.inventory.markers[stone_name].quantity + self.inventory.markers["gold"].quantity, stone_quantity)
+            #     if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name]) - self.inventory.markers["gold"].quantity) > 0:
+            #         temp_markers_to_return[stone_name] = markers_to_return
+            #     print(temp_markers_to_return)
+            #     if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name]) - self.inventory.markers[stone_name].quantity) > 0:
+            #         temp_markers_to_return['gold'] = markers_to_return
+            #     print(temp_markers_to_return)
             else:
                 print("JEDNAK FALSE")
+                print("TEMP MARKERS", temp_markers_to_return)
                 return False, {}
+        print("TEMP MARKERS", temp_markers_to_return)
         return True, temp_markers_to_return
 
     def buy_card(self, card, markers_to_return):
