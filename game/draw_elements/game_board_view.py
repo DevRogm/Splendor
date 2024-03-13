@@ -144,7 +144,8 @@ class GameBoardView(GameBoard):
                 else:
                     card_img = get_img(reserved_card.img)
                     draw_image(self, screen, card_img, factor_pos_x=0.05 + (reserved_count * 0.0765) + offset_x,
-                               factor_pos_y=0.4 + offset_y)
+                               factor_pos_y=0.4 + offset_y,
+                               action_name=f"{player.name}_reserved_card_{reserved_count}")
 
                     # Gems
                     gem_name = reserved_card.bonus + "_gem.png"
@@ -192,6 +193,8 @@ class GameBoardView(GameBoard):
                     self.buy_card(element_key)
                 elif "cards_lvl" in element_key and self.active_action == "reserve_card":
                     self.reserve_card(element_key)
+                elif f"{self.active_player.name}_reserved_card" in element_key and self.active_action == "buy_card":
+                    self.buy_reserved_card(element_key)
                 else:
                     try:
                         self.__getattribute__(element_key)()
@@ -232,7 +235,6 @@ class GameBoardView(GameBoard):
         self.active_action = 'buy_card'
 
     def reserve_card_action(self):
-        print("RESERVE CARD")
         self.active_action = 'reserve_card'
 
     def buy_card(self, card):
@@ -243,7 +245,18 @@ class GameBoardView(GameBoard):
             removed_card_from_table = self.stone_cards.remove_card(lvl, num)
             self.active_player.buy_card(removed_card_from_table, marker_to_return)
             if marker_to_return:
-                print("MARKERY DO ODDANIA: ", marker_to_return)
+                for marker_name, quantity in marker_to_return.items():
+                    [self.stone_markers.add_marker(marker_name, len(self.players)) for _ in range(quantity)]
+            self.stone_cards.lay_out_cards()
+            self.can_finish_turn()
+
+    def buy_reserved_card(self, card):
+        card_obj = self.active_player.inventory.reserved_cards.get(int(card.split('_')[3]) + 1)
+        can_buy, marker_to_return = self.active_player.can_buy(card_obj)
+        if can_buy:
+            self.active_player.buy_card(card_obj, marker_to_return)
+            self.active_player.inventory.reserved_cards[int(card.split('_')[3]) + 1] = None
+            if marker_to_return:
                 for marker_name, quantity in marker_to_return.items():
                     [self.stone_markers.add_marker(marker_name, len(self.players)) for _ in range(quantity)]
             self.stone_cards.lay_out_cards()
@@ -253,7 +266,6 @@ class GameBoardView(GameBoard):
         lvl, num = card.split("__")
         card_obj = self.stone_cards.return_card_obj(lvl, num)
         if None in list(self.active_player.inventory.reserved_cards.values()):
-            print("Działam")
             self.active_player.reserve_card(card_obj)
             self.stone_cards.remove_card(lvl, num)
             if self.stone_markers.markers['gold'].quantity > 0:

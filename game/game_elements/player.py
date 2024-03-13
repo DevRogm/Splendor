@@ -20,8 +20,6 @@ class PlayerInventory:
         The method checks number of markers
         :return: Number of markers
         """
-        print("SRPAWDZAM LICZBA ZNACNZIKOW!!!")
-        print(sum(stone.quantity for stone in self.markers.values()))
         return sum(stone.quantity for stone in self.markers.values())
 
     def _stone_markers_init(self) -> None:
@@ -71,19 +69,12 @@ class Player:
             if reserved_card is None:
                 self.inventory.reserved_cards[card_number] = card
                 break
-        print(self.inventory.reserved_cards)
 
     def can_buy(self, card):
         temp_markers_to_return = {}
         for stone_name, stone_quantity in card.requirements.items():
-            print("STONE NAME: ", stone_name, "Znaczniki: ", self.inventory.markers[stone_name].quantity, "Karty: ",
-                  len(self.inventory.stone_cards[stone_name]))
-            print("SUMA KAMIENI: ", (
-                len(self.inventory.stone_cards[stone_name]) + self.inventory.markers[stone_name].quantity, "WYMAGANE: ",
-                stone_quantity))
             if (all_stones_by_type := len(self.inventory.stone_cards[stone_name]) + self.inventory.markers[
                 stone_name].quantity - stone_quantity) >= 0:
-                print("MOGE KUPIĆ ZA ZNACZNIKI I KARTY")
                 if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name])) > 0:
                     temp_markers_to_return[stone_name] = markers_to_return
             elif self.inventory.markers['gold'].quantity - temp_markers_to_return.get('gold', 0) >= abs(
@@ -94,29 +85,8 @@ class Player:
                     temp_markers_to_return['gold'] = abs(all_stones_by_type)
                 if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name])) > 0:
                     temp_markers_to_return[stone_name] = markers_to_return - abs(all_stones_by_type)
-
-            # if (all_stones_by_type := len(self.inventory.stone_cards[stone_name]) +
-            #                           self.inventory.markers[stone_name].quantity) >= stone_quantity:
-            #     print("MAM TYLE KAMIENI ILE POTRZEBA")
-            #     if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name])) > 0:
-            #         temp_markers_to_return[stone_name] = markers_to_return
-            #
-            # elif (all_stones_by_type := len(self.inventory.stone_cards[stone_name]) +
-            #                           self.inventory.markers[stone_name].quantity) + self.inventory.markers["gold"].quantity >= stone_quantity:
-            #     print("ZA GOLDA")
-            #     print("stone_name", stone_name)
-            #     print(len(self.inventory.stone_cards[stone_name]) + self.inventory.markers[stone_name].quantity + self.inventory.markers["gold"].quantity, stone_quantity)
-            #     if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name]) - self.inventory.markers["gold"].quantity) > 0:
-            #         temp_markers_to_return[stone_name] = markers_to_return
-            #     print(temp_markers_to_return)
-            #     if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name]) - self.inventory.markers[stone_name].quantity) > 0:
-            #         temp_markers_to_return['gold'] = markers_to_return
-            #     print(temp_markers_to_return)
             else:
-                print("JEDNAK FALSE")
-                print("TEMP MARKERS", temp_markers_to_return)
                 return False, {}
-        print("TEMP MARKERS", temp_markers_to_return)
         return True, temp_markers_to_return
 
     def buy_card(self, card, markers_to_return):
@@ -126,7 +96,5 @@ class Player:
         self.inventory.stone_cards[card.bonus].append(card)
 
     def check_points(self):
-        # sum([sum([num for num in lista]) for lista in nested_list])
         self.points = sum([sum([stone_card.points for stone_card in stone_cards]) for stone_cards in
                            self.inventory.stone_cards.values()]) + self.inventory.aristocratic_cards * 3
-        print(self.name, self.points)

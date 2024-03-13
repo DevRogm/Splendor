@@ -49,7 +49,7 @@ while running:
         if test_game:
             game_views.change_view("game_board_view")
             test_game = False
-            players = {1: "Mario", 2: "Luigi"}
+            players = {1: "Mario", 2: "Luigi", 3: "Luna", 4: "Poppy"}
             game_views.game_board_view.game_preparation(players)
         if event.type == pygame.MOUSEBUTTONUP:
             # GAME STEPS
