@@ -21,6 +21,7 @@ def element_detection(element_edges: tuple) -> bool:
     else:
         return False
 
+
 def draw_player_area(screen, player, player_num, player_areas):
     if len(player_areas) != player_num:
         player_area_surface = pygame.Surface((screen.get_width() / 4, screen.get_height() / 2))
@@ -72,7 +73,8 @@ def get_img(img_name):
     return img_full_path
 
 
-def draw_simple_text(screen, text, factor_pos_x=0.0, factor_pos_y=0.0, font_size=36, font_name="ARIAL", color=(0, 0, 0)):
+def draw_simple_text(screen, text, factor_pos_x=0.0, factor_pos_y=0.0, font_size=36, font_name="ARIAL",
+                     color=(0, 0, 0)):
     my_font = pygame.font.SysFont(font_name, font_size)
     text = my_font.render(text.upper(), True, color)
     pos_x = screen.get_width() * factor_pos_x - text.get_width() / 2
@@ -81,8 +83,7 @@ def draw_simple_text(screen, text, factor_pos_x=0.0, factor_pos_y=0.0, font_size
 
 
 def draw_requirements(screen, stone_card_name, quantity, factor_pos_x=0.0, factor_pos_y=0.0, font_size=18,
-                      stone_requirements=False,
-                      cards_requirements=False):
+                      stone_requirements=False):
     colors = {'emerald': (32, 102, 0, 100),
               'sapphire': (83, 142, 199),
               'onyx': (82, 68, 68, 100),
@@ -93,11 +94,15 @@ def draw_requirements(screen, stone_card_name, quantity, factor_pos_x=0.0, facto
     pos_y = screen.get_height() * factor_pos_y
     if stone_requirements:
         pygame.draw.circle(screen, colors[stone_card_name], (pos_x, pos_y),
-                                    10, 0)
+                           10, 0)
     else:
-        pygame.draw.rect(screen, colors[stone_card_name], (pos_x-8, pos_y-8,
-                                                      15, 20))
+        pygame.draw.rect(screen, colors[stone_card_name], (pos_x - 8, pos_y - 8,
+                                                           15, 20))
     my_font = pygame.font.SysFont('ARIAL', font_size, True)
     stone_card_quantity = my_font.render(str(quantity), True, (0, 0, 0))
     stone_card_quantity_position = (screen.get_width() * factor_pos_x - 5, screen.get_height() * factor_pos_y - 7)
     screen.blit(stone_card_quantity, stone_card_quantity_position)
+
+
+class ExitLoop(BaseException):
+    pass

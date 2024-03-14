@@ -6,6 +6,7 @@ from game.game_elements.stone_markers import StoneMarker
 from game.game_elements.stone_cards import StoneCard
 from game_data.markes_and_cards_data import markers as markers_data, aristocratic_cards, cards_lvl_1, cards_lvl_2, \
     cards_lvl_3
+from game.utils import ExitLoop
 
 
 @dataclass
@@ -50,8 +51,18 @@ class AristocraticCardsInventory:
     def remove_card(self):
         pass
 
-    def can_give_card(self):
-        pass
+    def can_give_card(self, player_cards):
+        for aristo_card in self.cards:
+            try:
+                for stone, requirements in aristo_card['requirements'].items():
+                    if len(player_cards[stone]) < requirements:
+                        raise ExitLoop
+                idx = self.cards.index(aristo_card)
+                self.cards.pop(idx)
+                return True
+            except ExitLoop:
+                continue
+        return None
 
 
 @dataclass
@@ -92,6 +103,7 @@ class GameBoard:
     active_player: Player | None = None
     active_action: str | None = None
     temp_markers: list[StoneMarker] = field(default_factory=lambda: [])
+    show_results: bool = False
 
     def game_preparation(self, ply: dict) -> None:
         """
@@ -166,5 +178,9 @@ class GameBoard:
             player_idx += 1
         self.active_player = self.players[player_idx]
 
-    def check_the_winner(self):
-        pass
+    def is_the_last_round(self, players):
+        last_round = False
+        for player in players:
+            if player.points >= 1:
+                last_round = True
+        return last_round

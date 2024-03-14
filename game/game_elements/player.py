@@ -4,7 +4,6 @@ from game.game_elements.aristocratic_cards import AristocraticCard
 from game.game_elements.stone_cards import StoneCard
 from game_data.markes_and_cards_data import markers as markers_data
 from typing import List
-from itertools import zip_longest
 
 
 @dataclass
@@ -37,7 +36,7 @@ class PlayerInventory:
 @dataclass
 class Player:
     name: str
-    points: int = 0
+    points: int = 1
     inventory = None
 
     def __post_init__(self):
@@ -74,7 +73,7 @@ class Player:
         temp_markers_to_return = {}
         for stone_name, stone_quantity in card.requirements.items():
             if (all_stones_by_type := len(self.inventory.stone_cards[stone_name]) + self.inventory.markers[
-                stone_name].quantity - stone_quantity) >= 0:
+                    stone_name].quantity - stone_quantity) >= 0:
                 if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name])) > 0:
                     temp_markers_to_return[stone_name] = markers_to_return
             elif self.inventory.markers['gold'].quantity - temp_markers_to_return.get('gold', 0) >= abs(

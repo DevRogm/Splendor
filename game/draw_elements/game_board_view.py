@@ -73,8 +73,7 @@ class GameBoardView(GameBoard):
                        factor_pos_y=0.08)
             for row, (card_name, quantity) in enumerate(aristo_card['requirements'].items()):
                 draw_requirements(screen, card_name, quantity, factor_pos_x=0.575 + (column * 0.087),
-                                  factor_pos_y=0.12 - (row * 0.03),
-                                  cards_requirements=True)
+                                  factor_pos_y=0.12 - (row * 0.03))
         # Draw Action
         take_3_img = get_img("take_3_markers_active.png") if self.active_action == "take_3" else get_img(
             "take_3_markers.png")
@@ -294,7 +293,18 @@ class GameBoardView(GameBoard):
             self.active_action = "return_markers"
         else:
             self.active_action = None
+            if self.aristocratic_cards.can_give_card(self.active_player.inventory.stone_cards):
+                self.active_player.inventory.aristocratic_cards += 1
+            if self.is_the_last_round(self.players) and self.active_player is self.players[-1]:
+                self.show_results = True
             self.change_active_player()
+
+    def go_to_result_view(self, game_view):
+        game_view.change_view('results_view')
+
+        # Jesli ktos ma 15 pkt lub wiecej to trzeba dokonczyc rundę
+
+
         # autocomplete card
         # reset all temps
         # reset active action
