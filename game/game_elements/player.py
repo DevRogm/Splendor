@@ -36,7 +36,7 @@ class PlayerInventory:
 @dataclass
 class Player:
     name: str
-    points: int = 1
+    points: int = 0
     inventory = None
 
     def __post_init__(self):

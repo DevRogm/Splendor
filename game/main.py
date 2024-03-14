@@ -18,55 +18,63 @@ table_img = pygame.image.load(table)
 # Init game_board and game_views
 game_views = GameViews()
 
-while running:
-    screen.blit(pygame.transform.scale(table_img, (1280, 720)), (0, 0))
-    # Display game view
-    game_views.draw_view(screen)
-    pygame.display.update()
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONUP:
-            action = game_views.do_action()
-            if action == "start_game":
-                players = game_views.game_menu_view.players
-                game_views.game_board_view.game_preparation(players)
-            if game_views.game_board_view.show_results:
-                game_views.change_view("results_view")
-                game_views.game_board_view.show_results = False
-            if action == "quit":
-                running = False
-        if game_views.current_view == "game_menu_view" and game_views.game_menu_view.num_of_players:
-            if event.type == pygame.KEYDOWN:
-                game_views.game_menu_view.add_player_name(event.key)
-        if event.type == pygame.QUIT:
-            running = False
-    screen.fill("black")
-    dt = clock.tick(60) / 1000
-pygame.quit()
-
-# test_game = True
 # while running:
 #     screen.blit(pygame.transform.scale(table_img, (1280, 720)), (0, 0))
 #     # Display game view
 #     game_views.draw_view(screen)
 #     pygame.display.update()
 #     for event in pygame.event.get():
-#         if test_game:
-#             game_views.change_view("game_board_view")
-#             test_game = False
-#             players = {1: "Mario", 2: "Luigi"}
-#             if not game_views.game_board_view.game_running:
-#                 game_views.game_board_view.game_preparation(players)
-#                 game_views.game_board_view.game_running = True
 #         if event.type == pygame.MOUSEBUTTONUP:
-#             # GAME STEPS
 #             action = game_views.do_action()
+#             if action == "start_game":
+#                 players = game_views.game_menu_view.players
+#                 game_views.game_board_view.game_preparation(players)
+#             if game_views.game_board_view.show_results:
+#                 game_views.change_view("results_view")
+#                 game_views.game_board_view.show_results = False
 #             if action == "quit":
 #                 running = False
-#
 #         if game_views.current_view == "game_menu_view" and game_views.game_menu_view.num_of_players:
 #             if event.type == pygame.KEYDOWN:
 #                 game_views.game_menu_view.add_player_name(event.key)
 #         if event.type == pygame.QUIT:
 #             running = False
+#     screen.fill("black")
 #     dt = clock.tick(60) / 1000
 # pygame.quit()
+
+test_game = True
+while running:
+    screen.blit(pygame.transform.scale(table_img, (1280, 720)), (0, 0))
+    # Display game view
+    game_views.draw_view(screen)
+    pygame.display.update()
+    for event in pygame.event.get():
+        if test_game:
+            game_views.change_view("game_board_view")
+            test_game = False
+            players = {1: "Mario", 2: "Luigi", 3: "Luna", 4: "Poppy"}
+            if not game_views.game_board_view.show_results:
+                game_views.game_board_view.game_preparation(players)
+                game_views.game_board_view.show_results = True
+                game_views.game_board_view.players[0].points = 15
+                game_views.game_board_view.players[1].points = 9
+                game_views.game_board_view.players[2].points = 16
+                game_views.game_board_view.players[3].points = 10
+        if game_views.game_board_view.show_results:
+            game_views.change_view("results_view")
+            game_views.results_view.players = game_views.game_board_view.players
+            game_views.game_board_view.show_results = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            # GAME STEPS
+            action = game_views.do_action()
+            if action == "quit":
+                running = False
+
+        if game_views.current_view == "game_menu_view" and game_views.game_menu_view.num_of_players:
+            if event.type == pygame.KEYDOWN:
+                game_views.game_menu_view.add_player_name(event.key)
+        if event.type == pygame.QUIT:
+            running = False
+    dt = clock.tick(60) / 1000
+pygame.quit()

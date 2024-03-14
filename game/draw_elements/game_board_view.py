@@ -301,15 +301,3 @@ class GameBoardView(GameBoard):
 
     def go_to_result_view(self, game_view):
         game_view.change_view('results_view')
-
-        # Jesli ktos ma 15 pkt lub wiecej to trzeba dokonczyc rundę
-
-
-        # autocomplete card
-        # reset all temps
-        # reset active action
-        # check all player markers
-        # wait for return markers if more than 10
-        # check all player markers
-        # check can take aristo card
-        # change player
