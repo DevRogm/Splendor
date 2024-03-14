@@ -6,6 +6,7 @@ from game.game_elements.stone_markers import StoneMarker
 from game.game_elements.stone_cards import StoneCard
 from game_data.markes_and_cards_data import markers as markers_data, aristocratic_cards, cards_lvl_1, cards_lvl_2, \
     cards_lvl_3
+from game.utils import ExitLoop
 
 
 @dataclass
@@ -15,20 +16,20 @@ class StoneMarkersInventory:
         3: 5,  # 3 players: 5 markers
         4: 7,  # 4 players: 7 markers
     }
-    players: list
     markers: dict = field(default_factory=lambda: {})
 
-    def add_marker(self, marker: str) -> None:
+    def add_marker(self, marker: str, ply_num: int) -> None:
         """
         The method increases the stone number by 1 based on the received stone
         :param marker: Name of stone
+        :param ply_num: Num of players
         :return: None
         """
         if self.markers[marker].stone == 'gold' and self.markers[marker].quantity < 5:
-            self.markers[marker] += 1
+            self.markers[marker].quantity += 1
         else:
-            if self.markers[marker].quantity < len(self.players):
-                self.markers[marker] += 1
+            if self.markers[marker].quantity < self.markers_quantity_options[ply_num]:
+                self.markers[marker].quantity += 1
 
     def remove_marker(self, marker: str) -> None:
         """
@@ -50,8 +51,18 @@ class AristocraticCardsInventory:
     def remove_card(self):
         pass
 
-    def can_give_card(self):
-        pass
+    def can_give_card(self, player_cards):
+        for aristo_card in self.cards:
+            try:
+                for stone, requirements in aristo_card['requirements'].items():
+                    if len(player_cards[stone]) < requirements:
+                        raise ExitLoop
+                idx = self.cards.index(aristo_card)
+                self.cards.pop(idx)
+                return True
+            except ExitLoop:
+                continue
+        return None
 
 
 @dataclass
@@ -63,8 +74,10 @@ class StoneCardsInventory:
     cards_lvl_3: dict[str, Union[List[StoneCard], StoneCard, None]] = field(
         default_factory=lambda: {'inverted_stack': [], 'card_1': None, 'card_2': None, 'card_3': None, 'card_4': None})
 
-    def remove_card(self, lvl, stack):
-        pass
+    def remove_card(self, lvl, card):
+        card_to_return = self.__getattribute__(lvl).copy()
+        self.__getattribute__(lvl)[card] = None
+        return card_to_return[card]
 
     def lay_out_cards(self) -> None:
         """
@@ -77,13 +90,20 @@ class StoneCardsInventory:
                 if card.startswith('card') and not cards_lvl[card] and cards_lvl['inverted_stack']:
                     cards_lvl[card] = cards_lvl['inverted_stack'].pop(0)
 
+    def return_card_obj(self, lvl, card):
+        return self.__getattribute__(lvl)[card]
+
 
 @dataclass
 class GameBoard:
     players: List[Player] = field(default_factory=lambda: [])
-    stone_markers: StoneMarkersInventory = StoneMarkersInventory(players)
+    stone_markers: StoneMarkersInventory = StoneMarkersInventory()
     aristocratic_cards: AristocraticCardsInventory = AristocraticCardsInventory()
     stone_cards: StoneCardsInventory = StoneCardsInventory()
+    active_player: Player | None = None
+    active_action: str | None = None
+    temp_markers: list[StoneMarker] = field(default_factory=lambda: [])
+    show_results: bool = False
 
     def game_preparation(self, ply: dict) -> None:
         """
@@ -97,6 +117,7 @@ class GameBoard:
             self.prepare_stone_markers()
             self.prepare_aristocratic_cards()
             self.prepare_stone_cards()
+        self.active_player = self.players[0]
 
     def add_players(self, players: dict) -> None:
         """
@@ -148,11 +169,18 @@ class GameBoard:
         random.shuffle(aristocratic_cards)
         self.aristocratic_cards.cards = aristocratic_cards[:num_of_cards]
 
-    def whose_turn(self):
-        pass
+    def change_active_player(self):
+        player_idx = self.players.index(self.active_player)
+        self.active_player.check_points()
+        if player_idx + 1 >= len(self.players):
+            player_idx = 0
+        else:
+            player_idx += 1
+        self.active_player = self.players[player_idx]
 
-    def check_the_winner(self):
-        pass
-
-    def show_available_actions(self):
-        pass
+    def is_the_last_round(self, players):
+        last_round = False
+        for player in players:
+            if player.points >= 1:
+                last_round = True
+        return last_round

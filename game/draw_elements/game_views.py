@@ -8,7 +8,7 @@ from game.game_elements.game_board import GameBoard
 
 
 @dataclass
-class GameViews():
+class GameViews:
     start_view: StartView = StartView()
     game_menu_view: GameMenuView = GameMenuView()
     statistics_view: StatisticsView = StatisticsView()

@@ -50,7 +50,7 @@ class GameMenuView:
 
             # Player Name
             text = f"Player {self.active_player}: {self.temp_name}"
-            draw_simple_text(screen, text, factor_pos_x=0.5, factor_pos_y=0.6)
+            draw_simple_text(screen, text, factor_pos_x=0.5, factor_pos_y=0.6, color=(227, 206, 0))
 
             # Back to previous view button
             back_img = get_img("back.png")
@@ -63,7 +63,7 @@ class GameMenuView:
             for player_k, player_v in self.players.items():
                 if player_v:
                     text = f"Player {player_k}: {player_v}"
-                    draw_simple_text(screen, text, factor_pos_x=0.5, factor_pos_y=0.2 + player_k * 0.1)
+                    draw_simple_text(screen, text, factor_pos_x=0.5, factor_pos_y=0.2 + player_k * 0.1, color=(227, 206, 0))
 
     def action(self, game_view):
         for element_key, element_values in self.active_view_elements.items():
