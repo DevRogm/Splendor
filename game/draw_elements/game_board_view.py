@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from game.utils import element_detection, draw_simple_text, draw_requirements, draw_image, get_img
 from game_data.markes_and_cards_data import markers
-from game.game_elements.game_board import GameBoard
+from game.game_elements.game_board import GameBoard, StoneCardsInventory, AristocraticCardsInventory, StoneMarkersInventory
 
 
 @dataclass
@@ -301,3 +301,20 @@ class GameBoardView(GameBoard):
 
     def go_to_result_view(self, game_view):
         game_view.change_view('results_view')
+
+    def reset_game(self, play_again=False):
+        if not play_again:
+            self.players = []
+        else:
+            for player in self.players:
+                player.points = 0
+                player.inventory.stone_markers_init()
+                player.inventory.stone_cards = {'emerald': [], 'sapphire': [], 'ruby': [], 'diamond': [], 'onyx': []}
+                player.inventory.aristocratic_cards = 0
+                player.inventory.reserved_cards = {1: None, 2: None, 3: None}
+        self.stone_cards = StoneCardsInventory()
+        self.stone_markers = StoneMarkersInventory()
+        self.aristocratic_cards = AristocraticCardsInventory()
+        self.active_action = None
+        self.temp_markers = []
+        self.show_results = False
