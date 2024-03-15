@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from game.utils import element_detection, draw_simple_text, draw_requirements, draw_image, get_img
 from game_data.markes_and_cards_data import markers
-from game.game_elements.game_board import GameBoard, StoneCardsInventory, AristocraticCardsInventory, StoneMarkersInventory
+from game.game_elements.game_board import GameBoard, StoneCardsInventory, AristocraticCardsInventory, \
+    StoneMarkersInventory
 
 
 @dataclass

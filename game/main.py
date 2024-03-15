@@ -1,7 +1,5 @@
 import pygame
-import os
-from game.game_elements.game_board import GameBoard
-from game.draw_elements.game_views import GameViews
+from game.display_elements.game_views import GameViews
 from utils import get_img
 
 pygame.init()
@@ -11,7 +9,6 @@ pygame.display.set_caption(' . . o o O O SPLENDOR O O o o . . ')
 clock = pygame.time.Clock()
 running = True
 dt = 0
-test_game_board = True  # remove after work on game board
 table = get_img('table.png')
 table_img = pygame.image.load(table)
 
@@ -21,7 +18,7 @@ game_views = GameViews()
 while running:
     screen.blit(pygame.transform.scale(table_img, (1280, 720)), (0, 0))
     # Display game view
-    game_views.draw_view(screen)
+    game_views.display_view(screen)
     pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
