@@ -15,9 +15,6 @@ class GameViews:
     results_view: ResultsView = ResultsView()
     current_view: str = 'start_view'
 
-
-    def __init__(self):
-        print(self)
     def display_view(self, screen) -> None:
         """
         A method that calls draw method for current view
