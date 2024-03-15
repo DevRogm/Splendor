@@ -103,7 +103,7 @@ class GameMenuView:
 
     def go_to_start_view(self, game_view):
         self.temp_name = ''
-        self.players = dict.fromkeys([1, 2, 3, 4], '')
+        self.players = {}
         self.can_start_game = False
         self.active_player = 1
         game_view.change_view('start_view')

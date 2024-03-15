@@ -105,14 +105,16 @@ class GameBoard:
     temp_markers: list[StoneMarker] = field(default_factory=lambda: [])
     show_results: bool = False
 
-    def game_preparation(self, ply: dict) -> None:
+    def game_preparation(self, ply: dict, action) -> None:
         """
         The method prepares the game based on the given number of players.
         Calls the methods responsible for adding players, setup stone markers, aristocratic and stones cards
         :param ply:
+        :param action:
         :return: None
         """
-        self.add_players(ply)
+        if action != 'play_again':
+            self.add_players(ply)
         if len(ply) in [2, 3, 4]:
             self.prepare_stone_markers()
             self.prepare_aristocratic_cards()
@@ -150,13 +152,16 @@ class GameBoard:
         the cards on the table
         :return:
         """
-        random.shuffle(cards_lvl_1)
-        random.shuffle(cards_lvl_2)
-        random.shuffle(cards_lvl_3)
+        cards_l1 = cards_lvl_1.copy()
+        cards_l2 = cards_lvl_2.copy()
+        cards_l3 = cards_lvl_3.copy()
+        random.shuffle(cards_l1)
+        random.shuffle(cards_l2)
+        random.shuffle(cards_l3)
 
-        self.stone_cards.cards_lvl_1['inverted_stack'] = [StoneCard(**card_lvl_1) for card_lvl_1 in cards_lvl_1]
-        self.stone_cards.cards_lvl_2['inverted_stack'] = [StoneCard(**card_lvl_2) for card_lvl_2 in cards_lvl_2]
-        self.stone_cards.cards_lvl_3['inverted_stack'] = [StoneCard(**card_lvl_3) for card_lvl_3 in cards_lvl_3]
+        self.stone_cards.cards_lvl_1['inverted_stack'] = [StoneCard(**card_lvl_1) for card_lvl_1 in cards_l1]
+        self.stone_cards.cards_lvl_2['inverted_stack'] = [StoneCard(**card_lvl_2) for card_lvl_2 in cards_l2]
+        self.stone_cards.cards_lvl_3['inverted_stack'] = [StoneCard(**card_lvl_3) for card_lvl_3 in cards_l3]
 
         self.stone_cards.lay_out_cards()
 
@@ -181,6 +186,6 @@ class GameBoard:
     def is_the_last_round(self, players):
         last_round = False
         for player in players:
-            if player.points >= 1:
+            if player.points >= 15:
                 last_round = True
         return last_round

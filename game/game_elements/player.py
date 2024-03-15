@@ -21,7 +21,7 @@ class PlayerInventory:
         """
         return sum(stone.quantity for stone in self.markers.values())
 
-    def _stone_markers_init(self) -> None:
+    def stone_markers_init(self) -> None:
         """
         The method sets the initial stone markers with a quantity of 0
         :return: None
@@ -30,13 +30,13 @@ class PlayerInventory:
             self.markers[marker['stone']] = StoneMarker(**marker, quantity=0)
 
     def __post_init__(self):
-        self._stone_markers_init()
+        self.stone_markers_init()
 
 
 @dataclass
 class Player:
     name: str
-    points: int = 1
+    points: int = 0
     inventory = None
 
     def __post_init__(self):
