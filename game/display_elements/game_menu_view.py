@@ -98,8 +98,9 @@ class GameMenuView:
         :param char_id: id of characters
         :return: None
         """
+        is_different_names = True if self.temp_name not in self.players.values() else False
         # char_id == 13 -> Enter
-        if char_id == 13 and len(self.temp_name) >= 1:
+        if char_id == 13 and len(self.temp_name) >= 1 and is_different_names:
             self.players[self.active_player] = self.temp_name
             if self.players.__len__() >= self.num_of_players:
                 self.can_start_game = True

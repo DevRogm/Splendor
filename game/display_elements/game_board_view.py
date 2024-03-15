@@ -18,9 +18,8 @@ class GameBoardView(GameBoard):
         # Draw Markers
         for marker in enumerate(markers):
             img_name = f"{marker[1]['stone']}.png"
-            if marker[1]['stone'] == 'gold':
-                action_name = None
-            else:
+            action_name = None
+            if marker[1]['stone'] != 'gold':
                 action_name = f"take_{marker[1]['stone']}_marker"
             img = get_img(img_name)
             draw_image(self, screen, img, factor_pos_x=0.6 + (0.07 * marker[0]), factor_pos_y=0.85,
