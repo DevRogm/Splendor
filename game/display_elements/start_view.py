@@ -31,10 +31,10 @@ class StartView:
         game_quit_img = get_img("quit_option.png")
         draw_image(self, screen, game_quit_img, factor_pos_x=0.5, factor_pos_y=0.7, action_name='game_quit')
 
-    def action(self, game_view) -> Callable:
+    def action(self, game_view):
         """
         A method that does the action from the active elements
-        :param game_view: Surface to display elements
+        # :param game_view: Surface to display elements
         :return: None
         """
         for element_key, element_values in self.active_view_elements.items():
@@ -65,6 +65,6 @@ class StartView:
     def game_quit() -> str:
         """
         A method that returns string to exit the game
-        :return: None
+        :return: 'Quit' string
         """
         return "quit"
