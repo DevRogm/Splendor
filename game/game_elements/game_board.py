@@ -18,7 +18,7 @@ class StoneMarkersInventory:
     }
     markers: dict = field(default_factory=lambda: {})
 
-    def add_marker(self, marker: str, ply_num: int) -> None:
+    def add_marker(self, marker: StoneMarker, ply_num: int) -> None:
         """
         The method increases the stone number by 1 based on the received stone
         :param marker: Name of stone

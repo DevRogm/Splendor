@@ -15,13 +15,14 @@ class GameBoardView(GameBoard):
         :param screen: Surface to display elements
         :return: None
         """
+        # TABLE AREA
         # Draw Markers
         for marker in enumerate(markers):
             img_name = f"{marker[1]['stone']}.png"
+            img = get_img(img_name)
             action_name = None
             if marker[1]['stone'] != 'gold':
                 action_name = f"take_{marker[1]['stone']}_marker"
-            img = get_img(img_name)
             draw_image(self, screen, img, factor_pos_x=0.6 + (0.07 * marker[0]), factor_pos_y=0.85,
                        action_name=action_name)
 
@@ -46,22 +47,18 @@ class GameBoardView(GameBoard):
                     if card_val:
                         stone_card_action = f"{cards_lvl}__{card_key}"
                         card_img = get_img(card_val.img)
-
                         draw_image(self, screen, card_img, factor_pos_x=0.6 + (row * 0.087),
                                    factor_pos_y=0.65 - (column * 0.2), action_name=stone_card_action)
-
                         # Draw gem
                         gem_name = card_val.bonus + "_gem.png"
                         gem_img = get_img(gem_name)
                         draw_image(self, screen, gem_img, factor_pos_x=0.62 + (row * 0.087),
                                    factor_pos_y=0.59 - (column * 0.2))
-
                         # Draw requirements
                         for req_count, (stone_name, quantity) in enumerate(card_val.requirements.items()):
                             draw_requirements(screen, stone_name, quantity, factor_pos_x=0.575 + (row * 0.087),
                                               factor_pos_y=0.718 - (column * 0.2) - (req_count * 0.03),
                                               stone_requirements=True)
-
                         # Draw card bonus
                         if card_val.points:
                             draw_simple_text(screen, str(card_val.points), factor_pos_x=0.575 + (row * 0.087),
@@ -96,7 +93,7 @@ class GameBoardView(GameBoard):
         draw_image(self, screen, reserve_card_img, factor_pos_x=0.93, factor_pos_y=0.95,
                    action_name="reserve_card_action")
 
-        # Draw Players Area
+        # PLAYER AREAS
         for count, player in enumerate(self.players):
             # Draw Name
             if count <= 1:
@@ -105,14 +102,12 @@ class GameBoardView(GameBoard):
             else:
                 offset_x = (0.25 * count - 0.5)
                 offset_y = 0.5
-
             if player.name == self.active_player.name:
                 color = (227, 206, 0)
             else:
                 color = (255, 255, 255)
             draw_simple_text(screen, player.name, factor_pos_x=0.04 + offset_x,
                              factor_pos_y=0.03 + offset_y, font_size=24, color=color)
-
             # Draw Cards and Markers
             for column, card_markers in enumerate(markers):
                 if card_markers['stone'] != "gold" and len(player.inventory.stone_cards[card_markers['stone']]) > 0:
@@ -137,7 +132,6 @@ class GameBoardView(GameBoard):
                     draw_simple_text(screen, "x" + str(player.inventory.markers[card_markers['stone']].quantity),
                                      factor_pos_x=0.19 + offset_x,
                                      factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
-
             # Draw Reserved Cards
             for reserved_count, (reserved_card_num, reserved_card) in enumerate(
                     player.inventory.reserved_cards.items()):
@@ -150,30 +144,25 @@ class GameBoardView(GameBoard):
                     draw_image(self, screen, card_img, factor_pos_x=0.05 + (reserved_count * 0.0765) + offset_x,
                                factor_pos_y=0.4 + offset_y,
                                action_name=f"{player.name}_reserved_card_{reserved_count}")
-
                     # Gems
                     gem_name = reserved_card.bonus + "_gem.png"
                     gem_img = get_img(gem_name)
                     draw_image(self, screen, gem_img, factor_pos_x=0.07 + (reserved_count * 0.0765) + offset_x,
                                factor_pos_y=0.34 + offset_y)
-
                     # Draw requirements
                     for req_count, (stone_name, quantity) in enumerate(reserved_card.requirements.items()):
                         draw_requirements(screen, stone_name, quantity,
                                           factor_pos_x=0.025 + (reserved_count * 0.0765) + offset_x,
                                           factor_pos_y=0.468 - (req_count * 0.03) + offset_y,
                                           stone_requirements=True)
-
                     # Draw card bonus
                     if reserved_card.points:
                         draw_simple_text(screen, str(reserved_card.points),
                                          factor_pos_x=0.025 + (reserved_count * 0.0765) + offset_x,
                                          factor_pos_y=0.33 + offset_y, font_size=36, font_name="Gargi")
-
             # Display Points
             draw_simple_text(screen, "Score: " + str(player.points), factor_pos_x=0.04 + offset_x,
                              factor_pos_y=0.055 + offset_y, font_size=14, color=(255, 255, 255))
-
             # Draw Aristocratic Cards
             if player.inventory.aristocratic_cards:
                 crown_img = get_img("crown.png")
@@ -192,7 +181,8 @@ class GameBoardView(GameBoard):
         for element_key, element_values in self.active_view_elements.items():
             if element_detection(element_values) and not self.active_action == "return_markers":
                 if "marker" in element_key:
-                    self.take_marker(element_key)
+                    marker_name = element_key.split("_")[1]
+                    self.take_marker(marker_name)
                 elif "cards_lvl" in element_key and self.active_action == "buy_card":
                     self.buy_card(element_key)
                 elif "cards_lvl" in element_key and self.active_action == "reserve_card":
@@ -209,8 +199,12 @@ class GameBoardView(GameBoard):
                     marker_name = element_key.split("_")[2]
                     self.return_marker(marker_name)
 
-    def take_marker(self, marker_name):
-        marker = marker_name.split("_")[1]
+    def take_marker(self, marker: str) -> None:
+        """
+        The method allows to take markers from the table depending on the active action: take 2 or 3 markers
+        :param marker: Surface to display elements
+        :return: None
+        """
         if self.active_action == 'take_3' and marker not in self.temp_markers and len(self.temp_markers) < 3 and \
                 self.stone_markers.markers[marker].quantity > 0:
             self.temp_markers.append(marker)
@@ -286,7 +280,6 @@ class GameBoardView(GameBoard):
                 self.active_player.take_markers('gold')
             self.stone_cards.lay_out_cards()
             self.can_finish_turn()
-            # dodac znacznik golda graczowi o ile taki znacznik jeszcze jest na stol
 
     def can_finish_turn(self):
         for marker in self.temp_markers:
@@ -302,9 +295,6 @@ class GameBoardView(GameBoard):
             if self.is_the_last_round(self.players) and self.active_player is self.players[-1]:
                 self.show_results = True
             self.change_active_player()
-
-    def go_to_result_view(self, game_view):
-        game_view.change_view('results_view')
 
     def reset_game(self, play_again=False):
         if not play_again:
