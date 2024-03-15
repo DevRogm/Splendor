@@ -7,7 +7,12 @@ from typing import Type
 class StatisticsView:
     active_view_elements: dict = field(default_factory=lambda: {})
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
+        """
+        A method that draws elements on the screen
+        :param screen: Surface to display elements
+        :return: None
+        """
         # Prepare Statistics title and display
         statistics_option_img = get_img("statistics_option.png")
         draw_image(self, screen, statistics_option_img, factor_pos_x=0.5, factor_pos_y=0.1)
@@ -29,7 +34,8 @@ class StatisticsView:
             if element_detection(element_values):
                 self.__getattribute__(element_key)(game_view)
 
-    def back_to_start_view(self, game_view) -> None:
+    @staticmethod
+    def back_to_start_view(game_view) -> None:
         """
         A method that changes the view to Start View
         :param game_view: Instance of GameViews

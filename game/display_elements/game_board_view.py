@@ -8,9 +8,13 @@ from game.game_elements.game_board import GameBoard, StoneCardsInventory, Aristo
 @dataclass
 class GameBoardView(GameBoard):
     active_view_elements: dict = field(default_factory=lambda: {})
-    player_areas: dict = field(default_factory=lambda: {})
 
     def draw(self, screen) -> None:
+        """
+        A method that draws elements on the screen
+        :param screen: Surface to display elements
+        :return: None
+        """
         # Draw Markers
         for marker in enumerate(markers):
             img_name = f"{marker[1]['stone']}.png"
