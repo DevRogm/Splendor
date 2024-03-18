@@ -202,7 +202,7 @@ class GameBoardView(GameBoard):
     def take_marker(self, marker: str) -> None:
         """
         The method allows to take markers from the table depending on the active action: take 2 or 3 markers
-        :param marker: Surface to display elements
+        :param marker: Name of marker
         :return: None
         """
         if self.active_action == 'take_3' and marker not in self.temp_markers and len(self.temp_markers) < 3 and \
@@ -220,31 +220,60 @@ class GameBoardView(GameBoard):
                 if len(self.temp_markers) == 2:
                     self.can_finish_turn()
 
-    def return_marker(self, marker_name):
+    def return_marker(self, marker_name: str) -> None:
+        """
+        The method returns the marker selected by the player to the table
+        :param marker_name: Name of marker
+        :return:None
+        """
         self.active_player.return_markers(marker_name)
         self.stone_markers.add_marker(marker_name, ply_num=len(self.players))
         self.can_finish_turn()
 
     # CHOOSE ACTION
-    def take_3(self):
+    def take_3(self) -> None:
+        """
+        The method set active action as 'take_3' and resets temp markers after change action
+        :return:None
+        """
         if self.temp_markers:
             [self.stone_markers.add_marker(marker, len(self.players)) for marker in self.temp_markers]
         self.temp_markers = []
         self.active_action = 'take_3'
 
     def take_2(self):
+        """
+        The method set active action as 'take_3' and resets temp markers after change action
+        :return:None
+        """
         if self.temp_markers:
             [self.stone_markers.add_marker(marker, len(self.players)) for marker in self.temp_markers]
         self.temp_markers = []
         self.active_action = 'take_2'
 
-    def buy_card_action(self):
+    def buy_card_action(self) -> None:
+        """
+        The method sets active action as a 'buy_card'
+        :return: None
+        """
         self.active_action = 'buy_card'
 
-    def reserve_card_action(self):
+    def reserve_card_action(self) -> None:
+        """
+        The method sets active action as a 'reserve_card'
+        :return: None
+        """
         self.active_action = 'reserve_card'
 
-    def buy_card(self, card):
+    def buy_card(self, card: str) -> None:
+        """
+        The method that extracts the card level and its place on the table from the given string.
+        Based on this data, it retrieves the clicked card object.
+        The method removes card from the table if the player can buy it, add player markers on table and add card
+        to player inventory
+        :param card: String with card level and number in the row
+        :return: None
+        """
         lvl, num = card.split("__")
         card_obj = self.stone_cards.return_card_obj(lvl, num)
         can_buy, marker_to_return = self.active_player.can_buy(card_obj)
@@ -257,7 +286,15 @@ class GameBoardView(GameBoard):
             self.stone_cards.lay_out_cards()
             self.can_finish_turn()
 
-    def buy_reserved_card(self, card):
+    def buy_reserved_card(self, card: str) -> None:
+        """
+         The method that extracts the card level and its place on the table from the given string.
+         Based on this data, it retrieves the clicked card object.
+         The method removes card from the table if the player can buy it, add player markers on table and add card
+         to player inventory
+         :param card: String with card level and number in the row
+         :return: None
+         """
         card_obj = self.active_player.inventory.reserved_cards.get(int(card.split('_')[3]) + 1)
         can_buy, marker_to_return = self.active_player.can_buy(card_obj)
         if can_buy:
@@ -281,7 +318,11 @@ class GameBoardView(GameBoard):
             self.stone_cards.lay_out_cards()
             self.can_finish_turn()
 
-    def can_finish_turn(self):
+    def can_finish_turn(self) -> None:
+        """
+        The method checks whether the player can end the turn
+        :return: None
+        """
         for marker in self.temp_markers:
             self.active_player.take_markers(marker)
         self.temp_markers = []
@@ -296,7 +337,12 @@ class GameBoardView(GameBoard):
                 self.show_results = True
             self.change_active_player()
 
-    def reset_game(self, play_again=False):
+    def reset_game(self, play_again: bool = False) -> None:
+        """
+        The method that resets the game depending on whether there will be a replay
+        :param play_again: True or false
+        :return: None
+        """
         if not play_again:
             self.players = []
         else:
