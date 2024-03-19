@@ -1,10 +1,9 @@
 from dataclasses import dataclass
-from game.draw_elements.start_view import StartView
-from game.draw_elements.statistics_view import StatisticsView
-from game.draw_elements.game_menu_view import GameMenuView
-from game.draw_elements.game_board_view import GameBoardView
-from game.draw_elements.results_view import ResultsView
-from game.game_elements.game_board import GameBoard
+from game.display_elements.start_view import StartView
+from game.display_elements.statistics_view import StatisticsView
+from game.display_elements.game_menu_view import GameMenuView
+from game.display_elements.game_board_view import GameBoardView
+from game.display_elements.results_view import ResultsView
 
 
 @dataclass
@@ -16,7 +15,7 @@ class GameViews:
     results_view: ResultsView = ResultsView()
     current_view: str = 'start_view'
 
-    def draw_view(self, screen) -> None:
+    def display_view(self, screen) -> None:
         """
         A method that calls draw method for current view
         :param screen: Surface to display elements
