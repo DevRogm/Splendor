@@ -9,9 +9,14 @@ class ResultsView:
     players = None
 
     def draw(self, screen):
+        """
+        A method that draws elements on the screen
+        :param screen: Surface to display elements
+        :return: None
+        """
         splendor_img = get_img("game_results.png")
         draw_image(self, screen, splendor_img, factor_pos_x=0.5, factor_pos_y=0.2)
-        self.print_results(screen)
+        self.display_results(screen)
 
         play_again_img = get_img("play_again.png")
         draw_image(self, screen, play_again_img, factor_pos_x=0.85, factor_pos_y=0.8, action_name='go_to_game_view')
@@ -19,18 +24,17 @@ class ResultsView:
         back_to_start_img = get_img("back_to_start_view.png")
         draw_image(self, screen, back_to_start_img, factor_pos_x=0.2, factor_pos_y=0.8, action_name='go_to_start_view')
 
-    def print_results(self, screen):
+    def display_results(self, screen):
+        """
+        A method that displays result on the screen
+        :param screen: Surface to display elements
+        :return: None
+        """
         sorted_players = sorted(self.players, key=operator.attrgetter('points'), reverse=True)
-        text = f"Lp. NAME POINTS NUM OF CARDS NUM OF ARISTO"
-        draw_simple_text(screen, text, factor_pos_x=0.5, factor_pos_y=0.3, color=(227, 206, 0), font_size=30)
         for count, player in enumerate(sorted_players, start=1):
-            text = f"{count} {player.name} {player.points} {self.count_cards(player)} {player.inventory.aristocratic_cards}"
+            text = f"{count:^10} {player.name:^10} {player.points:^10}"
             draw_simple_text(screen, text, factor_pos_x=0.5, factor_pos_y=0.3 + (count * 0.08), color=(227, 206, 0),
                              font_size=30)
-
-    def count_cards(self, player):
-        num_of_cards = sum([len(stone_cards) for stone_cards in player.inventory.stone_cards.values()])
-        return num_of_cards
 
     def action(self, game_view):
         for element_key, element_values in self.active_view_elements.items():
@@ -39,7 +43,8 @@ class ResultsView:
             elif element_detection(element_values):
                 return self.__getattribute__(element_key)()
 
-    def go_to_start_view(self, game_view):
+    @staticmethod
+    def go_to_start_view(game_view):
         game_view.game_board_view.reset_game()
         game_view.game_menu_view.temp_name = ''
         game_view.game_menu_view.players = {}
