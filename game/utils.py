@@ -106,3 +106,4 @@ def draw_requirements(screen, stone_card_name, quantity, factor_pos_x=0.0, facto
 
 class ExitLoop(BaseException):
     pass
+
