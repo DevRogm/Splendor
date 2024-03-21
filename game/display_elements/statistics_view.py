@@ -6,6 +6,7 @@ from game.game_db.db_worker import DBWorker
 @dataclass
 class StatisticsView:
     active_view_elements: dict = field(default_factory=lambda: {})
+    is_get_stats = False
 
     def draw(self, screen) -> None:
         """
@@ -34,17 +35,16 @@ class StatisticsView:
             if element_detection(element_values):
                 self.__getattribute__(element_key)(game_view)
 
-    @staticmethod
-    def back_to_start_view(game_view) -> None:
+    def back_to_start_view(self, game_view) -> None:
         """
         A method that changes the view to Start View
         :param game_view: Instance of GameViews
         :return: None
         """
+        self.is_get_stats = False
         game_view.change_view('start_view')
 
-
-    def get_stats(self):
-        db_worker = DBWorker()
-        print(db_worker)
-
+    def get_stats(self, db_worker):
+        if not self.is_get_stats:
+            db_worker.read_data()
+        self.is_get_stats = True
