@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from game.utils import element_detection, draw_statistic, draw_image, get_img
-from typing import Type
+from game.game_db.db_worker import DBWorker
 
 
 @dataclass
@@ -42,3 +42,9 @@ class StatisticsView:
         :return: None
         """
         game_view.change_view('start_view')
+
+
+    def get_stats(self):
+        db_worker = DBWorker()
+        print(db_worker)
+

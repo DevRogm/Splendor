@@ -4,44 +4,47 @@ from psycopg2 import OperationalError
 
 
 class DBWorker:
+    table_name = 'statistics'
     def __init__(self):
-        pass
+        self.user = 'postgres'
+        self.password = 'admin'
+        self.conn = None
+        self.cur = None
 
-    def set_connection(self, db_name, user, password):
-        conn = psycopg2.connect(host="localhost", port=5432, dbname=db_name, user=user,
-                                password=password)
-        self.__setattr__(f'conn_{user}', conn)
-        self.__setattr__(f'cur_{user}', conn.cursor())
+    def _set_connection(self, db_name, user, password):
+        print("OPEN CONNECTION")
+        self.conn = psycopg2.connect(host="localhost", port=5432, dbname=db_name, user=user,
+                                     password=password)
+        self.cur = self.conn.cursor()
         auto_commit = psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT
-        conn.set_isolation_level(auto_commit)
+        self.conn.set_isolation_level(auto_commit)
+        print("OPENED CONNECTION")
 
-    def create_db(self):
-        print("Create DB")
-        cursor = self.__getattribute__(f"cur_{self.user}")
-        cursor.execute("CREATE DATABASE splendor_db;")
+    def _close_connection(self):
+        print("CLOSE CONNECTION")
+        self.conn.commit()
+        self.cur.close()
+        self.conn.close()
+        print("CLOSED CONNECTION")
 
-    def create_table(self):
+    def _create_table(self):
         print("Create Table")
-        print(self.user)
-        cursor = self.__getattribute__(f"cur_{self.user}")
-        cursor.execute("""CREATE TABLE best_scores
+        self.cur.execute("""CREATE TABLE statistics
         (
-            best_scores_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             rank INTEGER NOT NULL,
             name VARCHAR(10) NOT NULL,
-            points INTEGER NOT NULL,
-            aristo_num INTEGER NOT NULL,
-            cards_num INTEGER NOT NULL,
-            last_game TIMESTAMP NOT NULL
+            points INTEGER NOT NULL DEFAULT 0,
+            aristo_num INTEGER NOT NULL DEFAULT 0,
+            cards_num INTEGER NOT NULL DEFAULT 0,
+            last_game TIMESTAMP
         );""")
 
     def read_data(self):
         print("Read Table")
-        cursor = self.__getattribute__(f"cur_{self.user}")
-        cursor.execute("""SELECT * FROM best_scores;""")
+        self.cur.execute(f"SELECT * FROM {DBWorker.table_name};")
         print("DISPLAY DATA")
-        print(cursor.fetchall())
-        for row in cursor.fetchall():
+        for row in self.cur.fetchall():
             print(row)
 
     def update_data(self, data: list) -> None:
@@ -56,43 +59,27 @@ class DBWorker:
     def delete_data(self):
         pass
 
+    def is_table_exists(self, table_name):
+        self.cur.execute(
+            f"SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_schema = 'public' AND table_name ='{table_name}');")
+        is_exists = self.cur.fetchall()[0][0]
+        return is_exists
+
     def __enter__(self):
-        print("ENTER")
         try:
-            print("Try to connect to splendor_db")
-            self.__setattr__('user', 'postgres')
-            self.set_connection("splendor_db", self.user, "admin")
+            print("Try to connect to postgres db")
+            self._set_connection("postgres", self.user, self.password)
             print("Connected...")
+            if not self.is_table_exists(DBWorker.table_name):
+                self._create_table()
         except OperationalError:
             print("Connection Failed")
-            print("Need to create splendor_db")
-            self.__setattr__('user', 'postgres')
-            self.set_connection("postgres", self.user, "admin")
-            self.create_db()
-            self.set_connection("splendor_db", self.user, "admin")
-            print("Connected...")
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print("EXIT")
-        conn = self.__getattribute__(f"conn_{self.user}")
-        cursor = self.__getattribute__(f"cur_{self.user}")
-        conn.commit()
-        cursor.close()
-        conn.close()
-        self.__delattr__(f"conn_{self.user}")
-        self.__delattr__(f"cur_{self.user}")
+        self._close_connection()
 
 
-my_db = DBWorker()
-
-with my_db:
-    try:
-        data = []
-        my_db.update_data(data)
-    except:
-        pass
-    try:
-        my_db.read_data()
-    except:
-        my_db.create_table()
-        my_db.read_data()
+# my_db = DBWorker()
+#
+# with my_db:
+#     my_db.read_data()
