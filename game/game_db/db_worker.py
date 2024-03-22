@@ -51,26 +51,32 @@ class DBWorker:
         return is_exists
 
     def read_data(self):
-        self.cur.execute(f"SELECT * FROM {DBWorker.table_name} ORDER BY points DESC, cards_num ASC;")
+        self.cur.execute(f" SELECT ROW_NUMBER () OVER (ORDER BY points DESC, cards_num ASC), * FROM {DBWorker.table_name};")
         print(self.cur.fetchall())
 
     def update_data(self, player) -> None:
         if not self.check_if_player_exists(player.name):
             print("INSERT")
-            sql = "INSERT INTO statistics (name, points, aristo_num, cards_num, games, last_game) VALUES (%s, %s, %s, %s, 1, CURRENT_TIMESTAMP);"
-            self.cur.execute(sql, (player.name, player.points, player.all_stone_cards_num(), player.inventory.aristocratic_cards),)
+            sql = f"INSERT INTO {DBWorker.table_name} (name, points, aristo_num, cards_num, games, last_game) VALUES (%s, %s, %s, %s, 1, CURRENT_TIMESTAMP);"
+            self.cur.execute(sql, (
+                player.name, player.points, player.all_stone_cards_num(), player.inventory.aristocratic_cards), )
         else:
             print("UPDATE")
-            sql = "UPDATE statistics SET points = points + %s, aristo_num = aristo_num + %s, cards_num = cards_num + %s, games = games + 1, last_game=CURRENT_TIMESTAMP WHERE name = %s;"
-            self.cur.execute(sql, (player.points, player.all_stone_cards_num(), player.inventory.aristocratic_cards, player.name),)
+            sql = f"UPDATE {DBWorker.table_name} SET points = points + %s, aristo_num = aristo_num + %s, cards_num = cards_num + %s, games = games + 1, last_game=CURRENT_TIMESTAMP WHERE name = %s;"
+            self.cur.execute(sql, (
+                player.points, player.all_stone_cards_num(), player.inventory.aristocratic_cards, player.name), )
         print("Update Table END")
 
-    def delete_data(self):
-        pass
+    def reset_data(self):
+        print("RESET STATISTICS")
+        sql = f"TRUNCATE TABLE {DBWorker.table_name};"
+        try:
+            self.cur.execute(sql)
+        except:
+            print("CANT RESET")
 
     def is_table_exists(self):
         self.cur.execute(
             f"SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_schema = 'public' AND table_name ='{DBWorker.table_name}');")
         is_exists = self.cur.fetchone()[0]
         return is_exists
-
