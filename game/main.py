@@ -35,6 +35,9 @@ while running:
                 game_views.change_view("results_view")
                 game_views.results_view.players = game_views.game_board_view.players
                 game_views.game_board_view.show_results = False
+            if action == "reset_stats":
+                print("RESETTTTT")
+                game_views.statistics_view.reset_stats(db_worker)
             if action == "quit":
                 db_worker.close_connection()
                 running = False
