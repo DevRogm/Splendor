@@ -1,7 +1,7 @@
 import operator
 import datetime
 from dataclasses import dataclass, field
-from game.utils import get_img, draw_image, draw_simple_text, element_detection
+from game.utils import get_img, draw_image, element_detection, display_results as draw_result
 
 
 @dataclass
@@ -33,10 +33,7 @@ class ResultsView:
         :return: None
         """
         sorted_players = sorted(self.players, key=operator.attrgetter('points'), reverse=True)
-        for count, player in enumerate(sorted_players, start=1):
-            text = f"{count:^10} {player.name:^10} {player.points:^10}"
-            draw_simple_text(screen, text, factor_pos_x=0.5, factor_pos_y=0.3 + (count * 0.08), color=(227, 206, 0),
-                             font_size=30)
+        draw_result(screen, data=sorted_players)
 
     def action(self, game_view):
         for element_key, element_values in self.active_view_elements.items():

@@ -71,6 +71,7 @@ def draw_statistic(screen, font_size=26, data=None) -> None:
     surface_last_game.blit(last_game, (surface_last_game.get_width() / 2 - last_game.get_width() / 2, 0))
 
     for count, player_score in enumerate(data[:10], 1):
+        print(player_score)
         rank_ply = my_font.render(str(player_score[0]), True, (227, 206, 0))
         surface_rank.blit(rank_ply, (
             surface_rank.get_width() / 2 - rank_ply.get_width() / 2, surface_rank.get_height() * 0.1 * count))
@@ -83,7 +84,7 @@ def draw_statistic(screen, font_size=26, data=None) -> None:
         surface_points.blit(points_ply, (
             surface_points.get_width() / 2 - points_ply.get_width() / 2, surface_points.get_height() * 0.1 * count))
 
-        games_ply = my_font.render(str(player_score[4]), True, (227, 206, 0))
+        games_ply = my_font.render(str(player_score[6]), True, (227, 206, 0))
         surface_games.blit(games_ply, (
             surface_games.get_width() / 2 - games_ply.get_width() / 2, surface_games.get_height() * 0.1 * count))
 
@@ -91,7 +92,7 @@ def draw_statistic(screen, font_size=26, data=None) -> None:
         surface_cards.blit(cards_ply, (
             surface_cards.get_width() / 2 - cards_ply.get_width() / 2, surface_cards.get_height() * 0.1 * count))
 
-        aristo_ply = my_font.render(str(player_score[4]), True, (227, 206, 0))
+        aristo_ply = my_font.render(str(player_score[5]), True, (227, 206, 0))
         surface_aristo.blit(cards_ply, (
             surface_aristo.get_width() / 2 - aristo_ply.get_width() / 2, surface_aristo.get_height() * 0.1 * count))
 
@@ -113,6 +114,46 @@ def draw_statistic(screen, font_size=26, data=None) -> None:
     screen.blit(surface_aristo, (pos_x + offset_x, pos_y))
     offset_x += screen.get_width() * 0.02 + surface_aristo.get_width()
     screen.blit(surface_last_game, (pos_x + offset_x, pos_y))
+
+
+def display_results(screen, font_size=26, data=None) -> None:
+    my_font = pygame.font.SysFont('ARIAL', font_size)
+
+    surface_rank = pygame.Surface((screen.get_width() * 0.05, screen.get_height() * 0.6), pygame.SRCALPHA)
+    rank = my_font.render("Rank", True, (227, 206, 0))
+    surface_rank.blit(rank, (surface_rank.get_width() / 2 - rank.get_width() / 2, 0))
+
+    surface_name = pygame.Surface((screen.get_width() * 0.15, screen.get_height() * 0.6), pygame.SRCALPHA)
+    name = my_font.render("Name", True, (227, 206, 0))
+    surface_name.blit(name, (surface_name.get_width() / 2 - name.get_width() / 2, 0))
+
+    surface_points = pygame.Surface((screen.get_width() * 0.1, screen.get_height() * 0.6), pygame.SRCALPHA)
+    points = my_font.render("Points", True, (227, 206, 0))
+    surface_points.blit(points, (surface_points.get_width() / 2 - points.get_width() / 2, 0))
+
+    for count, player_score in enumerate(data, 1):
+        rank_ply = my_font.render(str(count), True, (227, 206, 0))
+        surface_rank.blit(rank_ply, (
+            surface_rank.get_width() / 2 - rank_ply.get_width() / 2, surface_rank.get_height() * 0.1 * count))
+
+        name_ply = my_font.render(str(player_score.name).upper(), True, (227, 206, 0))
+        surface_name.blit(name_ply, (
+            surface_name.get_width() / 2 - name_ply.get_width() / 2, surface_name.get_height() * 0.1 * count))
+
+        points_ply = my_font.render(str(player_score.points), True, (227, 206, 0))
+        surface_points.blit(points_ply, (
+            surface_points.get_width() / 2 - points_ply.get_width() / 2, surface_points.get_height() * 0.1 * count))
+
+    pos_x = screen.get_width() * 0.5 - (
+                surface_rank.get_width() + surface_points.get_width() + surface_name.get_width() + 1 * (
+                    screen.get_width() * 0.02)) / 2
+    pos_y = screen.get_height() * 0.3
+
+    screen.blit(surface_rank, (pos_x, pos_y))
+    offset_x = screen.get_width() * 0.02 + surface_rank.get_width()
+    screen.blit(surface_name, (pos_x + offset_x, pos_y))
+    offset_x += screen.get_width() * 0.02 + surface_name.get_width()
+    screen.blit(surface_points, (pos_x + offset_x, pos_y))
 
 
 def draw_image(view, screen, img_path, factor_pos_x=0.0, factor_pos_y=0.0, action_name=None) -> None:
