@@ -21,7 +21,7 @@ class StatisticsView:
         draw_image(self, screen, statistics_option_img, factor_pos_x=0.5, factor_pos_y=0.1)
 
         # Prepare list of player with scores, - to do: add pagination and read data from db
-        draw_statistic(screen)
+        draw_statistic(screen, data=self.data)
 
         # Back to previous view button
         back_img = get_img("back.png")
@@ -61,6 +61,5 @@ class StatisticsView:
 
     def get_stats(self, db_worker):
         if not self.is_get_stats:
-            print(db_worker)
-            db_worker.read_data()
+            self.__setattr__('data', db_worker.read_data())
         self.is_get_stats = True

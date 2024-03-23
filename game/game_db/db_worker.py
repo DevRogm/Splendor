@@ -53,7 +53,7 @@ class DBWorker:
     def read_data(self):
         self.cur.execute(
             f" SELECT ROW_NUMBER () OVER (ORDER BY points DESC, cards_num ASC), * FROM {DBWorker.table_name};")
-        print(self.cur.fetchall())
+        return self.cur.fetchall()
 
     def update_data(self, player) -> None:
         if not self.check_if_player_exists(player.name):
