@@ -92,7 +92,7 @@ def draw_statistic(screen, font_size=26, data=None) -> None:
             surface_cards.get_width() / 2 - cards_ply.get_width() / 2, surface_cards.get_height() * 0.1 * count))
 
         aristo_ply = my_font.render(str(player_score[5]), True, (227, 206, 0))
-        surface_aristo.blit(cards_ply, (
+        surface_aristo.blit(aristo_ply, (
             surface_aristo.get_width() / 2 - aristo_ply.get_width() / 2, surface_aristo.get_height() * 0.1 * count))
 
         last_game_ply = my_font.render(str(player_score[-1].strftime("%Y-%m-%d %H:%M:%S")), True, (227, 206, 0))
