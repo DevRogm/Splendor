@@ -70,7 +70,7 @@ def draw_statistic(screen, font_size=26, data=None) -> None:
     last_game = my_font.render("Last Game", True, (227, 206, 0))
     surface_last_game.blit(last_game, (surface_last_game.get_width() / 2 - last_game.get_width() / 2, 0))
 
-    for count, player_score in enumerate(data[:10], 1):
+    for count, player_score in enumerate(data[:11], 1):
         rank_ply = my_font.render(str(player_score[0]), True, (227, 206, 0))
         surface_rank.blit(rank_ply, (
             surface_rank.get_width() / 2 - rank_ply.get_width() / 2, surface_rank.get_height() * 0.1 * count))
