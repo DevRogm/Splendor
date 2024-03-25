@@ -73,7 +73,7 @@ class Player:
         temp_markers_to_return = {}
         for stone_name, stone_quantity in card.requirements.items():
             if (all_stones_by_type := len(self.inventory.stone_cards[stone_name]) + self.inventory.markers[
-                    stone_name].quantity - stone_quantity) >= 0:
+                stone_name].quantity - stone_quantity) >= 0:
                 if (markers_to_return := stone_quantity - len(self.inventory.stone_cards[stone_name])) > 0:
                     temp_markers_to_return[stone_name] = markers_to_return
             elif self.inventory.markers['gold'].quantity - temp_markers_to_return.get('gold', 0) >= abs(
@@ -97,3 +97,7 @@ class Player:
     def check_points(self):
         self.points = sum([sum([stone_card.points for stone_card in stone_cards]) for stone_cards in
                            self.inventory.stone_cards.values()]) + self.inventory.aristocratic_cards * 3
+
+    def all_stone_cards_num(self):
+        num_of_cards = sum([len(cards) for cards in self.inventory.stone_cards.values()])
+        return num_of_cards

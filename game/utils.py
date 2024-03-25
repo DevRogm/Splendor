@@ -1,6 +1,7 @@
 import random
 import pygame
 import os
+import datetime
 
 
 def element_detection(element_edges: tuple) -> bool:
@@ -36,22 +37,122 @@ def draw_player_area(screen, player, player_num, player_areas):
 
 
 def draw_statistic(screen, font_size=26, data=None) -> None:
-    # Dummy data, data from database will be added
-    dummy_data = {
-        1: {'nickname': "Lenny", "score": 24, "date": "21-03-2021"},
-        2: {'nickname': "Lenny", "score": 22, "date": "23-02-2021"},
-        3: {'nickname': "Lenny", "score": 21, "date": "13-01-2021"},
-        4: {'nickname': "Lenny", "score": 14, "date": "23-03-2021"},
-        5: {'nickname': "Lenny", "score": 12, "date": "12-05-2021"}
-    }
     my_font = pygame.font.SysFont('ARIAL', font_size)
-    player_score = my_font.render("Lp.       Nickname        Score             Date", True, (227, 206, 0))
-    screen.blit(player_score, (400, 200))
-    for data_key, data_values in dummy_data.items():
-        player_score = my_font.render(
-            f"{data_key}.{12 * ' '}{data_values['nickname']}{14 * ' '}{data_values['score']}{12 * ' '}{data_values['date']}",
-            True, (227, 206, 0))
-        screen.blit(player_score, (400, 200 + data_key * 50))
+
+    pos_x = screen.get_width() * 0.04
+    pos_y = screen.get_height() * 0.2
+
+    surface_rank = pygame.Surface((screen.get_width() * 0.05, screen.get_height() * 0.6), pygame.SRCALPHA)
+    rank = my_font.render("Rank", True, (227, 206, 0))
+    surface_rank.blit(rank, (surface_rank.get_width() / 2 - rank.get_width() / 2, 0))
+
+    surface_name = pygame.Surface((screen.get_width() * 0.15, screen.get_height() * 0.6), pygame.SRCALPHA)
+    name = my_font.render("Name", True, (227, 206, 0))
+    surface_name.blit(name, (surface_name.get_width() / 2 - name.get_width() / 2, 0))
+
+    surface_points = pygame.Surface((screen.get_width() * 0.1, screen.get_height() * 0.6), pygame.SRCALPHA)
+    points = my_font.render("Points", True, (227, 206, 0))
+    surface_points.blit(points, (surface_points.get_width() / 2 - points.get_width() / 2, 0))
+
+    surface_games = pygame.Surface((screen.get_width() * 0.1, screen.get_height() * 0.6), pygame.SRCALPHA)
+    games = my_font.render("Games", True, (227, 206, 0))
+    surface_games.blit(games, (surface_games.get_width() / 2 - games.get_width() / 2, 0))
+
+    surface_cards = pygame.Surface((screen.get_width() * 0.1, screen.get_height() * 0.6), pygame.SRCALPHA)
+    cards = my_font.render("Cards", True, (227, 206, 0))
+    surface_cards.blit(cards, (surface_cards.get_width() / 2 - cards.get_width() / 2, 0))
+
+    surface_aristo = pygame.Surface((screen.get_width() * 0.1, screen.get_height() * 0.6), pygame.SRCALPHA)
+    aristo = my_font.render("Aristo", True, (227, 206, 0))
+    surface_aristo.blit(aristo, (surface_aristo.get_width() / 2 - aristo.get_width() / 2, 0))
+
+    surface_last_game = pygame.Surface((screen.get_width() * 0.2, screen.get_height() * 0.6), pygame.SRCALPHA)
+    last_game = my_font.render("Last Game", True, (227, 206, 0))
+    surface_last_game.blit(last_game, (surface_last_game.get_width() / 2 - last_game.get_width() / 2, 0))
+
+    for count, player_score in enumerate(data[:11], 1):
+        rank_ply = my_font.render(str(player_score[0]), True, (227, 206, 0))
+        surface_rank.blit(rank_ply, (
+            surface_rank.get_width() / 2 - rank_ply.get_width() / 2, surface_rank.get_height() * 0.1 * count))
+
+        name_ply = my_font.render(str(player_score[2]).upper(), True, (227, 206, 0))
+        surface_name.blit(name_ply, (
+            surface_name.get_width() / 2 - name_ply.get_width() / 2, surface_name.get_height() * 0.1 * count))
+
+        points_ply = my_font.render(str(player_score[3]), True, (227, 206, 0))
+        surface_points.blit(points_ply, (
+            surface_points.get_width() / 2 - points_ply.get_width() / 2, surface_points.get_height() * 0.1 * count))
+
+        games_ply = my_font.render(str(player_score[6]), True, (227, 206, 0))
+        surface_games.blit(games_ply, (
+            surface_games.get_width() / 2 - games_ply.get_width() / 2, surface_games.get_height() * 0.1 * count))
+
+        cards_ply = my_font.render(str(player_score[4]), True, (227, 206, 0))
+        surface_cards.blit(cards_ply, (
+            surface_cards.get_width() / 2 - cards_ply.get_width() / 2, surface_cards.get_height() * 0.1 * count))
+
+        aristo_ply = my_font.render(str(player_score[5]), True, (227, 206, 0))
+        surface_aristo.blit(cards_ply, (
+            surface_aristo.get_width() / 2 - aristo_ply.get_width() / 2, surface_aristo.get_height() * 0.1 * count))
+
+        last_game_ply = my_font.render(str(player_score[-1].strftime("%Y-%m-%d %H:%M:%S")), True, (227, 206, 0))
+        surface_last_game.blit(last_game_ply, (
+            surface_last_game.get_width() / 2 - last_game_ply.get_width() / 2,
+            surface_last_game.get_height() * 0.1 * count))
+
+    screen.blit(surface_rank, (pos_x, pos_y))
+    offset_x = screen.get_width() * 0.02 + surface_rank.get_width()
+    screen.blit(surface_name, (pos_x + offset_x, pos_y))
+    offset_x += screen.get_width() * 0.02 + surface_name.get_width()
+    screen.blit(surface_points, (pos_x + offset_x, pos_y))
+    offset_x += screen.get_width() * 0.02 + surface_points.get_width()
+    screen.blit(surface_games, (pos_x + offset_x, pos_y))
+    offset_x += screen.get_width() * 0.02 + surface_games.get_width()
+    screen.blit(surface_cards, (pos_x + offset_x, pos_y))
+    offset_x += screen.get_width() * 0.02 + surface_cards.get_width()
+    screen.blit(surface_aristo, (pos_x + offset_x, pos_y))
+    offset_x += screen.get_width() * 0.02 + surface_aristo.get_width()
+    screen.blit(surface_last_game, (pos_x + offset_x, pos_y))
+
+
+def display_results(screen, font_size=26, data=None) -> None:
+    my_font = pygame.font.SysFont('ARIAL', font_size)
+
+    surface_rank = pygame.Surface((screen.get_width() * 0.05, screen.get_height() * 0.6), pygame.SRCALPHA)
+    rank = my_font.render("Rank", True, (227, 206, 0))
+    surface_rank.blit(rank, (surface_rank.get_width() / 2 - rank.get_width() / 2, 0))
+
+    surface_name = pygame.Surface((screen.get_width() * 0.15, screen.get_height() * 0.6), pygame.SRCALPHA)
+    name = my_font.render("Name", True, (227, 206, 0))
+    surface_name.blit(name, (surface_name.get_width() / 2 - name.get_width() / 2, 0))
+
+    surface_points = pygame.Surface((screen.get_width() * 0.1, screen.get_height() * 0.6), pygame.SRCALPHA)
+    points = my_font.render("Points", True, (227, 206, 0))
+    surface_points.blit(points, (surface_points.get_width() / 2 - points.get_width() / 2, 0))
+
+    for count, player_score in enumerate(data, 1):
+        rank_ply = my_font.render(str(count), True, (227, 206, 0))
+        surface_rank.blit(rank_ply, (
+            surface_rank.get_width() / 2 - rank_ply.get_width() / 2, surface_rank.get_height() * 0.1 * count))
+
+        name_ply = my_font.render(str(player_score.name).upper(), True, (227, 206, 0))
+        surface_name.blit(name_ply, (
+            surface_name.get_width() / 2 - name_ply.get_width() / 2, surface_name.get_height() * 0.1 * count))
+
+        points_ply = my_font.render(str(player_score.points), True, (227, 206, 0))
+        surface_points.blit(points_ply, (
+            surface_points.get_width() / 2 - points_ply.get_width() / 2, surface_points.get_height() * 0.1 * count))
+
+    pos_x = screen.get_width() * 0.5 - (
+                surface_rank.get_width() + surface_points.get_width() + surface_name.get_width() + 1 * (
+                    screen.get_width() * 0.02)) / 2
+    pos_y = screen.get_height() * 0.3
+
+    screen.blit(surface_rank, (pos_x, pos_y))
+    offset_x = screen.get_width() * 0.02 + surface_rank.get_width()
+    screen.blit(surface_name, (pos_x + offset_x, pos_y))
+    offset_x += screen.get_width() * 0.02 + surface_name.get_width()
+    screen.blit(surface_points, (pos_x + offset_x, pos_y))
 
 
 def draw_image(view, screen, img_path, factor_pos_x=0.0, factor_pos_y=0.0, action_name=None) -> None:

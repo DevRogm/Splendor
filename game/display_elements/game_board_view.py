@@ -3,7 +3,7 @@ from game.utils import element_detection, draw_simple_text, draw_requirements, d
 from game_data.markes_and_cards_data import markers
 from game.game_elements.game_board import GameBoard, StoneCardsInventory, AristocraticCardsInventory, \
     StoneMarkersInventory
-
+from typing import Any
 
 @dataclass
 class GameBoardView(GameBoard):
@@ -172,7 +172,15 @@ class GameBoardView(GameBoard):
                                  factor_pos_x=0.13 + offset_x,
                                  factor_pos_y=0.045 + offset_y, font_size=16, color=(255, 255, 255))
 
-    def action(self, game_view) -> None:
+
+        # Draw quit game ane play again
+        quit_game_img = get_img("quit_game.png")
+        draw_image(self, screen, quit_game_img, factor_pos_x=0.53, factor_pos_y=0.1, action_name='quit')
+
+        # play_again_img = get_img("again.png")
+        # draw_image(self, screen, play_again_img, factor_pos_x=0.528, factor_pos_y=0.25, action_name='reset')
+
+    def action(self, game_view) -> Any:
         """
         A method that calls another method with an action on the found element
         :param game_view: Instance of GameView
@@ -189,6 +197,13 @@ class GameBoardView(GameBoard):
                     self.reserve_card(element_key)
                 elif f"{self.active_player.name}_reserved_card" in element_key and self.active_action == "buy_card":
                     self.buy_reserved_card(element_key)
+                elif element_key == 'quit':
+                    game_view.game_board_view.reset_game()
+                    game_view.game_menu_view.temp_name = ''
+                    game_view.game_menu_view.players = {}
+                    game_view.game_menu_view.can_start_game = False
+                    game_view.game_menu_view.active_player = 1
+                    game_view.change_view('start_view')
                 else:
                     try:
                         self.__getattribute__(element_key)()
